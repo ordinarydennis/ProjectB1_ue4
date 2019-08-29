@@ -3,6 +3,7 @@
 
 #Resources
 Content/Resources/Market/ModularRPGHeroesPolyart/*
+!Content/Resources/Market/ModularRPGHeroesPolyart/*.keep
 
 # Visual Studio 2015 database file
 *.VC.db
