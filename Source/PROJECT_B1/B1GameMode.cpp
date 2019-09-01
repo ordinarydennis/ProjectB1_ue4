@@ -7,6 +7,6 @@
 
 AB1GameMode::AB1GameMode()
 {
-	DefaultPawnClass = AB1Character::StaticClass();
 	PlayerControllerClass = AB1PlayerController::StaticClass();
+	DefaultPawnClass = AB1Character::StaticClass();
 }
