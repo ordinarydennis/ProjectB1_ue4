@@ -22,7 +22,7 @@ AB1Character::AB1Character()
 	SpringArm->bInheritRoll = false;
 	SpringArm->bInheritYaw = false;
 	SpringArm->bDoCollisionTest = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
@@ -73,10 +73,10 @@ void AB1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AB1Character::UpDown(float NewAxisValue)
 {
-	DirectionToMove.X = NewAxisValue;
+	DirectionToMove.X = NewAxisValue * MovingSpeed;
 }
 void AB1Character::LeftRight(float NewAxisValue)
 {
-	DirectionToMove.Y = NewAxisValue;
+	DirectionToMove.Y = NewAxisValue * MovingSpeed;
 }
 

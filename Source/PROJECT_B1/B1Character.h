@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+//#include "CoreMinimal.h"
 #include "PROJECT_B1.h"
 #include "GameFramework/Character.h"
 #include "B1Character.generated.h"
@@ -41,5 +41,8 @@ private:
 private:
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
+
+private:
+	float MovingSpeed = 0.8f;
 
 };
