@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "PROJECT_B1.h"
 #include "Blueprint/UserWidget.h"
 #include "B1InGameWidget.generated.h"
 
@@ -14,4 +14,18 @@ class PROJECT_B1_API UB1InGameWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void NativeConstruct() override;
+	
+	UFUNCTION()
+	void onSkill1Clicked();
+
+	UFUNCTION()
+	void onSkill2Clicked();
+
+	UFUNCTION()
+	void onSkill3Clicked();
+
+	UFUNCTION()
+	void onSkill4Clicked();
 };

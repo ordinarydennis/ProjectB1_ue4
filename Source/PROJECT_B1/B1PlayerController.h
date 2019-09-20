@@ -2,7 +2,6 @@
 
 #pragma once
 
-//#include "CoreMinimal.h"
 #include "PROJECT_B1.h"
 #include "GameFramework/PlayerController.h"
 #include "B1PlayerController.generated.h"

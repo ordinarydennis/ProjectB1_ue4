@@ -6,6 +6,7 @@
 
 AB1PlayerController::AB1PlayerController()
 {
+	bShowMouseCursor = true;
 	static ConstructorHelpers::FClassFinder<UB1InGameWidget> INGAME_WIDGET(
 		TEXT("/Game/UI/InGameWidget.InGameWidget_C"));
 
