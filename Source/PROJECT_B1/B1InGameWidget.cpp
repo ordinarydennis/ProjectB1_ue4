@@ -2,6 +2,7 @@
 
 
 #include "B1InGameWidget.h"
+#include "B1Character.h"
 #include "Components/Button.h"
 
 void UB1InGameWidget::NativeConstruct()
@@ -31,20 +32,25 @@ void UB1InGameWidget::NativeConstruct()
 
 void UB1InGameWidget::onSkill1Clicked()
 {
-	printf("onSkill1Clicked");
+	//캐릭터에 세팅 
+	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_1);
 }
 
 void UB1InGameWidget::onSkill2Clicked()
 {
-	printf("onSkill2Clicked");
+	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_2);
 }
 
 void UB1InGameWidget::onSkill3Clicked()
 {
-	printf("onSkill3Clicked");
+	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_3);
 }
 
 void UB1InGameWidget::onSkill4Clicked()
 {
-	printf("onSkill4Clicked");
+	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_4);
 }

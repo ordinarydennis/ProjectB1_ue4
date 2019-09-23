@@ -2,8 +2,8 @@
 
 #pragma once
 
-//#include "CoreMinimal.h"
 #include "PROJECT_B1.h"
+#include "B1InGameWidget.h"
 #include "GameFramework/Character.h"
 #include "B1Character.generated.h"
 
@@ -15,6 +15,7 @@ class PROJECT_B1_API AB1Character : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AB1Character();
+	void RunSkill(BTN_SKILL_INDEX BtnSkillIdx);
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,5 +45,6 @@ private:
 
 private:
 	float MovingSpeed = 0.8f;
-
+	//애미메이션 타입 만들기
+	int CurrentSkillAniID = 0;
 };

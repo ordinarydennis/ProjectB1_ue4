@@ -2,6 +2,7 @@
 
 
 #include "B1Character.h"
+#include "B1InGameWidget.h"
 
 // Sets default values
 AB1Character::AB1Character()
@@ -44,7 +45,11 @@ AB1Character::AB1Character()
 		GetMesh()->SetAnimInstanceClass(PLAYER_ANIM.Class);
 	}
 }
-
+void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
+{
+	printf("RunSkill BtnSkillIdx: %d", BtnSkillIdx);
+	//현재 스킬 세팅 
+}
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()
 {

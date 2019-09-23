@@ -6,14 +6,20 @@
 #include "Blueprint/UserWidget.h"
 #include "B1InGameWidget.generated.h"
 
-/**
- * 
- */
+UENUM()
+enum class BTN_SKILL_INDEX : uint8 {
+	INDEX_NONE,
+	INDEX_1,
+	INDEX_2,
+	INDEX_3,
+	INDEX_4
+};
+
 UCLASS()
 class PROJECT_B1_API UB1InGameWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 protected:
 	virtual void NativeConstruct() override;
 	
@@ -29,3 +35,4 @@ protected:
 	UFUNCTION()
 	void onSkill4Clicked();
 };
+
