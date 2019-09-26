@@ -18,6 +18,9 @@ void UB1AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CurrentPlayerSpeed = Pawn->GetVelocity().Size();
 	}
 
-	//현재 동작중인 스킬을 가져온다.
 	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	//have to check object whether valid or not.
+	if (::IsValid(B1Character)){
+		CurrentSkillAnimID = B1Character->GetCurrentSkillAnimID();
+	}
 }
