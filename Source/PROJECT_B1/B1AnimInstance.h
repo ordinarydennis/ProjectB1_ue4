@@ -18,11 +18,20 @@ public:
 	UB1AnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+
+private:
+	UFUNCTION()
+	void AnimNotify_EndofAim();
+
+
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	float CurrentPlayerSpeed = 0.0f;
 
 	//나중에 프로젝트 타입으로 수정하기 using 사용하기
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
-	int32 CurrentSkillAnimID = 0;
+	int32 CurrentSkillAnimNum;
+
+	class AB1Character* B1Character = nullptr;
 };

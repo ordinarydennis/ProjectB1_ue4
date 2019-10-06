@@ -12,6 +12,19 @@ DECLARE_LOG_CATEGORY_EXTERN(B1, Log, All);
 #define B1CHECK(Expr, ...) {if(!(Expr)) { B1LOG(Error, TEXT("ASSERTION: %s"), TEXT("'"#Expr"'")); return __VA_ARGS__; }}
 
 
+//typedef int32 ANIMNUM;
+
+UENUM()
+enum class ERES_ANIM_NUM
+{
+	NONE,
+	DoubleSword_0 = 1000,
+	DoubleSword_1 = 1001,
+	DoubleSword_2 = 1002,
+	DoubleSword_3 = 1003,
+	DoubleSword_4 = 1004
+};
+
 #if WITH_EDITOR
 #include "EngineGlobals.h"
 #include "Engine/Engine.h"

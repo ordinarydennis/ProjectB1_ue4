@@ -49,12 +49,16 @@ void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 {
 	//printf("RunSkill BtnSkillIdx: %d", BtnSkillIdx);
 	//현재 스킬 세팅 
-	CurrentSkillAnimID = (int32)BtnSkillIdx;
+	//CurrentSkillAnimNum = (int32)BtnSkillIdx;
 }
-int32 AB1Character::GetCurrentSkillAnimID()
-{
-	return CurrentSkillAnimID;
-}
+//ERES_ANIM_NUM AB1Character::GetCurrentSkillAnimNum()
+//{
+//	return CurrentSkillAnimNum;
+//}
+//void AB1Character::SetCurrentSkillAnimNum(int32 SkillAnimNum)
+//{
+//	CurrentSkillAnimNum = (RES_ANIM_NUM)(SkillAnimNum + 1000);
+//}
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()
 {
