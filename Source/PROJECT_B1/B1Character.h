@@ -4,6 +4,7 @@
 
 #include "PROJECT_B1.h"
 #include "B1InGameWidget.h"
+#include "B1Skill.h"
 #include "GameFramework/Character.h"
 #include "B1Character.generated.h"
 
@@ -16,8 +17,8 @@ public:
 	// Sets default values for this character's properties
 	AB1Character();
 	void RunSkill(BTN_SKILL_INDEX BtnSkillIdx);
-	//ERES_ANIM_NUM GetCurrentSkillAnimNum();
-	//void SetCurrentSkillAnimNum(int32 SkillAnimNum);
+	ERES_ANIM_NUM GetCurrentSkillAnimResNum();
+	void SetCurrentSkillAnimResNum(ERES_ANIM_NUM SkillAnimResNum);
 
 protected:
 	// Called when the game starts or when spawned
@@ -48,5 +49,7 @@ private:
 private:
 	float MovingSpeed = 0.8f;
 	//애미메이션 타입 만들기
-	//ERES_ANIM_NUM CurrentSkillAnimNum;
+	ERES_ANIM_NUM CurrentSkillAnimResNum;
+
+	TMap<BTN_SKILL_INDEX, TSharedPtr<IB1Skill>> InGameSkills;
 };

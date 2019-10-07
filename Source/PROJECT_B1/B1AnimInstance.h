@@ -21,8 +21,7 @@ public:
 
 private:
 	UFUNCTION()
-	void AnimNotify_EndofAim();
-
+	void AnimNotify_EndofAnim();
 
 
 private:
@@ -31,7 +30,7 @@ private:
 
 	//나중에 프로젝트 타입으로 수정하기 using 사용하기
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
-	int32 CurrentSkillAnimNum;
+	int32 CurrentSkillAnimResNum;
 
 	class AB1Character* B1Character = nullptr;
 };

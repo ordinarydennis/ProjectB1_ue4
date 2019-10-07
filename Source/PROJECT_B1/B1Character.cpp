@@ -2,6 +2,7 @@
 
 
 #include "B1Character.h"
+#include "B1Skill1000.h"
 #include "B1InGameWidget.h"
 
 // Sets default values
@@ -44,21 +45,30 @@ AB1Character::AB1Character()
 	if (PLAYER_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(PLAYER_ANIM.Class);
 	}
+
+	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000());
+	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_1, Skill1000);
 }
 void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 {
 	//printf("RunSkill BtnSkillIdx: %d", BtnSkillIdx);
 	//현재 스킬 세팅 
 	//CurrentSkillAnimNum = (int32)BtnSkillIdx;
+
+	auto Skill = InGameSkills.Find(BtnSkillIdx);
+	if (Skill->IsValid()) {
+		CurrentSkillAnimResNum = (*Skill)->GetAnimResNum();
+		(*Skill)->Run();
+	}
 }
-//ERES_ANIM_NUM AB1Character::GetCurrentSkillAnimNum()
-//{
-//	return CurrentSkillAnimNum;
-//}
-//void AB1Character::SetCurrentSkillAnimNum(int32 SkillAnimNum)
-//{
-//	CurrentSkillAnimNum = (RES_ANIM_NUM)(SkillAnimNum + 1000);
-//}
+ERES_ANIM_NUM AB1Character::GetCurrentSkillAnimResNum()
+{
+	return CurrentSkillAnimResNum;
+}
+void AB1Character::SetCurrentSkillAnimResNum(ERES_ANIM_NUM SkillAnimResNum)
+{
+	CurrentSkillAnimResNum = SkillAnimResNum;
+}
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()
 {
