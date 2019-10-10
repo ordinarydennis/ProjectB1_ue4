@@ -16,5 +16,5 @@ void B1Skill1000::Run()
 }
 ERES_ANIM_NUM B1Skill1000::GetAnimResNum()
 {
-	return ERES_ANIM_NUM::DoubleSword_0;
+	return ERES_ANIM_NUM::SingleTwoHandSword_0;
 }

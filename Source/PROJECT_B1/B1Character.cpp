@@ -2,7 +2,10 @@
 
 
 #include "B1Character.h"
-#include "B1Skill1000.h"
+#include "Skill/1000/B1Skill1000.h"
+#include "Skill/1000/B1Skill1001.h"
+#include "Skill/1000/B1Skill1002.h"
+#include "Skill/1000/B1Skill1003.h"
 #include "B1InGameWidget.h"
 
 // Sets default values
@@ -48,15 +51,17 @@ AB1Character::AB1Character()
 
 	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000());
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_1, Skill1000);
+	TSharedPtr<IB1Skill> Skill1001(new B1Skill1001());
+	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_2, Skill1001);
+	TSharedPtr<IB1Skill> Skill1002(new B1Skill1002());
+	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_3, Skill1002);
+	TSharedPtr<IB1Skill> Skill1003(new B1Skill1003());
+	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_4, Skill1003);
 }
 void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 {
-	//printf("RunSkill BtnSkillIdx: %d", BtnSkillIdx);
-	//현재 스킬 세팅 
-	//CurrentSkillAnimNum = (int32)BtnSkillIdx;
-
 	auto Skill = InGameSkills.Find(BtnSkillIdx);
-	if (Skill->IsValid()) {
+	if (nullptr != Skill) {
 		CurrentSkillAnimResNum = (*Skill)->GetAnimResNum();
 		(*Skill)->Run();
 	}

@@ -34,5 +34,8 @@ protected:
 
 	UFUNCTION()
 	void onSkill4Clicked();
+
+private:
+	class AB1Character* B1Character = nullptr;
 };
 

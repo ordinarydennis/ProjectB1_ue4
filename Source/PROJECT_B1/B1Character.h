@@ -4,7 +4,7 @@
 
 #include "PROJECT_B1.h"
 #include "B1InGameWidget.h"
-#include "B1Skill.h"
+#include "Skill/B1Skill.h"
 #include "GameFramework/Character.h"
 #include "B1Character.generated.h"
 

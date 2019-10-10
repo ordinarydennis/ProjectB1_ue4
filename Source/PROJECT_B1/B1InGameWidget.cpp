@@ -9,6 +9,10 @@ void UB1InGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	if (nullptr == B1Character) {
+		B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	}
+
 	UButton* btnSkill1 = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill1")));
 	if (nullptr != btnSkill1) {
 		btnSkill1->OnClicked.AddDynamic(this, &UB1InGameWidget::onSkill1Clicked);
@@ -32,25 +36,38 @@ void UB1InGameWidget::NativeConstruct()
 
 void UB1InGameWidget::onSkill1Clicked()
 {
-	//캐릭터에 세팅 
-	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (false == ::IsValid(B1Character)) {
+		return;
+	}
 	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_1);
 }
 
 void UB1InGameWidget::onSkill2Clicked()
 {
-	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_2);
+	if (false == ::IsValid(B1Character)) {
+		return;
+	}
+	if (ERES_ANIM_NUM::NONE == B1Character->GetCurrentSkillAnimResNum()) {
+		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_2);
+	}
 }
 
 void UB1InGameWidget::onSkill3Clicked()
 {
-	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_3);
+	if (false == ::IsValid(B1Character)) {
+		return;
+	}
+	if (ERES_ANIM_NUM::NONE == B1Character->GetCurrentSkillAnimResNum()) {
+		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_3);
+	}
 }
 
 void UB1InGameWidget::onSkill4Clicked()
 {
-	auto B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_4);
+	if (false == ::IsValid(B1Character)) {
+		return;
+	}
+	if (ERES_ANIM_NUM::NONE == B1Character->GetCurrentSkillAnimResNum()) {
+		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_4);
+	}
 }

@@ -3,15 +3,16 @@
 #pragma once
 
 #include "PROJECT_B1.h"
-#include "B1Skill.h"
+#include "Skill/B1Skill.h"
+
 /**
  * 
  */
-class PROJECT_B1_API B1Skill1000 : public IB1Skill
+class PROJECT_B1_API B1Skill1001 : public IB1Skill
 {
 public:
-	B1Skill1000();
-	~B1Skill1000();
+	B1Skill1001();
+	~B1Skill1001();
 
 	virtual void Run() override;
 	virtual ERES_ANIM_NUM GetAnimResNum() override;
