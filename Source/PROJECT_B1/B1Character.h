@@ -17,8 +17,8 @@ public:
 	// Sets default values for this character's properties
 	AB1Character();
 	void RunSkill(BTN_SKILL_INDEX BtnSkillIdx);
-	ERES_ANIM_NUM GetCurrentSkillAnimResNum();
-	void SetCurrentSkillAnimResNum(ERES_ANIM_NUM SkillAnimResNum);
+	bool IsRunSkill();
+	void StopSkill();
 
 protected:
 	// Called when the game starts or when spawned
@@ -48,8 +48,6 @@ private:
 
 private:
 	float MovingSpeed = 0.8f;
-	//애미메이션 타입 만들기
-	ERES_ANIM_NUM CurrentSkillAnimResNum;
-
 	TMap<BTN_SKILL_INDEX, TSharedPtr<IB1Skill>> InGameSkills;
+	TSharedPtr<IB1Skill>* Skill = nullptr;
 };

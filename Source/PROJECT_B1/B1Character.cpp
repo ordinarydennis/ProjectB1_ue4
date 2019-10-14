@@ -7,6 +7,7 @@
 #include "Skill/1000/B1Skill1002.h"
 #include "Skill/1000/B1Skill1003.h"
 #include "B1InGameWidget.h"
+#include "Misc/DateTime.h"
 
 // Sets default values
 AB1Character::AB1Character()
@@ -49,30 +50,32 @@ AB1Character::AB1Character()
 		GetMesh()->SetAnimInstanceClass(PLAYER_ANIM.Class);
 	}
 
-	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000());
+	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000(GetMesh()));
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_1, Skill1000);
-	TSharedPtr<IB1Skill> Skill1001(new B1Skill1001());
+	TSharedPtr<IB1Skill> Skill1001(new B1Skill1001(GetMesh()));
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_2, Skill1001);
-	TSharedPtr<IB1Skill> Skill1002(new B1Skill1002());
+	TSharedPtr<IB1Skill> Skill1002(new B1Skill1002(GetMesh()));
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_3, Skill1002);
-	TSharedPtr<IB1Skill> Skill1003(new B1Skill1003());
+	TSharedPtr<IB1Skill> Skill1003(new B1Skill1003(GetMesh()));
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_4, Skill1003);
 }
 void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 {
-	auto Skill = InGameSkills.Find(BtnSkillIdx);
+	Skill = InGameSkills.Find(BtnSkillIdx);
+}
+
+bool AB1Character::IsRunSkill()
+{
 	if (nullptr != Skill) {
-		CurrentSkillAnimResNum = (*Skill)->GetAnimResNum();
-		(*Skill)->Run();
+		return (*Skill)->IsRun();
+	}
+	else {
+		return false;
 	}
 }
-ERES_ANIM_NUM AB1Character::GetCurrentSkillAnimResNum()
+void AB1Character::StopSkill()
 {
-	return CurrentSkillAnimResNum;
-}
-void AB1Character::SetCurrentSkillAnimResNum(ERES_ANIM_NUM SkillAnimResNum)
-{
-	CurrentSkillAnimResNum = SkillAnimResNum;
+	Skill = nullptr;
 }
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()
@@ -89,6 +92,10 @@ void AB1Character::Tick(float DeltaTime)
 	if (DirectionToMove.SizeSquared() > 0.0f) {
 		GetController()->SetControlRotation(FRotationMatrix::MakeFromX(DirectionToMove).Rotator());
 		AddMovementInput(DirectionToMove);
+	}
+
+	if (nullptr != Skill) {
+		(*Skill)->Run();
 	}
 }
 

@@ -39,7 +39,11 @@ void UB1InGameWidget::onSkill1Clicked()
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
-	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_1);
+
+	if (false == B1Character->IsRunSkill()) {
+		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_1);
+	}
+	
 }
 
 void UB1InGameWidget::onSkill2Clicked()
@@ -47,9 +51,11 @@ void UB1InGameWidget::onSkill2Clicked()
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
-	if (ERES_ANIM_NUM::NONE == B1Character->GetCurrentSkillAnimResNum()) {
+
+	if (false == B1Character->IsRunSkill()) {
 		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_2);
 	}
+	
 }
 
 void UB1InGameWidget::onSkill3Clicked()
@@ -57,7 +63,7 @@ void UB1InGameWidget::onSkill3Clicked()
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
-	if (ERES_ANIM_NUM::NONE == B1Character->GetCurrentSkillAnimResNum()) {
+	if (false == B1Character->IsRunSkill()) {
 		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_3);
 	}
 }
@@ -67,7 +73,8 @@ void UB1InGameWidget::onSkill4Clicked()
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
-	if (ERES_ANIM_NUM::NONE == B1Character->GetCurrentSkillAnimResNum()) {
+
+	if (false == B1Character->IsRunSkill()) {
 		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_4);
 	}
 }

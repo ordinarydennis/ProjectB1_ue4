@@ -11,9 +11,10 @@
 class PROJECT_B1_API B1Skill1002 : public IB1Skill
 {
 public:
-	B1Skill1002();
+	B1Skill1002(USkeletalMeshComponent* mesh);
 	~B1Skill1002();
 
 	virtual void Run() override;
+	virtual bool IsRun() override;
 	virtual ERES_ANIM_NUM GetAnimResNum() override;
 };

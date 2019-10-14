@@ -18,6 +18,8 @@ public:
 	UB1AnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+public:
+	void SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum);
 
 private:
 	UFUNCTION()
@@ -30,7 +32,7 @@ private:
 
 	//나중에 프로젝트 타입으로 수정하기 using 사용하기
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
-	int32 CurrentSkillAnimResNum;
+	int32 SkillAnimResNum;
 
 	class AB1Character* B1Character = nullptr;
 };

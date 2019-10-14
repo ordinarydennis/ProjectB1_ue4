@@ -22,16 +22,20 @@ void UB1AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 
 	//have to check object whether valid or not.
-	if (::IsValid(B1Character)) {
-		CurrentSkillAnimResNum = static_cast<int32>(B1Character->GetCurrentSkillAnimResNum());
-	}
+	//if (::IsValid(B1Character)) {
+	//	SkillAnimResNum = static_cast<int32>(B1Character->GetCurrentSkillAnimResNum());
+	//}
+}
+void UB1AnimInstance::SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum)
+{
+	SkillAnimResNum = static_cast<int32>(skillAnimResNum);
 }
 void UB1AnimInstance::AnimNotify_EndofAnim()
 {
-	print("AnimNotify_EndofAim");
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
-	CurrentSkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
-	B1Character->SetCurrentSkillAnimResNum(ERES_ANIM_NUM::NONE);
+	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
+	print("AnimNotify_EndofAnim");
+	B1Character->StopSkill();
 }
