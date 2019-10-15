@@ -40,10 +40,7 @@ void UB1InGameWidget::onSkill1Clicked()
 		return;
 	}
 
-	if (false == B1Character->IsRunSkill()) {
-		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_1);
-	}
-	
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_1);
 }
 
 void UB1InGameWidget::onSkill2Clicked()
@@ -52,10 +49,7 @@ void UB1InGameWidget::onSkill2Clicked()
 		return;
 	}
 
-	if (false == B1Character->IsRunSkill()) {
-		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_2);
-	}
-	
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_2);
 }
 
 void UB1InGameWidget::onSkill3Clicked()
@@ -63,9 +57,8 @@ void UB1InGameWidget::onSkill3Clicked()
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
-	if (false == B1Character->IsRunSkill()) {
-		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_3);
-	}
+	
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_3);
 }
 
 void UB1InGameWidget::onSkill4Clicked()
@@ -74,7 +67,5 @@ void UB1InGameWidget::onSkill4Clicked()
 		return;
 	}
 
-	if (false == B1Character->IsRunSkill()) {
-		B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_4);
-	}
+	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_4);
 }

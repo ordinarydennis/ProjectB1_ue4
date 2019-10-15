@@ -17,7 +17,6 @@ B1Skill1000::~B1Skill1000()
 void B1Skill1000::Run()
 {
 	//스킬 사용중이 아닐때 스킬 시작 시간 기록
-	//
 	//현재 시간 - 스킬 시작시간 
 	if (0 == SkillStartTimestamp) {
 		SkillStartTimestamp = FDateTime::Now().ToUnixTimestamp();
@@ -29,13 +28,11 @@ void B1Skill1000::Run()
 		if (FDateTime::Now().ToUnixTimestamp() - SkillStartTimestamp > CoolTime) {
 			SkillStartTimestamp = 0;
 			Animation = nullptr;
-			print("skill end");
 		}
 		
 		if (nullptr == Animation) {
 			Animation = Cast<UB1AnimInstance>(Mesh->GetAnimInstance());
 			if (Animation) {
-				print("skill start");
 				Animation->SetSkillAnimResNum(GetAnimResNum());
 			}
 		}
@@ -43,7 +40,7 @@ void B1Skill1000::Run()
 }
 bool B1Skill1000::IsRun()
 {
-	return (0 < SkillStartTimestamp) ? true : false;
+	return (FDateTime::Now().ToUnixTimestamp() - SkillStartTimestamp <= CoolTime) ? true : false;
 }
 ERES_ANIM_NUM B1Skill1000::GetAnimResNum()
 {

@@ -36,6 +36,5 @@ void UB1AnimInstance::AnimNotify_EndofAnim()
 		return;
 	}
 	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
-	print("AnimNotify_EndofAnim");
 	B1Character->StopSkill();
 }

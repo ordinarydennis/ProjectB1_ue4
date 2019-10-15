@@ -31,7 +31,7 @@ enum class ERES_ANIM_NUM
 
 #define print(text)                         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, TEXT(text), false)
 #define printc(channel, text)               if (GEngine) GEngine->AddOnScreenDebugMessage(channel, 5.0f, FColor::White, TEXT(text))
-#define printf(format, ...)                 if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 20.0f, FColor::White, FString::Printf(TEXT(format), ##__VA_ARGS__), false)
+#define printf(format, ...)                 if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::Printf(TEXT(format), ##__VA_ARGS__), false)
 #define printcf(channel, format, ...)       if (GEngine) GEngine->AddOnScreenDebugMessage(channel, 1.5f, FColor::White, FString::Printf(TEXT(format), ##__VA_ARGS__))
 
 #define printwarn(text)                     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Yellow, TEXT(text), false)

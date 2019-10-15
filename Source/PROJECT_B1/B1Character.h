@@ -17,7 +17,6 @@ public:
 	// Sets default values for this character's properties
 	AB1Character();
 	void RunSkill(BTN_SKILL_INDEX BtnSkillIdx);
-	bool IsRunSkill();
 	void StopSkill();
 
 protected:

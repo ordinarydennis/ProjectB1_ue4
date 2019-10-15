@@ -61,20 +61,19 @@ AB1Character::AB1Character()
 }
 void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 {
-	Skill = InGameSkills.Find(BtnSkillIdx);
-}
-
-bool AB1Character::IsRunSkill()
-{
-	if (nullptr != Skill) {
-		return (*Skill)->IsRun();
-	}
-	else {
-		return false;
+	if (nullptr == Skill) {
+		Skill = InGameSkills.Find(BtnSkillIdx);
+		if (false == (*Skill)->IsRun()) {
+			(*Skill)->Run();
+		}
+		else {
+			Skill = nullptr;
+		}
 	}
 }
 void AB1Character::StopSkill()
 {
+	printf("StopSkill()");
 	Skill = nullptr;
 }
 // Called when the game starts or when spawned
@@ -92,10 +91,6 @@ void AB1Character::Tick(float DeltaTime)
 	if (DirectionToMove.SizeSquared() > 0.0f) {
 		GetController()->SetControlRotation(FRotationMatrix::MakeFromX(DirectionToMove).Rotator());
 		AddMovementInput(DirectionToMove);
-	}
-
-	if (nullptr != Skill) {
-		(*Skill)->Run();
 	}
 }
 
