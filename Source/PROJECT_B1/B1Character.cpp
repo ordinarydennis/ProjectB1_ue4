@@ -61,20 +61,22 @@ AB1Character::AB1Character()
 }
 void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 {
+	Skill = InGameSkills.Find(BtnSkillIdx);
 	if (nullptr == Skill) {
-		Skill = InGameSkills.Find(BtnSkillIdx);
-		if (false == (*Skill)->IsRun()) {
-			(*Skill)->Run();
-		}
-		else {
-			Skill = nullptr;
-		}
+		return;
 	}
+
+	if (false == (*Skill)->IsCoolTime()) {
+		(*Skill)->Run();
+	}
+	else {
+		printf("CoolTime");
+	}
+	Skill = nullptr;
 }
 void AB1Character::StopSkill()
 {
-	printf("StopSkill()");
-	Skill = nullptr;
+	//Skill = nullptr;
 }
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()

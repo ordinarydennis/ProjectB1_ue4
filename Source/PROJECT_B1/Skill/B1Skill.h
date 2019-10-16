@@ -25,11 +25,14 @@ class PROJECT_B1_API IB1Skill
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void Run() = 0;
-	virtual bool IsRun() = 0;
+protected:
 	virtual ERES_ANIM_NUM GetAnimResNum() = 0;
+public:
+	bool IsCoolTime();
 
 protected:
 	int64 SkillStartTimestamp = 0;
-	USkeletalMeshComponent* Mesh;
+	USkeletalMeshComponent* Mesh = nullptr;
 	int32 CoolTime = 10;
+	UB1AnimInstance* AnimationInst = nullptr;
 };

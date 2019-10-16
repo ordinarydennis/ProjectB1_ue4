@@ -4,7 +4,6 @@
 
 #include "PROJECT_B1.h"
 #include "Skill/B1Skill.h"
-
 /**
  * 
  */
@@ -14,7 +13,11 @@ public:
 	B1Skill1002(USkeletalMeshComponent* mesh);
 	~B1Skill1002();
 
+public:
 	virtual void Run() override;
-	virtual bool IsRun() override;
+private:
 	virtual ERES_ANIM_NUM GetAnimResNum() override;
+
+private:
+	void PlayAnimation();
 };

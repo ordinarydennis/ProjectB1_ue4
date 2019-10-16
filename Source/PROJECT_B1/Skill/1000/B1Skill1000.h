@@ -15,6 +15,9 @@ public:
 
 public:
 	virtual void Run() override;
-	virtual bool IsRun() override;
+private:
 	virtual ERES_ANIM_NUM GetAnimResNum() override;
+
+private:
+	void PlayAnimation();
 };
