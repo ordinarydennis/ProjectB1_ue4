@@ -2,18 +2,17 @@
 
 
 #include "B1Skill1000.h"
+#include "B1Character.h"
 
-B1Skill1000::B1Skill1000(USkeletalMeshComponent* mesh)
+B1Skill1000::B1Skill1000(AB1Character* character)
 {
 	//기획 데이터에서 가져오도록 수정
 	CoolTime = 2;
 	SkillStartTimestamp = 0;
-	Mesh = mesh;
+	Character = character;
 }
-
 B1Skill1000::~B1Skill1000()
 {
-	//호출되는지 확인하기
 }
 void B1Skill1000::Run()
 {
@@ -26,10 +25,10 @@ void B1Skill1000::Run()
 }
 ERES_ANIM_NUM B1Skill1000::GetAnimResNum()
 {
-	return ERES_ANIM_NUM::SingleTwoHandSword_0;
+	return ERES_ANIM_NUM::_1000;
 }
 void B1Skill1000::PlayAnimation()
 {
-	AnimationInst = static_cast<UB1AnimInstance*>(Mesh->GetAnimInstance());
+	AnimationInst = static_cast<UB1AnimInstance*>(Character->GetMesh()->GetAnimInstance());
 	AnimationInst->SetSkillAnimResNum(GetAnimResNum());
 }

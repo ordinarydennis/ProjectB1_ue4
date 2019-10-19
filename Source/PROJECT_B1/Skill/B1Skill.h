@@ -32,7 +32,7 @@ public:
 
 protected:
 	int64 SkillStartTimestamp = 0;
-	USkeletalMeshComponent* Mesh = nullptr;
+	AB1Character* Character = nullptr;
 	int32 CoolTime = 10;
 	UB1AnimInstance* AnimationInst = nullptr;
 };

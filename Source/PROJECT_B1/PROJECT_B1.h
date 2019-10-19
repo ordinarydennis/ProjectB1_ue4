@@ -18,11 +18,12 @@ UENUM()
 enum class ERES_ANIM_NUM
 {
 	NONE,
-	SingleTwoHandSword_0 = 1000,
-	SingleTwoHandSword_1 = 1001,
-	SingleTwoHandSword_2 = 1002,
-	SingleTwoHandSword_3 = 1003,
-	SingleTwoHandSword_4 = 1004
+	_1000 = 1000,
+	_1001,
+	_1002,
+	_1003,
+	_1004,
+	_1005,
 };
 
 #if WITH_EDITOR

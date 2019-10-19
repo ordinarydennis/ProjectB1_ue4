@@ -7,5 +7,12 @@
 
 bool IB1Skill::IsCoolTime()
 {
-	return (FDateTime::Now().ToUnixTimestamp() - SkillStartTimestamp <= CoolTime) ? true : false;
+	bool ret = false;
+	if (FDateTime::Now().ToUnixTimestamp() - SkillStartTimestamp <= CoolTime) {
+		ret = true;
+	}
+	else {
+		SkillStartTimestamp = 0;
+	}
+	return ret;
 }

@@ -6,6 +6,8 @@
 #include "Skill/1000/B1Skill1001.h"
 #include "Skill/1000/B1Skill1002.h"
 #include "Skill/1000/B1Skill1003.h"
+#include "Skill/1000/B1Skill1005.h"
+
 #include "B1InGameWidget.h"
 #include "Misc/DateTime.h"
 
@@ -50,33 +52,27 @@ AB1Character::AB1Character()
 		GetMesh()->SetAnimInstanceClass(PLAYER_ANIM.Class);
 	}
 
-	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000(GetMesh()));
+	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000(this));
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_1, Skill1000);
-	TSharedPtr<IB1Skill> Skill1001(new B1Skill1001(GetMesh()));
+	TSharedPtr<IB1Skill> Skill1001(new B1Skill1001(this));
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_2, Skill1001);
-	TSharedPtr<IB1Skill> Skill1002(new B1Skill1002(GetMesh()));
+	TSharedPtr<IB1Skill> Skill1002(new B1Skill1002(this));
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_3, Skill1002);
-	TSharedPtr<IB1Skill> Skill1003(new B1Skill1003(GetMesh()));
-	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_4, Skill1003);
+	TSharedPtr<IB1Skill> Skill1005(new B1Skill1005(this));
+	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_4, Skill1005);
 }
 void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 {
-	Skill = InGameSkills.Find(BtnSkillIdx);
-	if (nullptr == Skill) {
+	auto CheckedSkill = InGameSkills.Find(BtnSkillIdx);
+	if (nullptr == CheckedSkill || (*CheckedSkill)->IsCoolTime()) {
 		return;
 	}
 
-	if (false == (*Skill)->IsCoolTime()) {
-		(*Skill)->Run();
-	}
-	else {
-		printf("CoolTime");
-	}
-	Skill = nullptr;
+	Skill = CheckedSkill;
 }
 void AB1Character::StopSkill()
 {
-	//Skill = nullptr;
+	Skill = nullptr;
 }
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()
@@ -93,6 +89,10 @@ void AB1Character::Tick(float DeltaTime)
 	if (DirectionToMove.SizeSquared() > 0.0f) {
 		GetController()->SetControlRotation(FRotationMatrix::MakeFromX(DirectionToMove).Rotator());
 		AddMovementInput(DirectionToMove);
+	}
+
+	if (nullptr != Skill) {
+		(*Skill)->Run();
 	}
 }
 

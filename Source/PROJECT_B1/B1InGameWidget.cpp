@@ -36,7 +36,7 @@ void UB1InGameWidget::NativeConstruct()
 
 void UB1InGameWidget::onSkill1Clicked()
 {
-	if (false == ::IsValid(B1Character)) {
+	if (nullptr == B1Character) {
 		return;
 	}
 
@@ -45,7 +45,7 @@ void UB1InGameWidget::onSkill1Clicked()
 
 void UB1InGameWidget::onSkill2Clicked()
 {
-	if (false == ::IsValid(B1Character)) {
+	if (nullptr == B1Character) {
 		return;
 	}
 
@@ -54,16 +54,16 @@ void UB1InGameWidget::onSkill2Clicked()
 
 void UB1InGameWidget::onSkill3Clicked()
 {
-	if (false == ::IsValid(B1Character)) {
+	if (nullptr == B1Character) {
 		return;
 	}
-	
+
 	B1Character->RunSkill(BTN_SKILL_INDEX::INDEX_3);
 }
 
 void UB1InGameWidget::onSkill4Clicked()
 {
-	if (false == ::IsValid(B1Character)) {
+	if (nullptr == B1Character) {
 		return;
 	}
 
