@@ -35,6 +35,8 @@ AB1Character::AB1Character()
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
 
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("B1Character"));
+
 	//유저가 선택한 캐릭터에따라 로딩
 	//메인UI에서 입력 받은 값을 가져온다. 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_COMMONER(
@@ -52,13 +54,13 @@ AB1Character::AB1Character()
 		GetMesh()->SetAnimInstanceClass(PLAYER_ANIM.Class);
 	}
 
-	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000(this));
+	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000());
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_1, Skill1000);
-	TSharedPtr<IB1Skill> Skill1001(new B1Skill1001(this));
+	TSharedPtr<IB1Skill> Skill1001(new B1Skill1001());
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_2, Skill1001);
-	TSharedPtr<IB1Skill> Skill1002(new B1Skill1002(this));
+	TSharedPtr<IB1Skill> Skill1002(new B1Skill1002());
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_3, Skill1002);
-	TSharedPtr<IB1Skill> Skill1005(new B1Skill1005(this));
+	TSharedPtr<IB1Skill> Skill1005(new B1Skill1005());
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_4, Skill1005);
 }
 void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
@@ -73,6 +75,12 @@ void AB1Character::RunSkill(BTN_SKILL_INDEX BtnSkillIdx)
 void AB1Character::StopSkill()
 {
 	Skill = nullptr;
+}
+void AB1Character::CheckAttack()
+{
+	if (nullptr != Skill) {
+		(*Skill)->CheckAttack();
+	}
 }
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()
@@ -96,6 +104,18 @@ void AB1Character::Tick(float DeltaTime)
 	}
 }
 
+void AB1Character::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	for(const auto& element:InGameSkills){
+		(element.Value)->init(this);
+	}
+
+	auto AnimationInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+	AnimationInst->OnAttackHitCheck.AddUObject(this, &AB1Character::CheckAttack);
+}
+
 // Called to bind functionality to input
 void AB1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -112,4 +132,3 @@ void AB1Character::LeftRight(float NewAxisValue)
 {
 	DirectionToMove.Y = NewAxisValue * MovingSpeed;
 }
-

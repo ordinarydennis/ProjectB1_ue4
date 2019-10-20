@@ -5,6 +5,7 @@
 //최적화 할 때 수정 하기
 //#include "CoreMinimal.h"
 #include "EngineMinimal.h"
+#include "DrawDebugHelpers.h"
 DECLARE_LOG_CATEGORY_EXTERN(B1, Log, All);
 #define B1LOG_CALLINFO (FString(__FUNCTION__) + TEXT("(") + FString::FromInt(__LINE__) + TEXT(")"))
 #define B1LOG_S(Verbosity) UE_LOG(B1, Verbosity, TEXT("%s"), *B1LOG_CALLINFO)

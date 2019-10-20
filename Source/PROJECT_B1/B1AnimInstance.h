@@ -6,6 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "B1AnimInstance.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+
 /**
  * 
  */
@@ -21,10 +23,14 @@ public:
 public:
 	void SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum);
 
+public:
+	FOnAttackHitCheckDelegate OnAttackHitCheck;
+
 private:
 	UFUNCTION()
 	void AnimNotify_EndofAnim();
-
+	UFUNCTION()
+	void AnimNotify_AttackHitCheck();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))

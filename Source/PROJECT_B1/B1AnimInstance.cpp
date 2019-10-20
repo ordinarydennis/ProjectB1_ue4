@@ -38,3 +38,7 @@ void UB1AnimInstance::AnimNotify_EndofAnim()
 	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
 	B1Character->StopSkill();
 }
+void UB1AnimInstance::AnimNotify_AttackHitCheck()
+{
+	OnAttackHitCheck.Broadcast();
+}
