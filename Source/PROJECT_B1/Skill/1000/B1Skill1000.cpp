@@ -27,7 +27,6 @@ void B1Skill1000::Run()
 }
 void B1Skill1000::CheckAttack()
 {
-	printf("B1Skill1000::AttackCheck");
 	float FinalAttackRange = 150.f;
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, Character);
@@ -47,7 +46,7 @@ void B1Skill1000::CheckAttack()
 	float HalfHeight = FinalAttackRange * 0.5f + AttackRadius;
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-	float DebugLifeTime = 5.0f;
+	float DebugLifeTime = 2.0f;
 
 	DrawDebugCapsule(Character->GetWorld(),
 		Center,
@@ -59,14 +58,11 @@ void B1Skill1000::CheckAttack()
 		DebugLifeTime);
 #endif
 
-
 	if (bResult) {
 		if (HitResult.Actor.IsValid())
 		{
-			printf("Attack");
-			//ABLOG(Warning, TEXT("Hit Actor Name: %s"), *HitResult.Actor->GetName());
-			//FDamageEvent DamageEvent;
-			//HitResult.Actor->TakeDamage(GetFinalAttackDamage(), DamageEvent, GetController(), this);
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(100, DamageEvent, Character->GetController(), Character);
 		}
 	}
 }

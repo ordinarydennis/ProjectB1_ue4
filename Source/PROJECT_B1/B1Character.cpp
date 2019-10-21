@@ -20,7 +20,7 @@ AB1Character::AB1Character()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
-	SpringArm->TargetArmLength = 350.0f;
+	SpringArm->TargetArmLength = 450.0f;
 	SpringArm->SetRelativeRotation(FRotator(-75.0f, 0.0f, 0.0f));
 
 	//ArmLengthTo = 350.0f;
@@ -114,6 +114,14 @@ void AB1Character::PostInitializeComponents()
 
 	auto AnimationInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
 	AnimationInst->OnAttackHitCheck.AddUObject(this, &AB1Character::CheckAttack);
+}
+
+float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	//printf("Actor %s Damage %f", *GetName(), FinalDamage);
+	return FinalDamage;
 }
 
 // Called to bind functionality to input
