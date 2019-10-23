@@ -6,16 +6,16 @@
 #include "Skill/B1Skill.h"
 
 /**
- * 
+ *
  */
-class PROJECT_B1_API B1Skill1001 : public IB1Skill
+class PROJECT_B1_API B1Skill1004 : public IB1Skill
 {
 public:
-	B1Skill1001();
-	~B1Skill1001();
+	B1Skill1004();
+	~B1Skill1004();
 
 public:
-	virtual void init(AB1Character* Character) override;
+	virtual void init(AB1Character* character) override;
 	virtual void Run() override;
 	virtual void CheckAttack() override;
 

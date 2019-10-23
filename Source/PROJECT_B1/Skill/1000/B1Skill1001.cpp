@@ -39,7 +39,3 @@ void B1Skill1001::PlayAnimation()
 {
 	AnimationInst->SetSkillAnimResNum(GetAnimResNum());
 }
-void B1Skill1001::AttackCheck()
-{
-
-}

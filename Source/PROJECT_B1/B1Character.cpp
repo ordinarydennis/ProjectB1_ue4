@@ -6,6 +6,7 @@
 #include "Skill/1000/B1Skill1001.h"
 #include "Skill/1000/B1Skill1002.h"
 #include "Skill/1000/B1Skill1003.h"
+#include "Skill/1000/B1Skill1004.h"
 #include "Skill/1000/B1Skill1005.h"
 
 #include "B1InGameWidget.h"
@@ -20,11 +21,9 @@ AB1Character::AB1Character()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
-	SpringArm->TargetArmLength = 450.0f;
-	SpringArm->SetRelativeRotation(FRotator(-75.0f, 0.0f, 0.0f));
+	SpringArm->TargetArmLength = 500.0f;
+	SpringArm->SetRelativeRotation(FRotator(-20.0f, -90.0f, 0.0f));
 
-	//ArmLengthTo = 350.0f;
-	//ArmRotationTo = FRotator(-70.0f, 0.0f, 0.0f);
 	SpringArm->bUsePawnControlRotation = false;
 	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritRoll = false;
@@ -34,6 +33,9 @@ AB1Character::AB1Character()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
+
+	//시작 위치
+	SetActorLocation(FVector(-2560.0f, 0.0f, 0.0f), false);
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("B1Character"));
 
@@ -53,6 +55,12 @@ AB1Character::AB1Character()
 	if (PLAYER_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(PLAYER_ANIM.Class);
 	}
+
+	//유저의 스킬을 모두 가져온다.
+	//스킬 배열 만든다. 섞는다.
+	//다음 가져올 인덱스 필요
+	//스킬 큐에서 앞부터 
+	//버튼 맵에 스킬 큐 앞부터 넣는다.
 
 	TSharedPtr<IB1Skill> Skill1000(new B1Skill1000());
 	InGameSkills.Add(BTN_SKILL_INDEX::INDEX_1, Skill1000);
@@ -134,9 +142,9 @@ void AB1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AB1Character::UpDown(float NewAxisValue)
 {
-	DirectionToMove.X = NewAxisValue * MovingSpeed;
+	DirectionToMove.Y = NewAxisValue * MovingSpeed;
 }
 void AB1Character::LeftRight(float NewAxisValue)
 {
-	DirectionToMove.Y = NewAxisValue * MovingSpeed;
+	DirectionToMove.X = NewAxisValue * MovingSpeed;
 }

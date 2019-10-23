@@ -4,6 +4,8 @@
 #Resources
 Content/Resources/Market/ModularRPGHeroesPolyart/*
 !Content/Resources/Market/ModularRPGHeroesPolyart/*.keep
+Content/Resources/Market/CraftResourcesIcons/*
+!Content/Resources/Market/CraftResourcesIcons/*.keep
 
 # Visual Studio 2015 database file
 *.VC.db
