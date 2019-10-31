@@ -19,6 +19,9 @@ UCLASS()
 class PROJECT_B1_API UB1InGameWidget : public UUserWidget
 {
 	GENERATED_BODY()
+	
+public:
+	void LoadImage();
 
 protected:
 	virtual void NativeConstruct() override;

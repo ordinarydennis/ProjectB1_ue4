@@ -6,6 +6,10 @@
 
 B1Skill1004::B1Skill1004()
 {
+	static ConstructorHelpers::FObjectFinder<UTexture2D> SkillIcon(TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_10_b"));
+	if (SkillIcon.Succeeded()) {
+		SkillIconTexture = SkillIcon.Object;
+	}
 }
 B1Skill1004::~B1Skill1004()
 {

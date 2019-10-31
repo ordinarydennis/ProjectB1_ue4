@@ -33,10 +33,12 @@ protected:
 
 public:
 	bool IsCoolTime();
+	void SetBtnImage(class UButton* btn);
 
 protected:
 	int64 SkillStartTimestamp = 0;
 	int32 CoolTime = 10;
 	AB1Character* Character = nullptr;
 	UB1AnimInstance* AnimationInst = nullptr;
+	UTexture2D* SkillIconTexture = nullptr;
 };

@@ -32,6 +32,38 @@ void UB1InGameWidget::NativeConstruct()
 	if (nullptr != btnSkill4) {
 		btnSkill4->OnClicked.AddDynamic(this, &UB1InGameWidget::onSkill4Clicked);
 	}
+
+	LoadImage();
+}
+
+void UB1InGameWidget::LoadImage()
+{
+	//버튼 이미지 로드
+	auto SkillBtnList = B1Character->GetSkillBtnList();
+	
+	UButton* btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill1")));
+	auto btn = SkillBtnList->Find(BTN_SKILL_INDEX::INDEX_1);
+	if (nullptr != btn) {
+		(*btn)->SetBtnImage(btnSkill);
+	}
+
+	btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill2")));
+	btn = SkillBtnList->Find(BTN_SKILL_INDEX::INDEX_2);
+	if (nullptr != btn) {
+		(*btn)->SetBtnImage(btnSkill);
+	}
+
+	btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill3")));
+	btn = SkillBtnList->Find(BTN_SKILL_INDEX::INDEX_3);
+	if (nullptr != btn) {
+		(*btn)->SetBtnImage(btnSkill);
+	}
+
+	btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill4")));
+	btn = SkillBtnList->Find(BTN_SKILL_INDEX::INDEX_4);
+	if (nullptr != btn) {
+		(*btn)->SetBtnImage(btnSkill);
+	}
 }
 
 void UB1InGameWidget::onSkill1Clicked()

@@ -19,6 +19,7 @@ public:
 	void RunSkill(BTN_SKILL_INDEX BtnSkillIdx);
 	void StopSkill();
 	void CheckAttack();
+	TMap<BTN_SKILL_INDEX, TSharedPtr<IB1Skill>>* GetSkillBtnList();
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,9 +47,11 @@ private:
 private:
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
+	TSharedPtr<IB1Skill> Factory(uint32 SkillNum);
 
 private:
 	float MovingSpeed = 0.8f;
 	TMap<BTN_SKILL_INDEX, TSharedPtr<IB1Skill>> InGameSkills;
+	TArray<TSharedPtr<IB1Skill>> InGameSkills2;
 	TSharedPtr<IB1Skill>* Skill = nullptr;
 };
