@@ -27,6 +27,8 @@ enum class ERES_ANIM_NUM
 	_1005,
 };
 
+const int NUM_OF_INGAME_SKILL_BTN = 4;
+
 #if WITH_EDITOR
 #include "EngineGlobals.h"
 #include "Engine/Engine.h"

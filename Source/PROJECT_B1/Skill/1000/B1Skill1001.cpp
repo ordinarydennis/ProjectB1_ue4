@@ -21,6 +21,7 @@ void B1Skill1001::init(AB1Character* character)
 	SkillStartTimestamp = 0;
 	Character = character;
 	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
+	ClassName = "B1Skill1001";
 }
 void B1Skill1001::Run()
 {

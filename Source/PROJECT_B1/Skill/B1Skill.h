@@ -34,6 +34,7 @@ protected:
 public:
 	bool IsCoolTime();
 	void SetBtnImage(class UButton* btn);
+	FString GetName();
 
 protected:
 	int64 SkillStartTimestamp = 0;
@@ -41,4 +42,5 @@ protected:
 	AB1Character* Character = nullptr;
 	UB1AnimInstance* AnimationInst = nullptr;
 	UTexture2D* SkillIconTexture = nullptr;
+	FString ClassName = "NULL";
 };

@@ -10,15 +10,17 @@ B1Skill1000::B1Skill1000()
 	if (SkillIcon.Succeeded()) {
 		SkillIconTexture = SkillIcon.Object;
 	}
+
+	//TODO: 기획 데이터에서 가져오도록 수정
+	CoolTime = 1;
+	SkillStartTimestamp = 0;
+	ClassName = "B1Skill1000";
 }
 B1Skill1000::~B1Skill1000()
 {
 }
 void B1Skill1000::init(AB1Character* character)
 {
-	//TODO: 기획 데이터에서 가져오도록 수정
-	CoolTime = 2;
-	SkillStartTimestamp = 0;
 	Character = character;
 	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
 }

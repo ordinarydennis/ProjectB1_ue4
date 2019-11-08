@@ -35,8 +35,10 @@ void UB1AnimInstance::AnimNotify_EndofAnim()
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
+
+	//브로드 캐스팅 to character and UI
 	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
-	B1Character->StopSkill();
+	OnEndofAnim.Broadcast();
 }
 void UB1AnimInstance::AnimNotify_AttackHitCheck()
 {

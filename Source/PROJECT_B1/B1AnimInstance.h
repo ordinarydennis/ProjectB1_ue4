@@ -7,6 +7,7 @@
 #include "B1AnimInstance.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnEndofAnimDelegate);
 
 /**
  * 
@@ -25,6 +26,7 @@ public:
 
 public:
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
+	FOnEndofAnimDelegate OnEndofAnim;
 
 private:
 	UFUNCTION()

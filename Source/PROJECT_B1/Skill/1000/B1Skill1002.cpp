@@ -17,10 +17,11 @@ B1Skill1002::~B1Skill1002()
 void B1Skill1002::init(AB1Character* character)
 {
 	//TODO: 기획 데이터에서 가져오도록 수정
-	CoolTime = 2;
+	CoolTime = 3;
 	SkillStartTimestamp = 0;
 	Character = character;
 	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
+	ClassName = "B1Skill1002";
 }
 void B1Skill1002::Run()
 {

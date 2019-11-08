@@ -16,10 +16,9 @@ class PROJECT_B1_API AB1Character : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AB1Character();
-	void RunSkill(BTN_SKILL_INDEX BtnSkillIdx);
+	void RunSkill(IB1Skill* skill);
 	void StopSkill();
 	void CheckAttack();
-	TMap<BTN_SKILL_INDEX, TSharedPtr<IB1Skill>>* GetSkillBtnList();
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,7 +31,6 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstiator, AActor* DamageCauser) override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 
 protected:
 	FVector DirectionToMove = FVector::ZeroVector;
@@ -47,11 +45,9 @@ private:
 private:
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
-	TSharedPtr<IB1Skill> Factory(uint32 SkillNum);
-
+	
 private:
 	float MovingSpeed = 0.8f;
-	TMap<BTN_SKILL_INDEX, TSharedPtr<IB1Skill>> InGameSkills;
-	TArray<TSharedPtr<IB1Skill>> InGameSkills2;
-	TSharedPtr<IB1Skill>* Skill = nullptr;
+	IB1Skill* Skill = nullptr;
+	BTN_SKILL_INDEX Btn = BTN_SKILL_INDEX::INDEX_NONE;
 };
