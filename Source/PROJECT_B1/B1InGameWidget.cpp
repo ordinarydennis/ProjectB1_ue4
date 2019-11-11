@@ -123,14 +123,14 @@ void UB1InGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 			//(*Btn)->SetIsEnabled(true);
 		}
 		else {
-			(*Btn)->SetBackgroundColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.0f));
+			(*Btn)->SetBackgroundColor(FLinearColor(0.05f, 0.05f, 0.05f, 1.0f));
 			//(*Btn)->SetIsEnabled(false);
 		}
 	}
 
 	IB1Skill* NextSkill;
 	SkillQueue.Peek(NextSkill);
-	auto imgSkill = Cast<UImage>(GetWidgetFromName(TEXT("imgSkill")));
+	auto imgSkill = Cast<UImage>(GetWidgetFromName(TEXT("imgNextSkill")));
 	if (NextSkill->IsCoolTime()) {
 		imgSkill->SetBrushTintColor(FSlateColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.0f)));
 	}
@@ -285,7 +285,7 @@ void UB1InGameWidget::SetNextSkillImg()
 {
 	IB1Skill* NextSkill;
 	SkillQueue.Peek(NextSkill);
-	auto imgSkill = Cast<UImage>(GetWidgetFromName(TEXT("imgSkill")));
+	auto imgSkill = Cast<UImage>(GetWidgetFromName(TEXT("imgNextSkill")));
 	imgSkill->Brush.SetResourceObject(Cast<UObject>(NextSkill->GetBtnImage()));
 	imgSkill->Brush.SetImageSize(FVector2D(130.f, 130.f));
 	imgSkill->Brush.DrawAs = ESlateBrushDrawType::Image;
