@@ -24,23 +24,20 @@ void IB1Skill::SetBtnImage(UButton* btn)
 	}
 
 	btn->WidgetStyle.Normal.SetResourceObject(Cast<UObject>(SkillIconTexture));
-	btn->WidgetStyle.Normal.SetImageSize(FVector2D(400.f, 400.f));
+	btn->WidgetStyle.Normal.SetImageSize(FVector2D(200.f, 200.f));
 	btn->WidgetStyle.Normal.DrawAs = ESlateBrushDrawType::Image;
 
 	btn->WidgetStyle.Hovered.SetResourceObject(Cast<UObject>(SkillIconTexture));
-	btn->WidgetStyle.Hovered.SetImageSize(FVector2D(300.f, 300.f));
+	btn->WidgetStyle.Hovered.SetImageSize(FVector2D(200.f, 200.f));
 	btn->WidgetStyle.Hovered.DrawAs = ESlateBrushDrawType::Image;
 
 	btn->WidgetStyle.Pressed.SetResourceObject(Cast<UObject>(SkillIconTexture));
-	btn->WidgetStyle.Pressed.SetImageSize(FVector2D(100.f, 100.f));
+	btn->WidgetStyle.Pressed.SetImageSize(FVector2D(170.f, 170.f));
 	btn->WidgetStyle.Pressed.DrawAs = ESlateBrushDrawType::Image;
-
-	btn->WidgetStyle.Disabled.SetResourceObject(Cast<UObject>(SkillIconTexture));
-	btn->WidgetStyle.Disabled.SetImageSize(FVector2D(100.f, 100.f));
-	btn->WidgetStyle.Disabled.DrawAs = ESlateBrushDrawType::Image;
-
-	//btn->SetIsEnabled(false);
-
+}
+UTexture2D* IB1Skill::GetBtnImage()
+{
+	return SkillIconTexture;
 }
 FString IB1Skill::GetName()
 {	

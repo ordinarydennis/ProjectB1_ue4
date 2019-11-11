@@ -34,6 +34,7 @@ protected:
 public:
 	bool IsCoolTime();
 	void SetBtnImage(class UButton* btn);
+	UTexture2D* GetBtnImage();
 	FString GetName();
 
 protected:

@@ -11,7 +11,7 @@
 class PROJECT_B1_API B1Skill1004 : public IB1Skill
 {
 public:
-	B1Skill1004();
+	B1Skill1004(AB1Character* character);
 	~B1Skill1004();
 
 public:

@@ -42,7 +42,8 @@ public:
 
 protected:
 	virtual void NativeConstruct() override;
-	
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
 	UFUNCTION()
 	void onSkill1Clicked();
 	UFUNCTION()
@@ -53,18 +54,19 @@ protected:
 	void onSkill4Clicked();
 
 private:
-	void ChangeSkillBtn();
-	TSharedPtr<IB1Skill> Factory(ERES_ANIM_NUM SkillNum);
+	TSharedPtr<IB1Skill> SkillFactory(ERES_ANIM_NUM SkillNum, AB1Character* character);
 	IB1Skill* GetSkill(BTN_SKILL_INDEX SkillBtnIndex);
 	void StopSkill();
+	void SetNextSkillImg();
 
 private:
-	IB1Skill* Skill = nullptr;
-	TArray<TSharedPtr<IB1Skill>> InGameSkills2;
-	TMap<BTN_SKILL_INDEX, UButton*> BtnArr;
-	TMap<BTN_SKILL_INDEX, IB1Skill*> InGameSkills;
-	TQueue<IB1Skill*> SkillQueue;
-	class AB1Character* B1Character = nullptr;
+	//IB1Skill* Skill = nullptr;
 	BTN_SKILL_INDEX BtnIndex = BTN_SKILL_INDEX::INDEX_NONE;
+	TArray<TSharedPtr<IB1Skill>> Skills;
+	TMap<BTN_SKILL_INDEX, UButton*> Btns;
+	TMap<BTN_SKILL_INDEX, IB1Skill*> SkillsOfBtn;
+	TQueue<IB1Skill*> SkillQueue;
+	AB1Character* B1Character = nullptr;
+	UTexture2D* NextSkillIconTexture = nullptr;
 };
 

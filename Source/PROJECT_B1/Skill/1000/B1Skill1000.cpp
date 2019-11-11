@@ -4,7 +4,7 @@
 #include "B1Skill1000.h"
 #include "B1Character.h"
 
-B1Skill1000::B1Skill1000()
+B1Skill1000::B1Skill1000(AB1Character* character)
 {
 	static ConstructorHelpers::FObjectFinder<UTexture2D> SkillIcon(TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_06_b"));
 	if (SkillIcon.Succeeded()) {
@@ -12,17 +12,19 @@ B1Skill1000::B1Skill1000()
 	}
 
 	//TODO: 기획 데이터에서 가져오도록 수정
-	CoolTime = 1;
+	CoolTime = 3;	//쿨타임이 너무 작으면 endofAnim 노티파이가 씹힐수 있다?
 	SkillStartTimestamp = 0;
 	ClassName = "B1Skill1000";
+
+	Character = character;
+	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
 }
 B1Skill1000::~B1Skill1000()
 {
 }
 void B1Skill1000::init(AB1Character* character)
 {
-	Character = character;
-	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
+
 }
 void B1Skill1000::Run()
 {

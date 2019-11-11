@@ -4,6 +4,7 @@
 #include "B1InGameWidget.h"
 #include "B1Character.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "Skill/1000/B1Skill1000.h"
 #include "Skill/1000/B1Skill1001.h"
 #include "Skill/1000/B1Skill1002.h"
@@ -43,11 +44,11 @@ UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)
 
 	//스킬 초기화
 	//초기화 시점과 큐에 넣는 시점이 달라야 한다.
-	InGameSkills2.Reserve(6);
+	Skills.Reserve(6);
 	for (const auto& skillNum : skillNums) {
-		auto skill = Factory(skillNum);
-		skill->init(B1Character);
-		InGameSkills2.Add(skill);
+		auto skill = SkillFactory(skillNum, B1Character);
+		//skill->init(B1Character);
+		Skills.Add(skill);
 		SkillQueue.Enqueue(skill.Get());
 	}
 
@@ -56,41 +57,43 @@ UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)
 	for (int i = 0; i < NUM_OF_INGAME_SKILL_BTN; i++) {
 		IB1Skill* Skill;
 		SkillQueue.Dequeue(Skill);
-		InGameSkills.Add(++a, Skill);
+		SkillsOfBtn.Add(++a, Skill);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D> NextSkillIcon(TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_stone_11_b.Tex_stone_11_b"));
+	if (NextSkillIcon.Succeeded()) {
+		NextSkillIconTexture = NextSkillIcon.Object;
 	}
 }
 void UB1InGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	BtnArr.Reserve(NUM_OF_INGAME_SKILL_BTN);
+	Btns.Reserve(NUM_OF_INGAME_SKILL_BTN);
 
 	auto BtnIndex2 = BTN_SKILL_INDEX::INDEX_NONE;
 	UButton* btnSkill1 = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill1")));
-	//auto SkillonBtn = InGameSkills.Find(BTN_SKILL_INDEX::INDEX_1);
 	if (nullptr != btnSkill1) {
-		//(*SkillonBtn)->SetBtnImage(btnSkill1);
 		btnSkill1->OnClicked.AddDynamic(this, &UB1InGameWidget::onSkill1Clicked);
-		BtnArr.Add(++BtnIndex2, btnSkill1);
+		Btns.Add(++BtnIndex2, btnSkill1);
 	}
 
 	UButton* btnSkill2 = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill2")));
 	if (nullptr != btnSkill2) {
-		//(*SkillonBtn)->SetBtnImage(btnSkill2);
 		btnSkill2->OnClicked.AddDynamic(this, &UB1InGameWidget::onSkill2Clicked);
-		BtnArr.Add(++BtnIndex2, btnSkill2);
+		Btns.Add(++BtnIndex2, btnSkill2);
 	}
 
 	UButton* btnSkill3 = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill3")));
 	if (nullptr != btnSkill3) {
 		btnSkill3->OnClicked.AddDynamic(this, &UB1InGameWidget::onSkill3Clicked);
-		BtnArr.Add(++BtnIndex2, btnSkill3);
+		Btns.Add(++BtnIndex2, btnSkill3);
 	}
 
 	UButton* btnSkill4 = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill4")));
 	if (nullptr != btnSkill4) {
 		btnSkill4->OnClicked.AddDynamic(this, &UB1InGameWidget::onSkill4Clicked);
-		BtnArr.Add(++BtnIndex2, btnSkill4);
+		Btns.Add(++BtnIndex2, btnSkill4);
 	}
 
 	LoadImage();
@@ -98,132 +101,160 @@ void UB1InGameWidget::NativeConstruct()
 	auto AnimationInst = Cast<UB1AnimInstance>(B1Character->GetMesh()->GetAnimInstance());
 	AnimationInst->OnEndofAnim.AddUObject(this, &UB1InGameWidget::StopSkill);
 }
+void UB1InGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	//여기 소스코드 한번 정리하기
+	//이미 색이 세팅되어 있다면 세팅하지 않기
+	BTN_SKILL_INDEX a = BTN_SKILL_INDEX::INDEX_NONE;
+	for (int i = 0; i < NUM_OF_INGAME_SKILL_BTN; i++) {
+		auto Skill = SkillsOfBtn.Find(++a);
+		if (nullptr == Skill) {
+			continue;
+		}
+		UButton** Btn = Btns.Find(a);
+		if (nullptr == Btn) {
+			continue;
+		}
+
+		if (false == (*Skill)->IsCoolTime()) {
+			(*Btn)->SetBackgroundColor(FLinearColor(1.0f, 1.0f, 1.0f, 1.0f));
+			//(*Btn)->SetIsEnabled(true);
+		}
+		else {
+			(*Btn)->SetBackgroundColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.0f));
+			//(*Btn)->SetIsEnabled(false);
+		}
+	}
+
+	IB1Skill* NextSkill;
+	SkillQueue.Peek(NextSkill);
+	auto imgSkill = Cast<UImage>(GetWidgetFromName(TEXT("imgSkill")));
+	if (NextSkill->IsCoolTime()) {
+		imgSkill->SetBrushTintColor(FSlateColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.0f)));
+	}
+	else {
+		imgSkill->SetBrushTintColor(FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f, 1.0f)));
+	}
+}
 void UB1InGameWidget::LoadImage()
 {
 	UButton* btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill1")));
-	auto btn = InGameSkills.Find(BTN_SKILL_INDEX::INDEX_1);
-	if (nullptr != btn) {
-		(*btn)->SetBtnImage(btnSkill);
+	auto SkillOfBtn = SkillsOfBtn.Find(BTN_SKILL_INDEX::INDEX_1);
+	if (nullptr != SkillOfBtn) {
+		(*SkillOfBtn)->SetBtnImage(btnSkill);
 	}
 
 	btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill2")));
-	btn = InGameSkills.Find(BTN_SKILL_INDEX::INDEX_2);
-	if (nullptr != btn) {
-		(*btn)->SetBtnImage(btnSkill);
+	SkillOfBtn = SkillsOfBtn.Find(BTN_SKILL_INDEX::INDEX_2);
+	if (nullptr != SkillOfBtn) {
+		(*SkillOfBtn)->SetBtnImage(btnSkill);
 	}
 
 	btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill3")));
-	btn = InGameSkills.Find(BTN_SKILL_INDEX::INDEX_3);
-	if (nullptr != btn) {
-		(*btn)->SetBtnImage(btnSkill);
+	SkillOfBtn = SkillsOfBtn.Find(BTN_SKILL_INDEX::INDEX_3);
+	if (nullptr != SkillOfBtn) {
+		(*SkillOfBtn)->SetBtnImage(btnSkill);
 	}
 
 	btnSkill = Cast<UButton>(GetWidgetFromName(TEXT("btnSkill4")));
-	btn = InGameSkills.Find(BTN_SKILL_INDEX::INDEX_4);
-	if (nullptr != btn) {
-		(*btn)->SetBtnImage(btnSkill);
-	}
+	SkillOfBtn = SkillsOfBtn.Find(BTN_SKILL_INDEX::INDEX_4);
+	if (nullptr != SkillOfBtn) {
+		(*SkillOfBtn)->SetBtnImage(btnSkill);
+	}	
+
+	SetNextSkillImg();
 }
 void UB1InGameWidget::onSkill1Clicked()
 {
-	if (nullptr == B1Character || nullptr != Skill) {
-		//printf("Skill is running");
+	if (nullptr == B1Character || BTN_SKILL_INDEX::INDEX_NONE != BtnIndex) {
 		return;
 	}
 
 	auto SkillonBtn = GetSkill(BTN_SKILL_INDEX::INDEX_1);
 	if (nullptr == SkillonBtn) {
-		//printf("0 Cool Time");
+		printf("Cool Time 4");
 		return;
 	}
+
 	BtnIndex = BTN_SKILL_INDEX::INDEX_1;
-	Skill = SkillonBtn;
-	B1Character->RunSkill(Skill);
+	B1Character->RunSkill(SkillonBtn);
 }
 void UB1InGameWidget::onSkill2Clicked()
 {
-	if (nullptr == B1Character || nullptr != Skill) {
-		//printf("Skill is running");
+	if (nullptr == B1Character || BTN_SKILL_INDEX::INDEX_NONE != BtnIndex) {
 		return;
 	}
 
 	auto SkillonBtn = GetSkill(BTN_SKILL_INDEX::INDEX_2);
 	if (nullptr == SkillonBtn) {
-		//printf("1 Cool Time");
+		printf("Cool Time 4");
 		return;
 	}
+
 	BtnIndex = BTN_SKILL_INDEX::INDEX_2;
-	Skill = SkillonBtn;
-	B1Character->RunSkill(Skill);
+	B1Character->RunSkill(SkillonBtn);
 }
 void UB1InGameWidget::onSkill3Clicked()
 {
-	if (nullptr == B1Character || nullptr != Skill) {
-		//printf("Skill is running");
+	if (nullptr == B1Character || BTN_SKILL_INDEX::INDEX_NONE != BtnIndex) {
 		return;
 	}
 
 	auto SkillonBtn = GetSkill(BTN_SKILL_INDEX::INDEX_3);
 	if (nullptr == SkillonBtn) {
-		//printf("3 Cool Time");
+		printf("Cool Time 4");
 		return;
 	}
+
 	BtnIndex = BTN_SKILL_INDEX::INDEX_3;
-	Skill = SkillonBtn;
-	B1Character->RunSkill(Skill);
+	B1Character->RunSkill(SkillonBtn);
 }
 void UB1InGameWidget::onSkill4Clicked()
 {
-	if (nullptr == B1Character || nullptr != Skill) {
-		//printf("Skill is running");
+	if (nullptr == B1Character || BTN_SKILL_INDEX::INDEX_NONE != BtnIndex) {
 		return;
 	}
 
 	auto SkillonBtn = GetSkill(BTN_SKILL_INDEX::INDEX_4);
 	if (nullptr == SkillonBtn) {
-		//printf("4 Cool Time");
+		printf("Cool Time 4");
 		return;
 	}
+
 	BtnIndex = BTN_SKILL_INDEX::INDEX_4;
-	Skill = SkillonBtn;
-	B1Character->RunSkill(Skill);
+	B1Character->RunSkill(SkillonBtn);
 }
-void UB1InGameWidget::ChangeSkillBtn()
-{
-	auto skill = InGameSkills.Find(BtnIndex);
-	if (nullptr != skill) {
-		(*skill)->SetBtnImage(BtnArr[BtnIndex]);
-	}
-}
-TSharedPtr<IB1Skill> UB1InGameWidget::Factory(ERES_ANIM_NUM SkillNum)
+TSharedPtr<IB1Skill> UB1InGameWidget::SkillFactory(ERES_ANIM_NUM SkillNum, AB1Character* character)
 {
 	TSharedPtr<IB1Skill> skill = nullptr;
 	switch (SkillNum)
 	{
 	case ERES_ANIM_NUM::_1000 :
-		skill = MakeShareable(new B1Skill1000());
+		skill = MakeShareable(new B1Skill1000(character));
 		break;
 	case ERES_ANIM_NUM::_1001 :
-		skill = MakeShareable(new B1Skill1001());
+		skill = MakeShareable(new B1Skill1001(character));
 		break;
 	case ERES_ANIM_NUM::_1002 :
-		skill = MakeShareable(new B1Skill1002());
+		skill = MakeShareable(new B1Skill1002(character));
 		break;
 	case ERES_ANIM_NUM::_1003 :
-		skill = MakeShareable(new B1Skill1003());
+		skill = MakeShareable(new B1Skill1003(character));
 		break;
 	case ERES_ANIM_NUM::_1004 :
-		skill = MakeShareable(new B1Skill1004());
+		skill = MakeShareable(new B1Skill1004(character));
 		break;
 	case ERES_ANIM_NUM::_1005 :
-		skill = MakeShareable(new B1Skill1005());
+		skill = MakeShareable(new B1Skill1005(character));
 		break;
 	}
 	return skill;
 }
 IB1Skill* UB1InGameWidget::GetSkill(BTN_SKILL_INDEX SkillBtnIndex)
 {
-	auto skill = InGameSkills.Find(SkillBtnIndex);
+	auto skill = SkillsOfBtn.Find(SkillBtnIndex);
 	if (nullptr == skill || (*skill)->IsCoolTime()) {
 		return nullptr;
 	}
@@ -231,18 +262,31 @@ IB1Skill* UB1InGameWidget::GetSkill(BTN_SKILL_INDEX SkillBtnIndex)
 }
 void UB1InGameWidget::StopSkill()
 {
-	//printf("Enqueue %s", *Skill->GetName());
-	SkillQueue.Enqueue(Skill);
-	IB1Skill* Skill2;
-	SkillQueue.Dequeue(Skill2);
-	//printf("Dequeue %s", *Skill2->GetName());
-	InGameSkills.Add(BtnIndex, Skill2);
+	if (BTN_SKILL_INDEX::INDEX_NONE == BtnIndex) {
+		printf("StopSkill() BTN_SKILL_INDEX::INDEX_NONE ");
+		return;
+	}
 
-	auto Btn = BtnArr.Find(BtnIndex);
-	Skill2->SetBtnImage(*Btn);
+	//스킬 교체 함수로 따로 만들기
+	auto Skill = SkillsOfBtn.Find(BtnIndex);
+	auto Btn = Btns.Find(BtnIndex);
+
+	SkillQueue.Enqueue(*Skill);
+	IB1Skill* NextSkill = nullptr;
+	SkillQueue.Dequeue(NextSkill);
+	NextSkill->SetBtnImage(*Btn);
+	SkillsOfBtn.Add(BtnIndex, NextSkill);
 	
-	Skill = nullptr;
 	BtnIndex = BTN_SKILL_INDEX::INDEX_NONE;
-
 	B1Character->StopSkill();
+	SetNextSkillImg();
+}
+void UB1InGameWidget::SetNextSkillImg()
+{
+	IB1Skill* NextSkill;
+	SkillQueue.Peek(NextSkill);
+	auto imgSkill = Cast<UImage>(GetWidgetFromName(TEXT("imgSkill")));
+	imgSkill->Brush.SetResourceObject(Cast<UObject>(NextSkill->GetBtnImage()));
+	imgSkill->Brush.SetImageSize(FVector2D(130.f, 130.f));
+	imgSkill->Brush.DrawAs = ESlateBrushDrawType::Image;
 }

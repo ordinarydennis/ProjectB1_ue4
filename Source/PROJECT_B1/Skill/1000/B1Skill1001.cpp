@@ -4,24 +4,27 @@
 #include "B1Skill1001.h"
 #include "B1Character.h"
 
-B1Skill1001::B1Skill1001()
+B1Skill1001::B1Skill1001(AB1Character* character)
 {
 	static ConstructorHelpers::FObjectFinder<UTexture2D> SkillIcon(TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_07_b"));
 	if (SkillIcon.Succeeded()) {
 		SkillIconTexture = SkillIcon.Object;
 	}
+
+	//TODO: 기획 데이터에서 가져오도록 수정
+	CoolTime = 3;
+	SkillStartTimestamp = 0;
+	ClassName = "B1Skill1001";
+
+	Character = character;
+	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
 }
 B1Skill1001::~B1Skill1001()
 {
 }
 void B1Skill1001::init(AB1Character* character)
 {
-	//TODO: 기획 데이터에서 가져오도록 수정
-	CoolTime = 2;
-	SkillStartTimestamp = 0;
-	Character = character;
-	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
-	ClassName = "B1Skill1001";
+
 }
 void B1Skill1001::Run()
 {

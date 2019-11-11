@@ -20,14 +20,10 @@ void UB1AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (nullptr == B1Character) {
 		B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	}
-
-	//have to check object whether valid or not.
-	//if (::IsValid(B1Character)) {
-	//	SkillAnimResNum = static_cast<int32>(B1Character->GetCurrentSkillAnimResNum());
-	//}
 }
 void UB1AnimInstance::SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum)
 {
+	//printf("SetSkillAnimResNum %d", skillAnimResNum);
 	SkillAnimResNum = static_cast<int32>(skillAnimResNum);
 }
 void UB1AnimInstance::AnimNotify_EndofAnim()
@@ -36,7 +32,7 @@ void UB1AnimInstance::AnimNotify_EndofAnim()
 		return;
 	}
 
-	//브로드 캐스팅 to character and UI
+	//printf("AnimNotify_EndofAnim %d", SkillAnimResNum);
 	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
 	OnEndofAnim.Broadcast();
 }
