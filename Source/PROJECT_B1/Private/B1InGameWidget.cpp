@@ -12,7 +12,6 @@
 #include "Skill/1000/B1Skill1004.h"
 #include "Skill/1000/B1Skill1005.h"
 
-
 UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
@@ -59,11 +58,6 @@ UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)
 		SkillQueue.Dequeue(Skill);
 		SkillsOfBtn.Add(++a, Skill);
 	}
-
-	static ConstructorHelpers::FObjectFinder<UTexture2D> NextSkillIcon(TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_stone_11_b.Tex_stone_11_b"));
-	if (NextSkillIcon.Succeeded()) {
-		NextSkillIconTexture = NextSkillIcon.Object;
-	}
 }
 void UB1InGameWidget::NativeConstruct()
 {
@@ -98,8 +92,8 @@ void UB1InGameWidget::NativeConstruct()
 
 	LoadImage();
 
-	auto AnimationInst = Cast<UB1AnimInstance>(B1Character->GetMesh()->GetAnimInstance());
-	AnimationInst->OnEndofAnim.AddUObject(this, &UB1InGameWidget::StopSkill);
+	auto AnimInst = Cast<UB1AnimInstance>(B1Character->GetMesh()->GetAnimInstance());
+	AnimInst->OnEndofAnim.AddUObject(this, &UB1InGameWidget::StopSkill);
 }
 void UB1InGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {

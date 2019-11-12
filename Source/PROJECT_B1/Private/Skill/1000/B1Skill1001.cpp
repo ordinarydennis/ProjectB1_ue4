@@ -6,9 +6,9 @@
 
 B1Skill1001::B1Skill1001(AB1Character* character)
 {
-	static ConstructorHelpers::FObjectFinder<UTexture2D> SkillIcon(TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_07_b"));
-	if (SkillIcon.Succeeded()) {
-		SkillIconTexture = SkillIcon.Object;
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ResTex2dSkill(*RES_TEX2D_SKILL1001);
+	if (ResTex2dSkill.Succeeded()) {
+		Tex2dSkill = ResTex2dSkill.Object;
 	}
 
 	//TODO: 기획 데이터에서 가져오도록 수정
@@ -17,23 +17,17 @@ B1Skill1001::B1Skill1001(AB1Character* character)
 	ClassName = "B1Skill1001";
 
 	Character = character;
-	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
+	AnimInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
 }
 B1Skill1001::~B1Skill1001()
 {
 }
-void B1Skill1001::init(AB1Character* character)
-{
-
-}
 void B1Skill1001::Run()
 {
-	if (IsCoolTime()) {
-		return;
+	if (0 == SkillStartTimestamp) {
+		PlayAnimation();
+		SkillStartTimestamp = FDateTime::Now().ToUnixTimestamp();
 	}
-
-	SkillStartTimestamp = FDateTime::Now().ToUnixTimestamp();
-	PlayAnimation();
 }
 void B1Skill1001::CheckAttack()
 {
@@ -45,5 +39,5 @@ ERES_ANIM_NUM B1Skill1001::GetAnimResNum()
 }
 void B1Skill1001::PlayAnimation()
 {
-	AnimationInst->SetSkillAnimResNum(GetAnimResNum());
+	AnimInst->SetSkillAnimResNum(GetAnimResNum());
 }

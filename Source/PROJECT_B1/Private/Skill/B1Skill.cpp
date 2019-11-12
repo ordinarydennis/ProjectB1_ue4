@@ -19,25 +19,25 @@ bool IB1Skill::IsCoolTime()
 }
 void IB1Skill::SetBtnImage(UButton* btn)
 {
-	if (nullptr == btn || nullptr == SkillIconTexture) {
+	if (nullptr == btn || nullptr == Tex2dSkill) {
 		return;
 	}
 
-	btn->WidgetStyle.Normal.SetResourceObject(Cast<UObject>(SkillIconTexture));
+	btn->WidgetStyle.Normal.SetResourceObject(Cast<UObject>(Tex2dSkill));
 	btn->WidgetStyle.Normal.SetImageSize(FVector2D(200.f, 200.f));
 	btn->WidgetStyle.Normal.DrawAs = ESlateBrushDrawType::Image;
 
-	btn->WidgetStyle.Hovered.SetResourceObject(Cast<UObject>(SkillIconTexture));
+	btn->WidgetStyle.Hovered.SetResourceObject(Cast<UObject>(Tex2dSkill));
 	btn->WidgetStyle.Hovered.SetImageSize(FVector2D(200.f, 200.f));
 	btn->WidgetStyle.Hovered.DrawAs = ESlateBrushDrawType::Image;
 
-	btn->WidgetStyle.Pressed.SetResourceObject(Cast<UObject>(SkillIconTexture));
+	btn->WidgetStyle.Pressed.SetResourceObject(Cast<UObject>(Tex2dSkill));
 	btn->WidgetStyle.Pressed.SetImageSize(FVector2D(170.f, 170.f));
 	btn->WidgetStyle.Pressed.DrawAs = ESlateBrushDrawType::Image;
 }
 UTexture2D* IB1Skill::GetBtnImage()
 {
-	return SkillIconTexture;
+	return Tex2dSkill;
 }
 FString IB1Skill::GetName()
 {	

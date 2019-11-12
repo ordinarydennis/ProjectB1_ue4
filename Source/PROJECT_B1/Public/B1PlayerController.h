@@ -20,10 +20,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = WIDGET)
-	TSubclassOf<class UB1InGameWidget> InGameWidgetClass;
+	TSubclassOf<class UB1InGameWidget> WidInGameClass;
 
 private:
-
 	UPROPERTY()
-	class UB1InGameWidget* InGameWidget;
+	class UB1InGameWidget* WidInGame;
 };

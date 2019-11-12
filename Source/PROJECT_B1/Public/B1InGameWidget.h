@@ -67,6 +67,5 @@ private:
 	TMap<BTN_SKILL_INDEX, IB1Skill*> SkillsOfBtn;
 	TQueue<IB1Skill*> SkillQueue;
 	AB1Character* B1Character = nullptr;
-	UTexture2D* NextSkillIconTexture = nullptr;
 };
 

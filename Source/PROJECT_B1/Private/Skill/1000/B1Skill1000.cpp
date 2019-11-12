@@ -6,9 +6,9 @@
 
 B1Skill1000::B1Skill1000(AB1Character* character)
 {
-	static ConstructorHelpers::FObjectFinder<UTexture2D> SkillIcon(TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_06_b"));
-	if (SkillIcon.Succeeded()) {
-		SkillIconTexture = SkillIcon.Object;
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ResTex2dSkill(*RES_TEX2D_SKILL1000);
+	if (ResTex2dSkill.Succeeded()) {
+		Tex2dSkill = ResTex2dSkill.Object;
 	}
 
 	//TODO: 기획 데이터에서 가져오도록 수정
@@ -17,14 +17,10 @@ B1Skill1000::B1Skill1000(AB1Character* character)
 	ClassName = "B1Skill1000";
 
 	Character = character;
-	AnimationInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
+	AnimInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
 }
 B1Skill1000::~B1Skill1000()
 {
-}
-void B1Skill1000::init(AB1Character* character)
-{
-
 }
 void B1Skill1000::Run()
 {
@@ -80,5 +76,5 @@ ERES_ANIM_NUM B1Skill1000::GetAnimResNum()
 }
 void B1Skill1000::PlayAnimation()
 {
-	AnimationInst->SetSkillAnimResNum(GetAnimResNum());
+	AnimInst->SetSkillAnimResNum(GetAnimResNum());
 }

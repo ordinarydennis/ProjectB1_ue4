@@ -15,7 +15,6 @@ public:
 	~B1Skill1004();
 
 public:
-	virtual void init(AB1Character* character) override;
 	virtual void Run() override;
 	virtual void CheckAttack() override;
 

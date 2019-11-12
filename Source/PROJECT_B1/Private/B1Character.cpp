@@ -33,19 +33,17 @@ AB1Character::AB1Character()
 
 	//유저가 선택한 캐릭터에따라 로딩
 	//메인UI에서 입력 받은 값을 가져온다. 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_COMMONER(
-		TEXT("/Game/Resources/Market/ModularRPGHeroesPolyart/Meshes/OneMeshCharacters/CommonerSK.CommonerSK"));
-	if (SK_COMMONER.Succeeded()) {
-		GetMesh()->SetSkeletalMesh(SK_COMMONER.Object);
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ResSkCommoner(*RES_SK_COMMONER);
+	if (ResSkCommoner.Succeeded()) {
+		GetMesh()->SetSkeletalMesh(ResSkCommoner.Object);
 		GetMesh()->AddLocalRotation(FRotator(0.0f, -90.0f, 0.0f));
 		GetMesh()->AddRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	}
 
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	static ConstructorHelpers::FClassFinder<UAnimInstance> PLAYER_ANIM(
-		TEXT("/Game/Blueprints/PlayerAnimBlueprint.PlayerAnimBlueprint_C"));
-	if (PLAYER_ANIM.Succeeded()) {
-		GetMesh()->SetAnimInstanceClass(PLAYER_ANIM.Class);
+	static ConstructorHelpers::FClassFinder<UAnimInstance> ResAnimInstPlayer(*RES_ANIM_INST_PLAYER);
+	if (ResAnimInstPlayer.Succeeded()) {
+		GetMesh()->SetAnimInstanceClass(ResAnimInstPlayer.Class);
 	}
 }
 void AB1Character::RunSkill(IB1Skill* skill)
@@ -86,8 +84,8 @@ void AB1Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	auto AnimationInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
-	AnimationInst->OnAttackHitCheck.AddUObject(this, &AB1Character::CheckAttack);
+	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Character::CheckAttack);
 }
 float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {

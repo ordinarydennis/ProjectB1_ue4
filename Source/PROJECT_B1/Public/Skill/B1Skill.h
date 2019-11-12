@@ -24,7 +24,6 @@ class PROJECT_B1_API IB1Skill
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void init(AB1Character* character) = 0;
 	virtual void Run() = 0;
 	virtual void CheckAttack() = 0;
 
@@ -40,8 +39,8 @@ public:
 protected:
 	int64 SkillStartTimestamp = 0;
 	int32 CoolTime = 10;
-	AB1Character* Character = nullptr;
-	UB1AnimInstance* AnimationInst = nullptr;
-	UTexture2D* SkillIconTexture = nullptr;
+	class AB1Character* Character = nullptr;
+	UB1AnimInstance* AnimInst = nullptr;
+	UTexture2D* Tex2dSkill = nullptr;
 	FString ClassName = "NULL";
 };
