@@ -2,6 +2,7 @@
 
 
 #include "B1Character.h"
+#include "B1AIController.h"
 #include "Misc/DateTime.h"
 
 // Sets default values
@@ -13,7 +14,7 @@ AB1Character::AB1Character()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
-	SpringArm->TargetArmLength = 700.0f;
+	SpringArm->TargetArmLength = 1200.0f;
 	SpringArm->SetRelativeRotation(FRotator(-70.0f, -90.0f, 0.0f));
 
 	SpringArm->bUsePawnControlRotation = false;
@@ -45,6 +46,9 @@ AB1Character::AB1Character()
 	if (ResAnimInstPlayer.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ResAnimInstPlayer.Class);
 	}
+
+	AIControllerClass = AB1AIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 void AB1Character::RunSkill(IB1Skill* skill)
 {
