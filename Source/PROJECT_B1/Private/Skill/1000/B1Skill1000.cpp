@@ -14,7 +14,7 @@ B1Skill1000::B1Skill1000(AB1Character* character)
 	//TODO: 기획 데이터에서 가져오도록 수정
 	CoolTime = 3;	//쿨타임이 너무 작으면 endofAnim 노티파이가 씹힐수 있다?
 	SkillStartTimestamp = 0;
-	ClassName = "B1Skill1000";
+	ClassName = __CLASS__;
 
 	Character = character;
 	AnimInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());

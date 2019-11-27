@@ -14,24 +14,15 @@ AB1Character::AB1Character()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
-	SpringArm->TargetArmLength = 1200.0f;
+	SpringArm->TargetArmLength = 800.0f;
 	SpringArm->SetRelativeRotation(FRotator(-70.0f, -90.0f, 0.0f));
 
-	SpringArm->bUsePawnControlRotation = false;
-	SpringArm->bInheritPitch = false;
-	SpringArm->bInheritRoll = false;
-	SpringArm->bInheritYaw = false;
-	SpringArm->bDoCollisionTest = false;
-	bUseControllerRotationYaw = true;
-	GetCharacterMovement()->bOrientRotationToMovement = false;
-	GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
 
 	//시작 위치
 	//SetActorLocation(FVector(-2560.0f, 0.0f, 0.0f), false);
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("B1Character"));
-
+	
 	//유저가 선택한 캐릭터에따라 로딩
 	//메인UI에서 입력 받은 값을 가져온다. 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ResSkCommoner(*RES_SK_COMMONER);
@@ -70,6 +61,31 @@ void AB1Character::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void AB1Character::SetControlMode(EControlMode NewControlMode)
+{
+	CurrentControlMode = NewControlMode;
+
+	switch (CurrentControlMode) {
+	case EControlMode::QUARTER_VIEW:
+		SpringArm->bUsePawnControlRotation = false;
+		SpringArm->bInheritPitch = false;
+		SpringArm->bInheritRoll = false;
+		SpringArm->bInheritYaw = false;
+		SpringArm->bDoCollisionTest = false;
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
+
+		break;
+	case EControlMode::NPC:
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
+		break;
+	}
+}
 // Called every frame
 void AB1Character::Tick(float DeltaTime)
 {
@@ -104,6 +120,18 @@ void AB1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AB1Character::UpDown);
 	PlayerInputComponent->BindAxis(TEXT("LeftRight"), this, &AB1Character::LeftRight);
+}
+void AB1Character::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (IsPlayerControlled()) {
+		SetControlMode(EControlMode::QUARTER_VIEW);
+		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	}
+	else {
+		SetControlMode(EControlMode::NPC);
+		GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	}
 }
 void AB1Character::UpDown(float NewAxisValue)
 {

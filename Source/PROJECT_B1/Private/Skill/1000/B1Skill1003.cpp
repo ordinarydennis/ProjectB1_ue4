@@ -14,7 +14,7 @@ B1Skill1003::B1Skill1003(AB1Character* character)
 	//TODO: 기획 데이터에서 가져오도록 수정
 	CoolTime = 4;
 	SkillStartTimestamp = 0;
-	ClassName = "B1Skill1003";
+	ClassName = __CLASS__;
 
 	Character = character;
 	AnimInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());

@@ -5,12 +5,7 @@
 #include "B1Character.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
-#include "Skill/1000/B1Skill1000.h"
-#include "Skill/1000/B1Skill1001.h"
-#include "Skill/1000/B1Skill1002.h"
-#include "Skill/1000/B1Skill1003.h"
-#include "Skill/1000/B1Skill1004.h"
-#include "Skill/1000/B1Skill1005.h"
+#include "SkillFactory.h"
 
 UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -22,9 +17,6 @@ UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)
 	if (nullptr == B1Character) {
 		return;
 	}
-
-	//printf("B1Character GetMesh %p", B1Character->GetMesh());
-	//printf("B1Character GetAnimInstance %p", B1Character->GetMesh()->GetAnimInstance());
 
 	//유저의 스킬을 여기에서 로딩 하도록 한다.
 	//유저의 스킬을 모두 가져온다.
@@ -45,7 +37,7 @@ UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)
 	//초기화 시점과 큐에 넣는 시점이 달라야 한다.
 	Skills.Reserve(6);
 	for (const auto& skillNum : skillNums) {
-		auto skill = SkillFactory(skillNum, B1Character);
+		auto skill = USkillFactory::GetInstance()->CreateSkill(skillNum, B1Character);
 		//skill->init(B1Character);
 		Skills.Add(skill);
 		SkillQueue.Enqueue(skill.Get());
@@ -219,32 +211,6 @@ void UB1InGameWidget::onSkill4Clicked()
 
 	BtnIndex = BTN_SKILL_INDEX::INDEX_4;
 	B1Character->RunSkill(SkillonBtn);
-}
-TSharedPtr<IB1Skill> UB1InGameWidget::SkillFactory(ERES_ANIM_NUM SkillNum, AB1Character* character)
-{
-	TSharedPtr<IB1Skill> skill = nullptr;
-	switch (SkillNum)
-	{
-	case ERES_ANIM_NUM::_1000 :
-		skill = MakeShareable(new B1Skill1000(character));
-		break;
-	case ERES_ANIM_NUM::_1001 :
-		skill = MakeShareable(new B1Skill1001(character));
-		break;
-	case ERES_ANIM_NUM::_1002 :
-		skill = MakeShareable(new B1Skill1002(character));
-		break;
-	case ERES_ANIM_NUM::_1003 :
-		skill = MakeShareable(new B1Skill1003(character));
-		break;
-	case ERES_ANIM_NUM::_1004 :
-		skill = MakeShareable(new B1Skill1004(character));
-		break;
-	case ERES_ANIM_NUM::_1005 :
-		skill = MakeShareable(new B1Skill1005(character));
-		break;
-	}
-	return skill;
 }
 IB1Skill* UB1InGameWidget::GetSkill(BTN_SKILL_INDEX SkillBtnIndex)
 {

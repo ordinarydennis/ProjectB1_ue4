@@ -23,31 +23,34 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstiator, AActor* DamageCauser) override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void PossessedBy(AController* NewController) override;
 
-protected:
-	FVector DirectionToMove = FVector::ZeroVector;
-
+	
+private:
+	enum class EControlMode
+	{
+		QUARTER_VIEW,
+		NPC,
+	};
+	void UpDown(float NewAxisValue);
+	void LeftRight(float NewAxisValue);
+	void SetControlMode(EControlMode ControlMode);
+	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	USpringArmComponent* SpringArm;
-
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	UCameraComponent* Camera;
-		
-private:
-	void UpDown(float NewAxisValue);
-	void LeftRight(float NewAxisValue);
-	
-private:
+
 	float MovingSpeed = 0.8f;
 	IB1Skill* Skill = nullptr;
 	BTN_SKILL_INDEX Btn = BTN_SKILL_INDEX::INDEX_NONE;
+	EControlMode CurrentControlMode = EControlMode::QUARTER_VIEW;
+	FVector DirectionToMove = FVector::ZeroVector;
 };

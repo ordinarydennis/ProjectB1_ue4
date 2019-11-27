@@ -54,7 +54,6 @@ protected:
 	void onSkill4Clicked();
 
 private:
-	TSharedPtr<IB1Skill> SkillFactory(ERES_ANIM_NUM SkillNum, AB1Character* character);
 	IB1Skill* GetSkill(BTN_SKILL_INDEX SkillBtnIndex);
 	void StopSkill();
 	void SetNextSkillImg();
