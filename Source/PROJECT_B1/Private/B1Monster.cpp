@@ -9,18 +9,22 @@ AB1Monster::AB1Monster()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    BoxCollision = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
+    BoxCollision->SetGenerateOverlapEvents(true);
+    BoxCollision->SetBoxExtent(FVector(40.f, 40.f, 100.f));
+    RootComponent = BoxCollision;
+
     // Rendering - SkeletalMeshComponent
     SkelMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("B1MonsterSM"));
-
     SkelMesh->SetRelativeLocationAndRotation(
-        FVector(0.f, 0.f, 10.f),
+        FVector(0.f, 0.f, -90.f),
         FRotator(0.f, -90.f, 0.f)    // Roll
     );
 
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Warrior(*RES_SK_MONSTER1);
-    SkelMesh->SetSkeletalMesh(SK_Warrior.Object);
+    static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Monster(*RES_SK_MONSTER1);
+    SkelMesh->SetSkeletalMesh(SK_Monster.Object);
     // Attacth to RootComponent
-    SkelMesh->SetupAttachment(RootComponent);
+    SkelMesh->SetupAttachment(BoxCollision);
 
     static ConstructorHelpers::FClassFinder<UAnimInstance> ResAnimInst(*RES_ANIM_INST_MONSTER);
     if (ResAnimInst.Succeeded()) {

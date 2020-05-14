@@ -26,8 +26,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	UPROPERTY(VisibleAnywhere, Category = "Collision")
+	UBoxComponent* BoxCollision  = nullptr;
+	
 private:
-	UPROPERTY(VisibleAnywhere, Category = "ABPawnComponent")
+	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")
 	class USkeletalMeshComponent* SkelMesh = nullptr;
 
 };
