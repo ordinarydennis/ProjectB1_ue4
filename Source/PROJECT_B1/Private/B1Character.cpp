@@ -15,7 +15,7 @@ AB1Character::AB1Character()
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
 	SpringArm->TargetArmLength = 800.0f;
-	SpringArm->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	SpringArm->SetRelativeRotation(FRotator(-70.0f, -90.0f, 0.0f));
 
 
 	//시작 위치
@@ -118,7 +118,7 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 void AB1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	//PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AB1Character::UpDown);
+	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AB1Character::UpDown);
 	PlayerInputComponent->BindAxis(TEXT("LeftRight"), this, &AB1Character::LeftRight);
 }
 void AB1Character::PossessedBy(AController* NewController)

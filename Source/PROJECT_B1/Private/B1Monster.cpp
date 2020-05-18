@@ -2,6 +2,7 @@
 
 
 #include "B1Monster.h"
+#include "B1MonsterAnimInstance.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
@@ -12,6 +13,8 @@ AB1Monster::AB1Monster()
     BoxCollision = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
     BoxCollision->SetGenerateOverlapEvents(true);
     BoxCollision->SetBoxExtent(FVector(40.f, 40.f, 100.f));
+    BoxCollision->SetCollisionProfileName(TEXT("B1Monster"));
+
     RootComponent = BoxCollision;
 
     // Rendering - SkeletalMeshComponent
@@ -50,6 +53,26 @@ void AB1Monster::Tick(float DeltaTime)
 void AB1Monster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
+void AB1Monster::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
 
+    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+}
+float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+    float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+    printf("Actor %s took Damage %f", *GetName(), FinalDamage);
+
+    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    AnimInst->SetDeadAnim();
+
+    return FinalDamage;
+}
+void AB1Monster::CheckAttack()
+{
+    printf("CheckAttack()");
+}
