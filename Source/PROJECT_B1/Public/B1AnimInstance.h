@@ -23,6 +23,7 @@ public:
 
 public:
 	void SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum);
+	void SetIsDeath(bool isDeath);
 
 public:
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
@@ -41,6 +42,9 @@ private:
 	//나중에 프로젝트 타입으로 수정하기 using 사용하기
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	int32 SkillAnimResNum;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
+	bool IsDeath = false;
 
 	class AB1Character* B1Character = nullptr;
 };

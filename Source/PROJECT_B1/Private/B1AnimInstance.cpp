@@ -40,3 +40,7 @@ void UB1AnimInstance::AnimNotify_AttackHitCheck()
 {
 	OnAttackHitCheck.Broadcast();
 }
+void UB1AnimInstance::SetIsDeath(bool isDeath)
+{
+	IsDeath = isDeath;
+}

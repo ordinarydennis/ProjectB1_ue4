@@ -53,4 +53,5 @@ private:
 	BTN_SKILL_INDEX Btn = BTN_SKILL_INDEX::INDEX_NONE;
 	EControlMode CurrentControlMode = EControlMode::QUARTER_VIEW;
 	FVector DirectionToMove = FVector::ZeroVector;
+	bool IsDeath = false;
 };

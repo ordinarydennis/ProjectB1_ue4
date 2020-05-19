@@ -74,5 +74,43 @@ float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& Dama
 }
 void AB1Monster::CheckAttack()
 {
-    printf("CheckAttack()");
+    float FinalAttackRange = 150.f;
+    FHitResult HitResult;
+    FCollisionQueryParams Params(NAME_None, false, this);
+    
+    bool bResult = this->GetWorld()->SweepSingleByChannel(
+        HitResult,
+        this->GetActorLocation(),
+        this->GetActorLocation() + this->GetActorForwardVector() * FinalAttackRange,
+        FQuat::Identity,
+        ECollisionChannel::ECC_GameTraceChannel4,
+        FCollisionShape::MakeSphere(50.0f),
+        Params);
+
+#if ENABLE_DRAW_DEBUG
+    FVector TraceVec = this->GetActorForwardVector() * FinalAttackRange;
+    FVector Center = this->GetActorLocation() + TraceVec * 0.5f;
+    float AttackRadius = 50.f;
+    float HalfHeight = FinalAttackRange * 0.5f + AttackRadius;
+    FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+    FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+    float DebugLifeTime = 0.5f;
+
+    DrawDebugCapsule(this->GetWorld(),
+        Center,
+        HalfHeight,
+        AttackRadius,
+        CapsuleRot,
+        DrawColor,
+        false,
+        DebugLifeTime);
+
+
+#endif
+    
+    if (HitResult.Actor.IsValid())
+    {
+        FDamageEvent DamageEvent;
+        HitResult.Actor->TakeDamage(100, DamageEvent, this->GetController(), this);
+    }
 }

@@ -91,6 +91,10 @@ void AB1Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (IsDeath){
+		return;
+	}
+
 	if (DirectionToMove.SizeSquared() > 0.0f) {
 		GetController()->SetControlRotation(FRotationMatrix::MakeFromX(DirectionToMove).Rotator());
 		AddMovementInput(DirectionToMove);
@@ -110,8 +114,10 @@ void AB1Character::PostInitializeComponents()
 float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	//printf("Actor %s Damage %f", *GetName(), FinalDamage);
+	
+	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInst->SetIsDeath(true);
+	IsDeath = true;
 	return FinalDamage;
 }
 // Called to bind functionality to input
