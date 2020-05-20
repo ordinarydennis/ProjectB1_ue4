@@ -36,5 +36,9 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")
 	class USkeletalMeshComponent* SkelMesh = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = UI)
+	class UWidgetComponent* HPBarWidget;
+	UPROPERTY(EditAnywhere, Category = UI)
+	TSubclassOf<class UUserWidget> HUDWidgetClass;
 
 };

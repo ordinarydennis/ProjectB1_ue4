@@ -3,6 +3,7 @@
 
 #include "B1Monster.h"
 #include "B1MonsterAnimInstance.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
@@ -32,6 +33,19 @@ AB1Monster::AB1Monster()
     static ConstructorHelpers::FClassFinder<UAnimInstance> ResAnimInst(*RES_ANIM_INST_MONSTER);
     if (ResAnimInst.Succeeded()) {
         SkelMesh->SetAnimInstanceClass(ResAnimInst.Class);
+    }
+
+
+    HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+    HPBarWidget->SetupAttachment(SkelMesh);
+    HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+    HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+    static ConstructorHelpers::FClassFinder<UUserWidget> UI_HUD(TEXT("/Game/UI/UI_HP_Bar.UI_HP_Bar_C"));
+    if (UI_HUD.Succeeded())
+    {
+        HPBarWidget->SetWidgetClass(UI_HUD.Class);
+        HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
+        HUDWidgetClass = UI_HUD.Class;
     }
 }
 

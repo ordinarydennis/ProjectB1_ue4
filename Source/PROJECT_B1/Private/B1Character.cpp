@@ -4,12 +4,14 @@
 #include "B1Character.h"
 #include "B1AIController.h"
 #include "Misc/DateTime.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AB1Character::AB1Character()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
@@ -40,6 +42,18 @@ AB1Character::AB1Character()
 
 	AIControllerClass = AB1AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+	HPBarWidget->SetupAttachment(GetMesh());
+	HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+	HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	static ConstructorHelpers::FClassFinder<UUserWidget> UI_HUD(TEXT("/Game/UI/UI_HP_Bar.UI_HP_Bar_C"));
+	if (UI_HUD.Succeeded())
+	{
+		HPBarWidget->SetWidgetClass(UI_HUD.Class);
+		HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
+		HUDWidgetClass = UI_HUD.Class;
+	}
 }
 void AB1Character::RunSkill(IB1Skill* skill)
 {
@@ -118,6 +132,7 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
 	AnimInst->SetIsDeath(true);
 	IsDeath = true;
+	SetActorEnableCollision(false);
 	return FinalDamage;
 }
 // Called to bind functionality to input
