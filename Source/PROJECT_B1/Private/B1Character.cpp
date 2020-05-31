@@ -5,6 +5,7 @@
 #include "B1AIController.h"
 #include "Misc/DateTime.h"
 #include "Components/WidgetComponent.h"
+#include "B1HPWidget.h"
 
 // Sets default values
 AB1Character::AB1Character()
@@ -74,17 +75,16 @@ void AB1Character::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//if (HUDWidgetClass != nullptr) {
-	//	//BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
-	//	//내부적으로 BeginPlay 인지 확인하고 세팅하기 때문
-	//	HPBarWidget->SetWidgetClass(HUDWidgetClass);
-	//	HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
-	//	auto CharacterWidget = Cast<UABCharacterWidget>(HPBarWidget->GetUserWidgetObject());
-	//	if (nullptr != CharacterWidget)
-	//	{
-	//		CharacterWidget->BindCharacterStat(CharacterStat);
-	//	}
-	//}
+	if (HUDWidgetClass != nullptr) {
+		//BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
+		//내부적으로 BeginPlay 인지 확인하고 세팅하기 때문
+		auto CharacterWidget = Cast<UB1HPWidget>(HPBarWidget->GetUserWidgetObject());
+		if (nullptr != CharacterWidget)
+		{
+			CharacterWidget->BindCharacterStat(this);
+		}
+	}
+
 }
 void AB1Character::SetControlMode(EControlMode NewControlMode)
 {
@@ -140,10 +140,13 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	
-	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
-	AnimInst->SetIsDeath(true);
-	IsDeath = true;
-	SetActorEnableCollision(false);
+	//auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+	//AnimInst->SetIsDeath(true);
+	//IsDeath = true;
+	//SetActorEnableCollision(false);
+
+	OnHPChanged.Broadcast();
+	
 	return FinalDamage;
 }
 // Called to bind functionality to input

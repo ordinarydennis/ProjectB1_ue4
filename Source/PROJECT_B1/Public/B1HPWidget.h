@@ -14,7 +14,7 @@ class PROJECT_B1_API UB1HPWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-    void BindCharacterStat(class AB1Monster* B1Monster);
+    void BindCharacterStat(class APawn* pawn);
 
 protected:
 	virtual void NativeConstruct() override;
