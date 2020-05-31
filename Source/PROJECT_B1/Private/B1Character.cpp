@@ -17,7 +17,7 @@ AB1Character::AB1Character()
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
 	SpringArm->TargetArmLength = 800.0f;
-	SpringArm->SetRelativeRotation(FRotator(-70.0f, -90.0f, 0.0f));
+	SpringArm->SetRelativeRotation(FRotator(-45.0f, -90.0f, 0.0f));
 
 
 	//시작 위치
@@ -43,16 +43,16 @@ AB1Character::AB1Character()
 	AIControllerClass = AB1AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
-	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
 	HPBarWidget->SetupAttachment(GetMesh());
 	HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
 	HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
-	static ConstructorHelpers::FClassFinder<UUserWidget> UI_HUD(TEXT("/Game/UI/UI_HP_Bar.UI_HP_Bar_C"));
-	if (UI_HUD.Succeeded())
+	static ConstructorHelpers::FClassFinder<UUserWidget> ResWidgetHP(*RES_WIDGET_HP);
+	if (ResWidgetHP.Succeeded())
 	{
-		HPBarWidget->SetWidgetClass(UI_HUD.Class);
+		HPBarWidget->SetWidgetClass(ResWidgetHP.Class);
 		HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
-		HUDWidgetClass = UI_HUD.Class;
+		HUDWidgetClass = ResWidgetHP.Class;
 	}
 }
 void AB1Character::RunSkill(IB1Skill* skill)
@@ -73,7 +73,18 @@ void AB1Character::CheckAttack()
 void AB1Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//if (HUDWidgetClass != nullptr) {
+	//	//BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
+	//	//내부적으로 BeginPlay 인지 확인하고 세팅하기 때문
+	//	HPBarWidget->SetWidgetClass(HUDWidgetClass);
+	//	HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
+	//	auto CharacterWidget = Cast<UABCharacterWidget>(HPBarWidget->GetUserWidgetObject());
+	//	if (nullptr != CharacterWidget)
+	//	{
+	//		CharacterWidget->BindCharacterStat(CharacterStat);
+	//	}
+	//}
 }
 void AB1Character::SetControlMode(EControlMode NewControlMode)
 {

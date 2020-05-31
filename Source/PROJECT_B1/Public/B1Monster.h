@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "B1Monster.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
+
 UCLASS()
 class PROJECT_B1_API AB1Monster : public APawn
 {
@@ -15,6 +17,8 @@ public:
 	// Sets default values for this pawn's properties
 	AB1Monster();
 	void CheckAttack();
+
+	FOnHPChangedDelegate OnHPChanged;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,5 +44,7 @@ private:
 	class UWidgetComponent* HPBarWidget;
 	UPROPERTY(EditAnywhere, Category = UI)
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
+	UPROPERTY(VisibleAnywhere)
+	class UProgressBar* HPProgressBar;
 
 };

@@ -23,3 +23,5 @@ const FString RES_BT_CHARACTER = TEXT("/Game/AI/BT_B1Character.BT_B1Character");
 
 const FString RES_SK_MONSTER1 = TEXT("/Game/Resources/Market/MLWarbandHP/Characters/Berserker/Mesh/BerserkerSK.BerserkerSK");
 const FString RES_ANIM_INST_MONSTER = TEXT("/Game/Blueprints/MonsterAnimBlueprint.MonsterAnimBlueprint_C");
+
+const FString RES_WIDGET_HP = TEXT("/Game/UI/HPBar.HPBar_C");

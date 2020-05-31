@@ -8,6 +8,8 @@
 #include "GameFramework/Character.h"
 #include "B1Character.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
+
 UCLASS()
 class PROJECT_B1_API AB1Character : public ACharacter
 {
@@ -19,6 +21,8 @@ public:
 	void RunSkill(IB1Skill* skill);
 	void StopSkill();
 	void CheckAttack();
+
+	FOnHPChangedDelegate OnHPChanged;
 
 protected:
 	// Called when the game starts or when spawned

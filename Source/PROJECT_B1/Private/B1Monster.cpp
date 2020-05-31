@@ -4,6 +4,7 @@
 #include "B1Monster.h"
 #include "B1MonsterAnimInstance.h"
 #include "Components/WidgetComponent.h"
+#include "B1HPWidget.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
@@ -36,16 +37,16 @@ AB1Monster::AB1Monster()
     }
 
 
-    HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+    HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
     HPBarWidget->SetupAttachment(SkelMesh);
     HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
     HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
-    static ConstructorHelpers::FClassFinder<UUserWidget> UI_HUD(TEXT("/Game/UI/UI_HP_Bar.UI_HP_Bar_C"));
-    if (UI_HUD.Succeeded())
+    static ConstructorHelpers::FClassFinder<UUserWidget> ResWidgetHP(*RES_WIDGET_HP);
+    if (ResWidgetHP.Succeeded())
     {
-        HPBarWidget->SetWidgetClass(UI_HUD.Class);
+        HPBarWidget->SetWidgetClass(ResWidgetHP.Class);
         HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
-        HUDWidgetClass = UI_HUD.Class;
+        HUDWidgetClass = ResWidgetHP.Class;
     }
 }
 
@@ -53,7 +54,17 @@ AB1Monster::AB1Monster()
 void AB1Monster::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+    if (HUDWidgetClass != nullptr) {
+        //BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
+        //내부적으로 BeginPlay 인지 확인하고 세팅하기 때문
+        auto CharacterWidget = Cast<UB1HPWidget>(HPBarWidget->GetUserWidgetObject());
+        if (nullptr != CharacterWidget)
+        {
+            CharacterWidget->BindCharacterStat(this);
+        }
+    }
+
 }
 
 // Called every frame
@@ -74,15 +85,18 @@ void AB1Monster::PostInitializeComponents()
 
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
     AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+
 }
 float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
     float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-    printf("Actor %s took Damage %f", *GetName(), FinalDamage);
+    //printf("Actor %s took Damage %f", *GetName(), FinalDamage);
 
-    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    AnimInst->SetDeadAnim();
+    //auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    //AnimInst->SetDeadAnim();
+
+    OnHPChanged.Broadcast();
 
     return FinalDamage;
 }
