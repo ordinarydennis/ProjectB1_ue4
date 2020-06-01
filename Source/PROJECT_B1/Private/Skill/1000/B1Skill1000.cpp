@@ -18,6 +18,8 @@ B1Skill1000::B1Skill1000(AB1Character* character)
 
 	Character = character;
 	AnimInst = Cast<UB1AnimInstance>(Character->GetMesh()->GetAnimInstance());
+
+	Demage = 10;
 }
 B1Skill1000::~B1Skill1000()
 {
@@ -66,7 +68,7 @@ void B1Skill1000::CheckAttack()
 		if (HitResult.Actor.IsValid())
 		{
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(100, DamageEvent, Character->GetController(), Character);
+			HitResult.Actor->TakeDamage(Demage, DamageEvent, Character->GetController(), Character);
 		}
 	}
 }

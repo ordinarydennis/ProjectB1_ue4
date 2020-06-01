@@ -5,13 +5,12 @@
 #include "PROJECT_B1.h"
 #include "B1InGameWidget.h"
 #include "Skill/B1Skill.h"
-#include "GameFramework/Character.h"
+//#include "GameFramework/Character.h"
+#include "B1BaseCharacter.h"
 #include "B1Character.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
-
 UCLASS()
-class PROJECT_B1_API AB1Character : public ACharacter
+class PROJECT_B1_API AB1Character : public AB1BaseCharacter
 {
 	GENERATED_BODY()
 
@@ -21,8 +20,6 @@ public:
 	void RunSkill(IB1Skill* skill);
 	void StopSkill();
 	void CheckAttack();
-
-	FOnHPChangedDelegate OnHPChanged;
 
 protected:
 	// Called when the game starts or when spawned

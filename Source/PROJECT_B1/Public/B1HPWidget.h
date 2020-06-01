@@ -14,7 +14,7 @@ class PROJECT_B1_API UB1HPWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-    void BindCharacterStat(class APawn* pawn);
+    void BindCharacterStat(class AB1BaseCharacter* pawn);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -23,4 +23,7 @@ protected:
 private:
 	UPROPERTY()
 	class UProgressBar* HPProgressBar;
+
+private:
+	class AB1BaseCharacter* BaseCharacter = nullptr;
 };

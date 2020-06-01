@@ -12,12 +12,14 @@ AB1Monster::AB1Monster()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    BoxCollision = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
-    BoxCollision->SetGenerateOverlapEvents(true);
-    BoxCollision->SetBoxExtent(FVector(40.f, 40.f, 100.f));
-    BoxCollision->SetCollisionProfileName(TEXT("B1Monster"));
-
-    RootComponent = BoxCollision;
+    //BoxCollision = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
+    //BoxCollision->SetGenerateOverlapEvents(true);
+    //BoxCollision->SetBoxExtent(FVector(40.f, 40.f, 100.f));
+    //BoxCollision->SetCollisionProfileName(TEXT("B1Monster"));
+    
+    RootComponent = GetCapsuleComponent();
+    GetCapsuleComponent()->SetCollisionProfileName(TEXT("B1Monster"));
+    GetCapsuleComponent()->SetCapsuleSize(50.f, 100.f);
 
     // Rendering - SkeletalMeshComponent
     SkelMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("B1MonsterSM"));
@@ -26,10 +28,11 @@ AB1Monster::AB1Monster()
         FRotator(0.f, -90.f, 0.f)    // Roll
     );
 
+
     static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Monster(*RES_SK_MONSTER1);
     SkelMesh->SetSkeletalMesh(SK_Monster.Object);
     // Attacth to RootComponent
-    SkelMesh->SetupAttachment(BoxCollision);
+    SkelMesh->SetupAttachment(RootComponent);
 
     static ConstructorHelpers::FClassFinder<UAnimInstance> ResAnimInst(*RES_ANIM_INST_MONSTER);
     if (ResAnimInst.Succeeded()) {
@@ -48,6 +51,8 @@ AB1Monster::AB1Monster()
         HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
         HUDWidgetClass = ResWidgetHP.Class;
     }
+
+    MaxHP = HP = 100.0f;
 }
 
 // Called when the game starts or when spawned
@@ -96,6 +101,11 @@ float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& Dama
     //auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
     //AnimInst->SetDeadAnim();
 
+    HP -= DamageAmount;
+    if (0.0f > HP)
+    {
+        HP = 0.0f;
+    }
     OnHPChanged.Broadcast();
 
     return FinalDamage;

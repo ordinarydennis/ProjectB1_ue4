@@ -55,6 +55,8 @@ AB1Character::AB1Character()
 		HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
 		HUDWidgetClass = ResWidgetHP.Class;
 	}
+
+	MaxHP = HP = 100.0f;
 }
 void AB1Character::RunSkill(IB1Skill* skill)
 {

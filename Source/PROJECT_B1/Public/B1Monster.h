@@ -3,13 +3,12 @@
 #pragma once
 
 #include "PROJECT_B1.h"
-#include "GameFramework/Pawn.h"
+//#include "GameFramework/Pawn.h"
+#include "B1BaseCharacter.h"
 #include "B1Monster.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
-
 UCLASS()
-class PROJECT_B1_API AB1Monster : public APawn
+class PROJECT_B1_API AB1Monster : public AB1BaseCharacter
 {
 	GENERATED_BODY()
 
@@ -17,8 +16,6 @@ public:
 	// Sets default values for this pawn's properties
 	AB1Monster();
 	void CheckAttack();
-
-	FOnHPChangedDelegate OnHPChanged;
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,5 +43,4 @@ private:
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
 	UPROPERTY(VisibleAnywhere)
 	class UProgressBar* HPProgressBar;
-
 };
