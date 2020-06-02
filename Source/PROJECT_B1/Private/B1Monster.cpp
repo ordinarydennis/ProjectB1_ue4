@@ -5,6 +5,7 @@
 #include "B1MonsterAnimInstance.h"
 #include "Components/WidgetComponent.h"
 #include "B1HPWidget.h"
+#include "B1MonsterAIController.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
@@ -53,6 +54,9 @@ AB1Monster::AB1Monster()
     }
 
     MaxHP = HP = 100.0f;
+
+    AIControllerClass = AB1MonsterAIController::StaticClass();
+    AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
@@ -70,6 +74,10 @@ void AB1Monster::BeginPlay()
         }
     }
 
+    bUseControllerRotationYaw = false;
+    GetCharacterMovement()->bUseControllerDesiredRotation = false;
+    GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
 }
 
 // Called every frame

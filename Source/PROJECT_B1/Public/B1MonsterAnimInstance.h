@@ -18,6 +18,7 @@ class PROJECT_B1_API UB1MonsterAnimInstance : public UAnimInstance
 	
 public:
 	UB1MonsterAnimInstance();
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void SetDeadAnim();
 
 public:
@@ -28,6 +29,8 @@ private:
 	void AnimNotify_AttackHitCheck();
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
+	float CurrentPlayerSpeed = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	bool IsDead = false;
 };

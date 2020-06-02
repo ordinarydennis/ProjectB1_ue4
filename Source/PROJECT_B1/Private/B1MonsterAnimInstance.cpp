@@ -7,6 +7,15 @@ UB1MonsterAnimInstance::UB1MonsterAnimInstance()
 {
 
 }
+void UB1MonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+{
+	Super::NativeUpdateAnimation(DeltaSeconds);
+
+	auto Pawn = TryGetPawnOwner();
+	if (::IsValid(Pawn)) {
+		CurrentPlayerSpeed = Pawn->GetVelocity().Size();
+	}
+}
 void UB1MonsterAnimInstance::SetDeadAnim()
 {
 	IsDead = true;

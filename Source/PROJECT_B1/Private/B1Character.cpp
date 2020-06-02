@@ -18,7 +18,7 @@ AB1Character::AB1Character()
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
 	SpringArm->TargetArmLength = 800.0f;
-	SpringArm->SetRelativeRotation(FRotator(-45.0f, -90.0f, 0.0f));
+	SpringArm->SetRelativeRotation(FRotator(-75.0f, -90.0f, 0.0f));
 
 
 	//시작 위치
