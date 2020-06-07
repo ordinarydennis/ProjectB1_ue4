@@ -13,11 +13,6 @@ AB1Monster::AB1Monster()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    //BoxCollision = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
-    //BoxCollision->SetGenerateOverlapEvents(true);
-    //BoxCollision->SetBoxExtent(FVector(40.f, 40.f, 100.f));
-    //BoxCollision->SetCollisionProfileName(TEXT("B1Monster"));
-    
     RootComponent = GetCapsuleComponent();
     GetCapsuleComponent()->SetCollisionProfileName(TEXT("B1Monster"));
     GetCapsuleComponent()->SetCapsuleSize(50.f, 100.f);

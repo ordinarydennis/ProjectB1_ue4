@@ -2,33 +2,39 @@
 
 
 #include "B1MonsterAIController.h"
-#include "NavigationSystem.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardData.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
+const FName AB1MonsterAIController::HomePosKey(TEXT("HomePos"));
+const FName AB1MonsterAIController::PatrolPosKey(TEXT("PatrolPos"));
+//const FName AB1MonsterAIController::TargetKey(TEXT("Target"));
+
 
 AB1MonsterAIController::AB1MonsterAIController()
 {
-	RepeatInterval = 3.0f;
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT(
+		"/Game/AI/BB_B1Monster.BB_B1Monster"));
 
+	if (BBObject.Succeeded()) {
+		BBAsset = BBObject.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT(
+		"/Game/AI/BT_B1Monster.BT_B1Monster"));
+
+	if (BTObject.Succeeded()) {
+		BTAsset = BTObject.Object;
+	}
 }
 void AB1MonsterAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	GetWorld()->GetTimerManager().SetTimer(RepeatTimerHandle, this, 
-		&AB1MonsterAIController::OnRepeatTimer,RepeatInterval, true);
-}
-void AB1MonsterAIController::OnUnPossess()
-{
-	Super::OnUnPossess();
-	GetWorld()->GetTimerManager().ClearTimer(RepeatTimerHandle);
-}
-void AB1MonsterAIController::OnRepeatTimer()
-{
-	auto CurrentPawn = GetPawn();
-
-	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
-
-	FNavLocation NextLocation;
-	if (NavSystem->GetRandomPointInNavigableRadius(FVector::ZeroVector, 500.0f, NextLocation)) {
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, NextLocation.Location);
+	
+	if (UseBlackboard(BBAsset, Blackboard)) {
+		Blackboard->SetValueAsVector(HomePosKey, GetPawn()->GetActorLocation());
+		if (!RunBehaviorTree(BTAsset)) {
+			printf("AIController couln't run behavior tree!");
+		}
 	}
 }

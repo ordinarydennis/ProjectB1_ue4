@@ -17,12 +17,14 @@ class PROJECT_B1_API AB1MonsterAIController : public AAIController
 public:
 	AB1MonsterAIController();
 	virtual void OnPossess(APawn* InPawn) override;
-	virtual void OnUnPossess() override;
+
+	static const FName HomePosKey;
+	static const FName PatrolPosKey;
+	//static const FName TargetKey;
 
 private:
-	void OnRepeatTimer();
-
-private:
-	FTimerHandle RepeatTimerHandle;
-	float RepeatInterval;
+	UPROPERTY()
+	class UBehaviorTree* BTAsset;
+	UPROPERTY()
+	class UBlackboardData* BBAsset;
 };

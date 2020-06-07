@@ -3,7 +3,6 @@
 #pragma once
 
 #include "PROJECT_B1.h"
-//#include "GameFramework/Pawn.h"
 #include "B1BaseCharacter.h"
 #include "B1Monster.generated.h"
 
@@ -29,10 +28,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-public:
-	UPROPERTY(VisibleAnywhere, Category = "Collision")
-	UBoxComponent* BoxCollision  = nullptr;
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")
