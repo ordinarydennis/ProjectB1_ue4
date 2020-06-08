@@ -38,8 +38,10 @@ AB1Monster::AB1Monster()
 
     HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
     HPBarWidget->SetupAttachment(SkelMesh);
-    HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+    //HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+    HPBarWidget->SetPivot(FVector2D(0.5f, 3.f));
     HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+    
     static ConstructorHelpers::FClassFinder<UUserWidget> ResWidgetHP(*RES_WIDGET_HP);
     if (ResWidgetHP.Succeeded())
     {
@@ -74,7 +76,11 @@ void AB1Monster::BeginPlay()
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
 }
-
+void AB1Monster::PossessedBy(AController* NewController)
+{
+    Super::PossessedBy(NewController);
+    GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+}
 // Called every frame
 void AB1Monster::Tick(float DeltaTime)
 {

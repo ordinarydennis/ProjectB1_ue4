@@ -8,20 +8,18 @@
 
 const FName AB1MonsterAIController::HomePosKey(TEXT("HomePos"));
 const FName AB1MonsterAIController::PatrolPosKey(TEXT("PatrolPos"));
-//const FName AB1MonsterAIController::TargetKey(TEXT("Target"));
+const FName AB1MonsterAIController::TargetKey(TEXT("Target"));
 
 
 AB1MonsterAIController::AB1MonsterAIController()
 {
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT(
-		"/Game/AI/BB_B1Monster.BB_B1Monster"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(*RES_BB_MONSTER);
 
 	if (BBObject.Succeeded()) {
 		BBAsset = BBObject.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT(
-		"/Game/AI/BT_B1Monster.BT_B1Monster"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(*RES_BT_MONSTER);
 
 	if (BTObject.Succeeded()) {
 		BTAsset = BTObject.Object;

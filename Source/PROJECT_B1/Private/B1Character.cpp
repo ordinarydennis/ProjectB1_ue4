@@ -17,9 +17,8 @@ AB1Character::AB1Character()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
-	SpringArm->TargetArmLength = 800.0f;
-	SpringArm->SetRelativeRotation(FRotator(-75.0f, -90.0f, 0.0f));
-
+	SpringArm->TargetArmLength = 1000.0f;
+	SpringArm->SetRelativeRotation(FRotator(-50.0f, -90.0f, 0.0f));
 
 	//시작 위치
 	//SetActorLocation(FVector(-2560.0f, 0.0f, 0.0f), false);
