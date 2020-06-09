@@ -35,10 +35,10 @@ AB1Monster::AB1Monster()
         SkelMesh->SetAnimInstanceClass(ResAnimInst.Class);
     }
 
-
     HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
     HPBarWidget->SetupAttachment(SkelMesh);
-    //HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+    //HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+    //SetPivot is better than SetRelativeLocation to adjust widget.
     HPBarWidget->SetPivot(FVector2D(0.5f, 3.f));
     HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
     
@@ -87,7 +87,6 @@ void AB1Monster::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
 // Called to bind functionality to input
 void AB1Monster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -160,4 +159,10 @@ void AB1Monster::CheckAttack()
         FDamageEvent DamageEvent;
         HitResult.Actor->TakeDamage(100, DamageEvent, this->GetController(), this);
     }
+}
+void AB1Monster::Attack()
+{
+    //Play Attack Animation 
+    printf("Attack");
+    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
 }

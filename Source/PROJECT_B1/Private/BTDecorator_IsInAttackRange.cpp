@@ -2,8 +2,9 @@
 
 
 #include "BTDecorator_IsInAttackRange.h"
-#include "B1AIController.h"
-#include "B1Character.h"
+#include "B1MonsterAIController.h"
+#include "B1BaseCharacter.h"
+#include "B1Monster.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTDecorator_IsInAttackRange::UBTDecorator_IsInAttackRange()
@@ -16,12 +17,11 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 {
 	bool bResult = Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
 
-	//auto ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
-	auto ControllingPawn = Cast<AB1Character>(OwnerComp.GetAIOwner()->GetPawn());
+	auto ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (nullptr == ControllingPawn)
 		return false;
 
-	auto Target = Cast<AB1Character>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AB1AIController::TargetKey));
+	auto Target = Cast<AB1BaseCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AB1MonsterAIController::TargetKey));
 	if (nullptr == Target) {
 		return false;
 	}

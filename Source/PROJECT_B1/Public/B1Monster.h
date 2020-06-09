@@ -15,6 +15,7 @@ public:
 	// Sets default values for this pawn's properties
 	AB1Monster();
 	void CheckAttack();
+	void Attack();
 
 protected:
 	// Called when the game starts or when spawned
