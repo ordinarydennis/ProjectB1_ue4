@@ -15,11 +15,19 @@ void UB1MonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (::IsValid(Pawn)) {
 		CurrentPlayerSpeed = Pawn->GetVelocity().Size();
 	}
+
+	if (0 == CurrentPlayerSpeed){
+		SetMonsterState(ERES_STATE_MONSTER::IDLE);
+	}
+	else if (0 < CurrentPlayerSpeed) {
+		SetMonsterState(ERES_STATE_MONSTER::RUN);
+	}
 }
-void UB1MonsterAnimInstance::SetDeadAnim()
+void UB1MonsterAnimInstance::SetMonsterState(ERES_STATE_MONSTER monsterState)
 {
-	IsDead = true;
+	MonsterState = static_cast<int32>(monsterState);
 }
+
 void UB1MonsterAnimInstance::AnimNotify_AttackHitCheck()
 {
 	OnAttackHitCheck.Broadcast();

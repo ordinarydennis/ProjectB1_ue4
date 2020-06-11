@@ -106,9 +106,6 @@ float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& Dama
 
     //printf("Actor %s took Damage %f", *GetName(), FinalDamage);
 
-    //auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    //AnimInst->SetDeadAnim();
-
     HP -= DamageAmount;
     if (0.0f > HP)
     {
@@ -162,7 +159,6 @@ void AB1Monster::CheckAttack()
 }
 void AB1Monster::Attack()
 {
-    //Play Attack Animation 
-    printf("Attack");
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    AnimInst->SetMonsterState(ERES_STATE_MONSTER::ATTACK);
 }

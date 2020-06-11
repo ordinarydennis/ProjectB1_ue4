@@ -40,4 +40,6 @@ private:
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
 	UPROPERTY(VisibleAnywhere)
 	class UProgressBar* HPProgressBar;
+
+	ERES_STATE_MONSTER MonsterState = ERES_STATE_MONSTER::IDLE;
 };
