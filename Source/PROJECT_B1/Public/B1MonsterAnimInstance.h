@@ -7,7 +7,7 @@
 #include "B1MonsterAnimInstance.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
-
+DECLARE_MULTICAST_DELEGATE(FOnEndOfAttackDelegate);
 /**
  * 
  */
@@ -23,10 +23,13 @@ public:
 
 public:
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
+	FOnEndOfAttackDelegate OnEndOfAttack;
 
 private:
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
+	UFUNCTION()
+	void AnimNotify_EndOfAttack();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))

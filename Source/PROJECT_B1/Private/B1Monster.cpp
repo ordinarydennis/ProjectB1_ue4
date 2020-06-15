@@ -98,6 +98,7 @@ void AB1Monster::PostInitializeComponents()
 
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
     AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+    AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
 
 }
 float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -157,8 +158,12 @@ void AB1Monster::CheckAttack()
         HitResult.Actor->TakeDamage(100, DamageEvent, this->GetController(), this);
     }
 }
-void AB1Monster::Attack()
+void AB1Monster::EndOfAttack()
+{
+    OnAttackEnd.Broadcast();
+}
+void AB1Monster::SetMonsterState(ERES_STATE_MONSTER state)
 {
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    AnimInst->SetMonsterState(ERES_STATE_MONSTER::ATTACK);
+    AnimInst->SetMonsterState(state);
 }

@@ -4,11 +4,11 @@
 #include "BTTask_Attack.h"
 #include "B1Monster.h"
 #include "AIController.h"
-//#include "B1MonsterAnimInstance.h"
 
 UBTTask_Attack::UBTTask_Attack()
 {
 	IsAttacking = false;
+	bNotifyTick = true;
 }
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -19,22 +19,21 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 	
-	Monster->Attack();
+	Monster->SetMonsterState(ERES_STATE_MONSTER::ATTACK);
 
-	//IsAttacking = true;
+	IsAttacking = true;
 
-	//auto AnimInst = Cast<UB1MonsterAnimInstance>(Monster->GetMesh()->GetAnimInstance());
-	//AnimInst->OnEndofAnim.AddLambda([this]() ->  void {
-	//	IsAttacking = false;
-	//	});
+	Monster->OnAttackEnd.AddLambda([this]() ->  void {
+		IsAttacking = false;
+		});
 	
 	return EBTNodeResult::InProgress;
 }
 void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	/*if (!IsAttacking) {
+	if (!IsAttacking) {
+		printf("FinishLatentTask");
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	}*/
+	}
 }

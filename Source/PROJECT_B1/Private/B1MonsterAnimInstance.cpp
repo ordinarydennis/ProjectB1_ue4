@@ -16,10 +16,7 @@ void UB1MonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CurrentPlayerSpeed = Pawn->GetVelocity().Size();
 	}
 
-	if (0 == CurrentPlayerSpeed){
-		SetMonsterState(ERES_STATE_MONSTER::IDLE);
-	}
-	else if (0 < CurrentPlayerSpeed) {
+	if (0 < CurrentPlayerSpeed) {
 		SetMonsterState(ERES_STATE_MONSTER::RUN);
 	}
 }
@@ -32,3 +29,8 @@ void UB1MonsterAnimInstance::AnimNotify_AttackHitCheck()
 {
 	OnAttackHitCheck.Broadcast();
 }
+void UB1MonsterAnimInstance::AnimNotify_EndOfAttack()
+{
+	OnEndOfAttack.Broadcast();
+}
+
