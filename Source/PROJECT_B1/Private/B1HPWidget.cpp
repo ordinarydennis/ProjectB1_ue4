@@ -2,7 +2,7 @@
 
 
 #include "B1HPWidget.h"
-#include "B1Monster.h"
+#include "B1BaseCharacter.h"
 #include "Components/ProgressBar.h"
 
 void UB1HPWidget::NativeConstruct()
@@ -10,16 +10,27 @@ void UB1HPWidget::NativeConstruct()
 	Super::NativeConstruct();
 	HPProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HPBar")));
 }
-void UB1HPWidget::BindCharacterStat(AB1Monster* monster)
+void UB1HPWidget::BindCharacterStat(AB1BaseCharacter* pawn)
 {
-	//모든 클래스가 사용 할수 있도록 수정!
-	monster->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
+	BaseCharacter = pawn;
+	BaseCharacter->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
+	
+	//auto monster = Cast<AB1Monster>(pawn);
+	//if (nullptr != monster)
+	//{
+	//	monster->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
+	//}
+	//auto character = Cast<AB1Character>(pawn);
+	//if (nullptr != character)
+	//{
+	//	character->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
+	//}
 }
 void UB1HPWidget::UpdateHPWidget()
 {
-	printf("UpdateHPWidget HPProgressBar %p", HPProgressBar);
 	if (nullptr != HPProgressBar)
 	{
-		HPProgressBar->SetPercent(0.5);
+		float Percent = BaseCharacter->GetHP() / BaseCharacter->GetMaxHP();
+		HPProgressBar->SetPercent(Percent);
 	}
 }

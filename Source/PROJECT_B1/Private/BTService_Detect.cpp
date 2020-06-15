@@ -2,7 +2,7 @@
 
 
 #include "BTService_Detect.h"
-#include "B1AIController.h"
+#include "B1MonsterAIController.h"
 #include "B1Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -23,7 +23,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
-	float DetectRadius = 600.0f;
+	float DetectRadius = 500.0f;
 
 	if (nullptr == World) {
 		return;
@@ -40,23 +40,22 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		CollisionQueryParam
 	);
 
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, true);
+	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.5f);
 
 	if (bResult) {
 		for (auto OverlapResult : OverlapResults) {
 			AB1Character* B1Character = Cast<AB1Character>(OverlapResult.GetActor());
 			if (B1Character && B1Character->GetController()->IsPlayerController()) {
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AB1AIController::TargetKey, B1Character);
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AB1MonsterAIController::TargetKey, B1Character);
+				
 				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
 				DrawDebugPoint(World, B1Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				DrawDebugLine(World, ControllingPawn->GetActorLocation(),
-					B1Character->GetActorLocation(), FColor::Blue, false, 0.2f);
+				DrawDebugLine(World, ControllingPawn->GetActorLocation(),B1Character->GetActorLocation(), FColor::Blue, false, 0.2f);
 				return;
 			}
 		}
 	}
 	else {
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject(AB1AIController::TargetKey, nullptr);
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(AB1MonsterAIController::TargetKey, nullptr);
 	}
-	//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
 }

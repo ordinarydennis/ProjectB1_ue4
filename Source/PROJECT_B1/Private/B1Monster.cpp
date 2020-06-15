@@ -5,6 +5,7 @@
 #include "B1MonsterAnimInstance.h"
 #include "Components/WidgetComponent.h"
 #include "B1HPWidget.h"
+#include "B1MonsterAIController.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
@@ -12,12 +13,9 @@ AB1Monster::AB1Monster()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    BoxCollision = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
-    BoxCollision->SetGenerateOverlapEvents(true);
-    BoxCollision->SetBoxExtent(FVector(40.f, 40.f, 100.f));
-    BoxCollision->SetCollisionProfileName(TEXT("B1Monster"));
-
-    RootComponent = BoxCollision;
+    RootComponent = GetCapsuleComponent();
+    GetCapsuleComponent()->SetCollisionProfileName(TEXT("B1Monster"));
+    GetCapsuleComponent()->SetCapsuleSize(50.f, 100.f);
 
     // Rendering - SkeletalMeshComponent
     SkelMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("B1MonsterSM"));
@@ -26,21 +24,24 @@ AB1Monster::AB1Monster()
         FRotator(0.f, -90.f, 0.f)    // Roll
     );
 
+
     static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Monster(*RES_SK_MONSTER1);
     SkelMesh->SetSkeletalMesh(SK_Monster.Object);
     // Attacth to RootComponent
-    SkelMesh->SetupAttachment(BoxCollision);
+    SkelMesh->SetupAttachment(RootComponent);
 
     static ConstructorHelpers::FClassFinder<UAnimInstance> ResAnimInst(*RES_ANIM_INST_MONSTER);
     if (ResAnimInst.Succeeded()) {
         SkelMesh->SetAnimInstanceClass(ResAnimInst.Class);
     }
 
-
     HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
     HPBarWidget->SetupAttachment(SkelMesh);
-    HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+    //HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+    //SetPivot is better than SetRelativeLocation to adjust widget.
+    HPBarWidget->SetPivot(FVector2D(0.5f, 3.f));
     HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+    
     static ConstructorHelpers::FClassFinder<UUserWidget> ResWidgetHP(*RES_WIDGET_HP);
     if (ResWidgetHP.Succeeded())
     {
@@ -48,6 +49,11 @@ AB1Monster::AB1Monster()
         HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
         HUDWidgetClass = ResWidgetHP.Class;
     }
+
+    MaxHP = HP = 100.0f;
+
+    AIControllerClass = AB1MonsterAIController::StaticClass();
+    AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
@@ -65,15 +71,22 @@ void AB1Monster::BeginPlay()
         }
     }
 
+    bUseControllerRotationYaw = false;
+    GetCharacterMovement()->bUseControllerDesiredRotation = false;
+    GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
 }
-
+void AB1Monster::PossessedBy(AController* NewController)
+{
+    Super::PossessedBy(NewController);
+    GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+}
 // Called every frame
 void AB1Monster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
-
 // Called to bind functionality to input
 void AB1Monster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -85,6 +98,7 @@ void AB1Monster::PostInitializeComponents()
 
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
     AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+    AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
 
 }
 float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -93,9 +107,11 @@ float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& Dama
 
     //printf("Actor %s took Damage %f", *GetName(), FinalDamage);
 
-    //auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    //AnimInst->SetDeadAnim();
-
+    HP -= DamageAmount;
+    if (0.0f > HP)
+    {
+        HP = 0.0f;
+    }
     OnHPChanged.Broadcast();
 
     return FinalDamage;
@@ -141,4 +157,13 @@ void AB1Monster::CheckAttack()
         FDamageEvent DamageEvent;
         HitResult.Actor->TakeDamage(100, DamageEvent, this->GetController(), this);
     }
+}
+void AB1Monster::EndOfAttack()
+{
+    OnAttackEnd.Broadcast();
+}
+void AB1Monster::SetMonsterState(ERES_STATE_MONSTER state)
+{
+    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    AnimInst->SetMonsterState(state);
 }

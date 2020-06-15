@@ -39,6 +39,7 @@ public:
 protected:
 	int64 SkillStartTimestamp = 0;
 	int32 CoolTime = 10;
+	int64 Demage = 0;
 	class AB1Character* Character = nullptr;
 	UB1AnimInstance* AnimInst = nullptr;
 	UTexture2D* Tex2dSkill = nullptr;

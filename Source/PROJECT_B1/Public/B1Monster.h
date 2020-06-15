@@ -3,13 +3,13 @@
 #pragma once
 
 #include "PROJECT_B1.h"
-#include "GameFramework/Pawn.h"
+#include "B1BaseCharacter.h"
 #include "B1Monster.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 
 UCLASS()
-class PROJECT_B1_API AB1Monster : public APawn
+class PROJECT_B1_API AB1Monster : public AB1BaseCharacter
 {
 	GENERATED_BODY()
 
@@ -17,25 +17,24 @@ public:
 	// Sets default values for this pawn's properties
 	AB1Monster();
 	void CheckAttack();
+	void EndOfAttack();
+	void SetMonsterState(ERES_STATE_MONSTER state);
 
-	FOnHPChangedDelegate OnHPChanged;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	virtual void PostInitializeComponents() override;
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstiator, AActor* DamageCauser) override;
-
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = "Collision")
-	UBoxComponent* BoxCollision  = nullptr;
+	FOnAttackEndDelegate OnAttackEnd;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void PostInitializeComponents() override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstiator, AActor* DamageCauser) override;
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")
@@ -47,4 +46,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UProgressBar* HPProgressBar;
 
+	ERES_STATE_MONSTER MonsterState = ERES_STATE_MONSTER::IDLE;
 };

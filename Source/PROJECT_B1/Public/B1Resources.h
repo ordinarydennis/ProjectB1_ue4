@@ -20,6 +20,8 @@ const FString RES_TEX2D_SKILL1005 = TEXT("/Game/Resources/Market/CraftResourcesI
 const FString RES_BB_CHARACTER = TEXT("/Game/AI/BB_B1Character.BB_B1Character");
 const FString RES_BT_CHARACTER = TEXT("/Game/AI/BT_B1Character.BT_B1Character");
 
+const FString RES_BB_MONSTER = TEXT("/Game/AI/BB_B1Monster.BB_B1Monster");
+const FString RES_BT_MONSTER = TEXT("/Game/AI/BT_B1Monster.BT_B1Monster");
 
 const FString RES_SK_MONSTER1 = TEXT("/Game/Resources/Market/MLWarbandHP/Characters/Berserker/Mesh/BerserkerSK.BerserkerSK");
 const FString RES_ANIM_INST_MONSTER = TEXT("/Game/Blueprints/MonsterAnimBlueprint.MonsterAnimBlueprint_C");

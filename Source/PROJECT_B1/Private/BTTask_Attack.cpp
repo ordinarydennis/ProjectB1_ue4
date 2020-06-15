@@ -2,34 +2,28 @@
 
 
 #include "BTTask_Attack.h"
-#include "B1AIController.h"
-#include "B1Character.h"
-#include "Skill/1000/B1Skill1000.h"
+#include "B1Monster.h"
+#include "AIController.h"
 
 UBTTask_Attack::UBTTask_Attack()
 {
 	IsAttacking = false;
+	bNotifyTick = true;
 }
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	auto AICharacter = Cast<AB1Character>(OwnerComp.GetAIOwner()->GetPawn());
-	if (nullptr == AICharacter) {
+	auto Monster = Cast<AB1Monster>(OwnerComp.GetAIOwner()->GetPawn());
+	if (nullptr == Monster) {
 		return EBTNodeResult::Failed;
 	}
-
-	if (nullptr == B1Character) {
-		B1Character = Cast<AB1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	}
-
-	//TSharedPtr<IB1Skill> skill(new B1Skill1000(B1Character));
-	AICharacter->RunSkill(new B1Skill1000(AICharacter));
 	
+	Monster->SetMonsterState(ERES_STATE_MONSTER::ATTACK);
+
 	IsAttacking = true;
 
-	auto AnimInst = Cast<UB1AnimInstance>(B1Character->GetMesh()->GetAnimInstance());
-	AnimInst->OnEndofAnim.AddLambda([this]() ->  void {
+	Monster->OnAttackEnd.AddLambda([this]() ->  void {
 		IsAttacking = false;
 		});
 	
@@ -39,6 +33,7 @@ void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 	if (!IsAttacking) {
+		printf("FinishLatentTask");
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }

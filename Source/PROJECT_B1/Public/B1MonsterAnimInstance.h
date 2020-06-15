@@ -7,7 +7,7 @@
 #include "B1MonsterAnimInstance.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
-
+DECLARE_MULTICAST_DELEGATE(FOnEndOfAttackDelegate);
 /**
  * 
  */
@@ -18,16 +18,26 @@ class PROJECT_B1_API UB1MonsterAnimInstance : public UAnimInstance
 	
 public:
 	UB1MonsterAnimInstance();
-	void SetDeadAnim();
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	void SetMonsterState(ERES_STATE_MONSTER monsterState);
 
 public:
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
+	FOnEndOfAttackDelegate OnEndOfAttack;
 
 private:
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
+	UFUNCTION()
+	void AnimNotify_EndOfAttack();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
+	float CurrentPlayerSpeed = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	bool IsDead = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
+	bool IsAttack = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
+	int32 MonsterState = 0;
 };
