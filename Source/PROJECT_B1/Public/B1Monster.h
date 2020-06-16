@@ -47,4 +47,5 @@ private:
 	class UProgressBar* HPProgressBar;
 
 	ERES_STATE_MONSTER MonsterState = ERES_STATE_MONSTER::IDLE;
+	int64 Damage = 0;
 };

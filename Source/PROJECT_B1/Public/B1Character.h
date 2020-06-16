@@ -52,6 +52,8 @@ private:
 	class UWidgetComponent* HPBarWidget;
 	UPROPERTY(EditAnywhere, Category = UI)
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
+	UPROPERTY()
+	class AB1PlayerController* B1PlayerController;
 
 	float MovingSpeed = 0.8f;
 	IB1Skill* Skill = nullptr;

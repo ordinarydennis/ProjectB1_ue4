@@ -3,6 +3,7 @@
 
 #include "B1Character.h"
 #include "B1AIController.h"
+#include "B1PlayerController.h"
 #include "Misc/DateTime.h"
 #include "Components/WidgetComponent.h"
 #include "B1HPWidget.h"
@@ -75,6 +76,8 @@ void AB1Character::CheckAttack()
 void AB1Character::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	B1PlayerController = Cast<AB1PlayerController>(GetController());
 
 	if (HUDWidgetClass != nullptr) {
 		//BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
@@ -145,6 +148,16 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 	//AnimInst->SetIsDeath(true);
 	//IsDeath = true;
 	//SetActorEnableCollision(false);
+
+	HP -= DamageAmount;
+	if (KINDA_SMALL_NUMBER > HP) {
+		auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+		AnimInst->SetIsDeath(true);
+		SetActorEnableCollision(false);
+		GetMesh()->SetHiddenInGame(false);
+		HPBarWidget->SetHiddenInGame(true);
+		DisableInput(B1PlayerController);
+	}
 
 	OnHPChanged.Broadcast();
 	

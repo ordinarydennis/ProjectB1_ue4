@@ -51,7 +51,7 @@ AB1Monster::AB1Monster()
     }
 
     MaxHP = HP = 100.0f;
-
+    Damage = 50;
     AIControllerClass = AB1MonsterAIController::StaticClass();
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
@@ -155,7 +155,7 @@ void AB1Monster::CheckAttack()
     if (HitResult.Actor.IsValid())
     {
         FDamageEvent DamageEvent;
-        HitResult.Actor->TakeDamage(100, DamageEvent, this->GetController(), this);
+        HitResult.Actor->TakeDamage(Damage, DamageEvent, this->GetController(), this);
     }
 }
 void AB1Monster::EndOfAttack()

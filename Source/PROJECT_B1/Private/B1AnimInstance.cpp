@@ -23,7 +23,6 @@ void UB1AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 }
 void UB1AnimInstance::SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum)
 {
-	//printf("SetSkillAnimResNum %d", skillAnimResNum);
 	SkillAnimResNum = static_cast<int32>(skillAnimResNum);
 }
 void UB1AnimInstance::AnimNotify_EndofAnim()
@@ -32,7 +31,6 @@ void UB1AnimInstance::AnimNotify_EndofAnim()
 		return;
 	}
 
-	//printf("AnimNotify_EndofAnim %d", SkillAnimResNum);
 	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
 	OnEndofAnim.Broadcast();
 }

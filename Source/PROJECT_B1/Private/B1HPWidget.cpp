@@ -14,17 +14,6 @@ void UB1HPWidget::BindCharacterStat(AB1BaseCharacter* pawn)
 {
 	BaseCharacter = pawn;
 	BaseCharacter->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
-	
-	//auto monster = Cast<AB1Monster>(pawn);
-	//if (nullptr != monster)
-	//{
-	//	monster->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
-	//}
-	//auto character = Cast<AB1Character>(pawn);
-	//if (nullptr != character)
-	//{
-	//	character->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
-	//}
 }
 void UB1HPWidget::UpdateHPWidget()
 {
