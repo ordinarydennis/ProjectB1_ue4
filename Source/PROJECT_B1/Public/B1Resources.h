@@ -26,4 +26,7 @@ const FString RES_BT_MONSTER = TEXT("/Game/AI/BT_B1Monster.BT_B1Monster");
 const FString RES_SK_MONSTER1 = TEXT("/Game/Resources/Market/MLWarbandHP/Characters/Berserker/Mesh/BerserkerSK.BerserkerSK");
 const FString RES_ANIM_INST_MONSTER = TEXT("/Game/Blueprints/MonsterAnimBlueprint.MonsterAnimBlueprint_C");
 
+const FString RES_SK_MONSTER_1 = TEXT("/Game/Resources/Market/MLWarbandHP/Characters/Minion/Mesh/MinionSK.MinionSK");
+const FString RES_ANIM_INST_MONSTER_1 = TEXT("/Game/Blueprints/MinionAnimBP.MinionAnimBP_C");
+
 const FString RES_WIDGET_HP = TEXT("/Game/UI/HPBar.HPBar_C");

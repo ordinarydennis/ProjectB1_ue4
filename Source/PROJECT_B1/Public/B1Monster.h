@@ -4,6 +4,7 @@
 
 #include "PROJECT_B1.h"
 #include "B1BaseCharacter.h"
+#include "B1CharacterInfo.h"
 #include "B1Monster.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
@@ -28,6 +29,8 @@ public:
 
 public:
 	FOnAttackEndDelegate OnAttackEnd;
+	UPROPERTY(EditAnywhere, Category = INFO)
+	int MonsterType = 0;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,7 +38,10 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void PostInitializeComponents() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstiator, AActor* DamageCauser) override;
-	
+
+private:
+	B1CharacterInfo getResourceInfo(int monsterType);
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")
 	class USkeletalMeshComponent* SkelMesh = nullptr;
