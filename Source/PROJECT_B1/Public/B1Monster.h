@@ -41,6 +41,7 @@ protected:
 
 private:
 	B1CharacterInfo getResourceInfo(int monsterType);
+	void OnAssetLoadCompleted();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")
@@ -54,4 +55,7 @@ private:
 
 	ERES_STATE_MONSTER MonsterState = ERES_STATE_MONSTER::IDLE;
 	int64 Damage = 0;
+
+	TArray<FSoftObjectPath> AssetList;
+	TSharedPtr<struct FStreamableHandle> AssetStreamingHandle;
 };

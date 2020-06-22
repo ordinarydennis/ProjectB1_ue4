@@ -7,6 +7,7 @@
 #include "B1HPWidget.h"
 #include "B1MonsterAIController.h"
 #include "B1CharacterInfo.h"
+#include "B1GameInstance.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
@@ -30,17 +31,17 @@ AB1Monster::AB1Monster()
         FRotator(0.f, -90.f, 0.f)    // Roll
     );
 
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Monster(*MonsterInfo.GetResSkMesh());
-    printf("*MonsterInfo.GetResSkMesh() %s", *MonsterInfo.GetResSkMesh());
-    SkelMesh->SetSkeletalMesh(SK_Monster.Object);
+    //static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Monster(*MonsterInfo.GetResSkMesh());
+
+    //SkelMesh->SetSkeletalMesh(SK_Monster.Object);
 
     // Attacth to RootComponent
     SkelMesh->SetupAttachment(RootComponent);
 
-    static ConstructorHelpers::FClassFinder<UAnimInstance> ResAnimInst(*MonsterInfo.GetResAnimInst());
-    if (ResAnimInst.Succeeded()) {
-        SkelMesh->SetAnimInstanceClass(ResAnimInst.Class);
-    }
+    //static ConstructorHelpers::FClassFinder<UAnimInstance> ResAnimInst(*MonsterInfo.GetResAnimInst());
+    //if (ResAnimInst.Succeeded()) {
+        //SkelMesh->SetAnimInstanceClass(ResAnimInst.Class);
+    //}
 
     HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
     HPBarWidget->SetupAttachment(SkelMesh);
@@ -87,6 +88,19 @@ void AB1Monster::BeginPlay()
 {
 	Super::BeginPlay();
 
+    auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
+    if (nullptr != B1GameInstance) {
+
+        B1CharacterInfo MonsterInfo = getResourceInfo(MonsterType);
+       
+        AssetList.AddUnique(MonsterInfo.GetResSkMesh());
+        AssetList.AddUnique(MonsterInfo.GetResAnimInst());
+        
+        AssetStreamingHandle = B1GameInstance->StreamableManager.RequestAsyncLoad(
+            AssetList, FStreamableDelegate::CreateUObject(this, &AB1Monster::OnAssetLoadCompleted));
+
+    }
+
     if (HUDWidgetClass != nullptr) {
         //BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
         //내부적으로 BeginPlay 인지 확인하고 세팅하기 때문
@@ -100,6 +114,26 @@ void AB1Monster::BeginPlay()
     GetCharacterMovement()->bUseControllerDesiredRotation = false;
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
+}
+void AB1Monster::OnAssetLoadCompleted()
+{
+    AssetStreamingHandle->ReleaseHandle();
+
+    TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(AssetList[0]);
+    if (LoadedAssetPath.IsValid()) {
+        SkelMesh->SetSkeletalMesh(LoadedAssetPath.Get());
+    }
+
+    TSoftClassPtr<UAnimInstance> LoadedAssetPath2(AssetList[1]);
+    if (LoadedAssetPath2.IsValid()) {
+        printf("LoadedAssetPath2.IsValid() true");
+        SkelMesh->SetAnimInstanceClass(LoadedAssetPath2.Get());
+    }
+    else {
+        printf("LoadedAssetPath2.IsValid() false");
+    }
+
+    //SetCharacterState(ECharacterState::READY);
 }
 void AB1Monster::PossessedBy(AController* NewController)
 {
@@ -120,10 +154,10 @@ void AB1Monster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void AB1Monster::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
-    printf("MonsterType %d", MonsterType);
-    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
-    AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
+    //printf("MonsterType %d", MonsterType);
+    //auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    //AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+    //AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
 }
 float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
