@@ -40,8 +40,9 @@ protected:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstiator, AActor* DamageCauser) override;
 
 private:
-	B1CharacterInfo getResourceInfo(int monsterType);
-	void OnAssetLoadCompleted();
+	B1CharacterInfo GetCharacterInfo(int monsterType);
+	void LoadResource();
+	void CompletedResourceLoad();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")
@@ -56,6 +57,6 @@ private:
 	ERES_STATE_MONSTER MonsterState = ERES_STATE_MONSTER::IDLE;
 	int64 Damage = 0;
 
-	TArray<FSoftObjectPath> AssetList;
-	TSharedPtr<struct FStreamableHandle> AssetStreamingHandle;
+	TArray<FSoftObjectPath> ResourcePathList;
+	TSharedPtr<struct FStreamableHandle> ResourceStreamingHandle;
 };

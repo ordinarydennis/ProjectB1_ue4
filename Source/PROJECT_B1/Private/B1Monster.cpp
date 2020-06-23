@@ -16,20 +16,15 @@ AB1Monster::AB1Monster()
 	PrimaryActorTick.bCanEverTick = true;
 
     RootComponent = GetCapsuleComponent();
+    GetCapsuleComponent()->SetVisibleFlag(1);
     GetCapsuleComponent()->SetCollisionProfileName(TEXT("B1Monster"));
     // Rendering - SkeletalMeshComponent
     SkelMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("B1MonsterSM"));
-
-    B1CharacterInfo MonsterInfo = getResourceInfo(MonsterType);
-
-    float NewRadius = MonsterInfo.GetCapsuleSize().X;
-    float NewHalfHeight = MonsterInfo.GetCapsuleSize().Y;
-    GetCapsuleComponent()->SetCapsuleSize(NewRadius, NewHalfHeight);
     
-    SkelMesh->SetRelativeLocationAndRotation(
-        FVector(0.f, 0.f, -90.f),
-        FRotator(0.f, -90.f, 0.f)    // Roll
-    );
+    //SkelMesh->SetRelativeLocationAndRotation(
+    //    FVector(0.f, 0.f, -90.f),
+    //    FRotator(0.f, -90.f, 0.f)    // Roll
+    //);
 
     //static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Monster(*MonsterInfo.GetResSkMesh());
 
@@ -44,12 +39,11 @@ AB1Monster::AB1Monster()
     //}
 
     HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
-    HPBarWidget->SetupAttachment(SkelMesh);
-    //HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
-    //SetPivot is better than SetRelativeLocation to adjust widget.
-    HPBarWidget->SetPivot(FVector2D(0.5f, 3.f));
-    HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
     
+    //SetPivot is better than SetRelativeLocation to adjust widget.
+    //HPBarWidget->SetPivot(FVector2D(0.5f, 3.f));
+    HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+
     static ConstructorHelpers::FClassFinder<UUserWidget> ResWidgetHP(*RES_WIDGET_HP);
     if (ResWidgetHP.Succeeded()){
         HPBarWidget->SetWidgetClass(ResWidgetHP.Class);
@@ -57,13 +51,10 @@ AB1Monster::AB1Monster()
         HUDWidgetClass = ResWidgetHP.Class;
     }
 
-    MaxHP = HP = 100.0f;
-    Damage = 50;
-
     AIControllerClass = AB1MonsterAIController::StaticClass();
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
-B1CharacterInfo AB1Monster::getResourceInfo(int monsterType)
+B1CharacterInfo AB1Monster::GetCharacterInfo(int monsterType)
 {
     B1CharacterInfo MonsterInfo;
     switch (monsterType) {
@@ -71,11 +62,17 @@ B1CharacterInfo AB1Monster::getResourceInfo(int monsterType)
         MonsterInfo.SetResSkMesh(RES_SK_MONSTER1);
         MonsterInfo.SetResAnimInst(RES_ANIM_INST_MONSTER);
         MonsterInfo.SetCapsuleSize(FVector2D(50.f, 100.f));
+        MonsterInfo.SetMaxHP(100.f);
+        MonsterInfo.SetDamage(50.f);
+        MonsterInfo.SetMaxWalkSpeed(300.f);
         break;
     case 1:
         MonsterInfo.SetResSkMesh(RES_SK_MONSTER_1);
         MonsterInfo.SetResAnimInst(RES_ANIM_INST_MONSTER_1);
         MonsterInfo.SetCapsuleSize(FVector2D(50.f, 100.f));
+        MonsterInfo.SetMaxHP(100.f);
+        MonsterInfo.SetDamage(50.f);
+        MonsterInfo.SetMaxWalkSpeed(200.f);
         break;
     default:
         break;
@@ -88,18 +85,7 @@ void AB1Monster::BeginPlay()
 {
 	Super::BeginPlay();
 
-    auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
-    if (nullptr != B1GameInstance) {
-
-        B1CharacterInfo MonsterInfo = getResourceInfo(MonsterType);
-       
-        AssetList.AddUnique(MonsterInfo.GetResSkMesh());
-        AssetList.AddUnique(MonsterInfo.GetResAnimInst());
-        
-        AssetStreamingHandle = B1GameInstance->StreamableManager.RequestAsyncLoad(
-            AssetList, FStreamableDelegate::CreateUObject(this, &AB1Monster::OnAssetLoadCompleted));
-
-    }
+    LoadResource();
 
     if (HUDWidgetClass != nullptr) {
         //BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
@@ -115,30 +101,61 @@ void AB1Monster::BeginPlay()
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
 }
-void AB1Monster::OnAssetLoadCompleted()
+void AB1Monster::LoadResource()
 {
-    AssetStreamingHandle->ReleaseHandle();
+    auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
+    if (nullptr != B1GameInstance) {
+        B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
 
-    TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(AssetList[0]);
+        ResourcePathList.AddUnique(MonsterInfo.GetResSkMesh());
+        ResourcePathList.AddUnique(MonsterInfo.GetResAnimInst());
+
+        ResourceStreamingHandle = B1GameInstance->StreamableManager.RequestAsyncLoad(
+            ResourcePathList, FStreamableDelegate::CreateUObject(this, &AB1Monster::CompletedResourceLoad));
+    }
+}
+void AB1Monster::CompletedResourceLoad()
+{
+    ResourceStreamingHandle->ReleaseHandle();
+
+    TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(ResourcePathList[0]);
     if (LoadedAssetPath.IsValid()) {
         SkelMesh->SetSkeletalMesh(LoadedAssetPath.Get());
     }
 
-    TSoftClassPtr<UAnimInstance> LoadedAssetPath2(AssetList[1]);
+    SkelMesh->SetRelativeLocationAndRotation(
+        FVector(0.f, 0.f, -90.f),
+        FRotator(0.f, -90.f, 0.f)    // Roll
+    );
+
+    HPBarWidget->SetupAttachment(SkelMesh);
+    HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
+
+    TSoftClassPtr<UAnimInstance> LoadedAssetPath2(ResourcePathList[1]);
     if (LoadedAssetPath2.IsValid()) {
-        printf("LoadedAssetPath2.IsValid() true");
         SkelMesh->SetAnimInstanceClass(LoadedAssetPath2.Get());
     }
-    else {
-        printf("LoadedAssetPath2.IsValid() false");
-    }
+
+    B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
+
+    GetCapsuleComponent()->SetCapsuleSize(
+        MonsterInfo.GetCapsuleSize().X, 
+        MonsterInfo.GetCapsuleSize().Y
+    );
+
+    MaxHP = HP = MonsterInfo.GetMaxHP();
+    Damage = MonsterInfo.GetDamage();
+    GetCharacterMovement()->MaxWalkSpeed = MonsterInfo.GetMaxWalkSpeed();
+
+    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+    AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
 
     //SetCharacterState(ECharacterState::READY);
 }
 void AB1Monster::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
-    GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 }
 // Called every frame
 void AB1Monster::Tick(float DeltaTime)
@@ -154,7 +171,6 @@ void AB1Monster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void AB1Monster::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
-    //printf("MonsterType %d", MonsterType);
     //auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
     //AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
     //AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);

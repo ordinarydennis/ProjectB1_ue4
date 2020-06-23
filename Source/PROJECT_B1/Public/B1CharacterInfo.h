@@ -16,13 +16,22 @@ public:
 	FString GetResSkMesh();
 	FString GetResAnimInst();
 	FVector2D GetCapsuleSize();
+	float GetMaxHP();
+	float GetDamage();
+	float GetMaxWalkSpeed();
 
 	void SetResSkMesh(FString resSkMesh);
 	void SetResAnimInst(FString resAnimInst);
 	void SetCapsuleSize(FVector2D capsuleSize);
+	void SetMaxHP(float maxHP);
+	void SetDamage(float damage);
+	void SetMaxWalkSpeed(float maxWalkSpeed);
 	
 private:
 	FString ResSkMesh;
 	FString ResAnimInst;
 	FVector2D CapsuleSize;
+	float MaxHP = 0.f;
+	float Damage = 0.f;
+	float MaxWalkSpeed = 0.f;
 };

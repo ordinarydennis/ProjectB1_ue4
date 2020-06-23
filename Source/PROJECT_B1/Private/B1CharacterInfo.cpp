@@ -22,6 +22,18 @@ FVector2D B1CharacterInfo::GetCapsuleSize()
 {
 	return CapsuleSize;
 }
+float B1CharacterInfo::GetMaxHP()
+{
+	return MaxHP;
+}
+float B1CharacterInfo::GetDamage()
+{
+	return Damage;
+}
+float B1CharacterInfo::GetMaxWalkSpeed()
+{
+	return MaxWalkSpeed;
+}
 void B1CharacterInfo::SetResSkMesh(FString resSkMesh)
 {
 	ResSkMesh = resSkMesh;
@@ -34,3 +46,16 @@ void B1CharacterInfo::SetCapsuleSize(FVector2D capsuleSize)
 {
 	CapsuleSize = capsuleSize;
 }
+void B1CharacterInfo::SetMaxHP(float maxHP)
+{
+	MaxHP = maxHP;
+}
+void B1CharacterInfo::SetDamage(float damage)
+{
+	Damage = damage;
+}
+void B1CharacterInfo::SetMaxWalkSpeed(float maxWalkSpeed)
+{
+	MaxWalkSpeed = maxWalkSpeed;
+}
+

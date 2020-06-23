@@ -46,7 +46,7 @@ AB1Character::AB1Character()
 
 	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
 	HPBarWidget->SetupAttachment(GetMesh());
-	HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+	HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
 	HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	static ConstructorHelpers::FClassFinder<UUserWidget> ResWidgetHP(*RES_WIDGET_HP);
 	if (ResWidgetHP.Succeeded())
