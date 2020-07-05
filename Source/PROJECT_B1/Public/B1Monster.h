@@ -40,6 +40,7 @@ protected:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstiator, AActor* DamageCauser) override;
 
 private:
+	void Init(int32 monsterType);
 	B1CharacterInfo GetCharacterInfo(int monsterType);
 	void LoadResource();
 	void CompletedResourceLoad();
@@ -59,4 +60,7 @@ private:
 
 	TArray<FSoftObjectPath> ResourcePathList;
 	TSharedPtr<struct FStreamableHandle> ResourceStreamingHandle;
+	
+	//TSharedPtr<B1CharacterInfo> MonsterInfo;
+	bool IsInit = false;
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+//#include "PROJECT_B1.h"
 
 /**
  * 
@@ -26,7 +27,7 @@ public:
 	void SetMaxHP(float maxHP);
 	void SetDamage(float damage);
 	void SetMaxWalkSpeed(float maxWalkSpeed);
-	
+
 private:
 	FString ResSkMesh;
 	FString ResAnimInst;

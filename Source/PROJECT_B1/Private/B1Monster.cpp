@@ -8,6 +8,7 @@
 #include "B1MonsterAIController.h"
 #include "B1CharacterInfo.h"
 #include "B1GameInstance.h"
+#include "B1CustomStructs.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
@@ -53,39 +54,43 @@ AB1Monster::AB1Monster()
 
     AIControllerClass = AB1MonsterAIController::StaticClass();
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+    //MonsterInfo = MakeShareable(new B1CharacterInfo);
 }
 B1CharacterInfo AB1Monster::GetCharacterInfo(int monsterType)
 {
-    B1CharacterInfo MonsterInfo;
+    TSharedPtr<B1CharacterInfo> MonsterInfo = MakeShareable(new B1CharacterInfo);
     switch (monsterType) {
     case 0:
-        MonsterInfo.SetResSkMesh(RES_SK_MONSTER1);
-        MonsterInfo.SetResAnimInst(RES_ANIM_INST_MONSTER);
-        MonsterInfo.SetCapsuleSize(FVector2D(50.f, 100.f));
-        MonsterInfo.SetMaxHP(100.f);
-        MonsterInfo.SetDamage(50.f);
-        MonsterInfo.SetMaxWalkSpeed(300.f);
+        MonsterInfo->SetResSkMesh(RES_SK_MONSTER1);
+        MonsterInfo->SetResAnimInst(RES_ANIM_INST_MONSTER);
+        MonsterInfo->SetCapsuleSize(FVector2D(50.f, 100.f));
+        MonsterInfo->SetMaxHP(100.f);
+        MonsterInfo->SetDamage(50.f);
+        MonsterInfo->SetMaxWalkSpeed(300.f);
         break;
     case 1:
-        MonsterInfo.SetResSkMesh(RES_SK_MONSTER_1);
-        MonsterInfo.SetResAnimInst(RES_ANIM_INST_MONSTER_1);
-        MonsterInfo.SetCapsuleSize(FVector2D(50.f, 100.f));
-        MonsterInfo.SetMaxHP(100.f);
-        MonsterInfo.SetDamage(50.f);
-        MonsterInfo.SetMaxWalkSpeed(200.f);
+        MonsterInfo->SetResSkMesh(RES_SK_MONSTER_1);
+        MonsterInfo->SetResAnimInst(RES_ANIM_INST_MONSTER_1);
+        MonsterInfo->SetCapsuleSize(FVector2D(50.f, 100.f));
+        MonsterInfo->SetMaxHP(100.f);
+        MonsterInfo->SetDamage(50.f);
+        MonsterInfo->SetMaxWalkSpeed(200.f);
         break;
     default:
         break;
     }
 
-    return MonsterInfo;
+    //MonsterInfo->ReimportDT();
+    return *MonsterInfo;
 }
 // Called when the game starts or when spawned
 void AB1Monster::BeginPlay()
 {
 	Super::BeginPlay();
-
-    LoadResource();
+    //printf("BeginPlay");
+    //Init(MonsterType);
+    //LoadResource();
 
     if (HUDWidgetClass != nullptr) {
         //BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
@@ -101,21 +106,88 @@ void AB1Monster::BeginPlay()
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
 }
-void AB1Monster::LoadResource()
+void AB1Monster::Init(int32 monsterType)
 {
     auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
+    printf("monsterType %d", monsterType);
+    FB1MonaterTableRow* MonsterTableRow = B1GameInstance->GetMonsterData(monsterType);
+
+    if(nullptr == MonsterTableRow){
+        printf("MonsterTableRow null");
+        return;
+    }
+
+    //printf("monsterType %d, health: %f, Damage %f, Speed: %f", monsterType, MonsterTableRow->HP, MonsterTableRow->Speed, MonsterTableRow->Damage);
+    FSoftObjectPath mesh = MonsterTableRow->ResSKMesh;
+    TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(mesh);
+    if (LoadedAssetPath.IsValid()) {
+        //printf("LoadedAssetPath %s", *LoadedAssetPath.ToString());
+        SkelMesh->SetSkeletalMesh(LoadedAssetPath.Get());
+    }
+
+    FSoftObjectPath anim = MonsterTableRow->ResAnimInst;
+    TSoftClassPtr<UAnimInstance> LoadedAssetPath2(anim);
+    if (LoadedAssetPath2.IsValid()) {
+        //printf("LoadedAssetPath2 %s", *LoadedAssetPath2.ToString());
+        SkelMesh->SetAnimInstanceClass(LoadedAssetPath2.Get());
+    }
+
+    B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
+    GetCapsuleComponent()->SetCapsuleSize(
+        MonsterInfo.GetCapsuleSize().X,
+        MonsterInfo.GetCapsuleSize().Y
+    );
+
+    SkelMesh->SetRelativeLocationAndRotation(
+        FVector(0.f, 0.f, -90.f),
+        FRotator(0.f, -90.f, 0.f)    // Roll
+    );
+
+    HPBarWidget->SetupAttachment(SkelMesh);
+    HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
+
+    MaxHP = HP = MonsterTableRow->HP;
+    GetCharacterMovement()->MaxWalkSpeed = MonsterTableRow->Speed;
+    Damage = MonsterTableRow->Damage;
+
+    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+    AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+    AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
+}
+void AB1Monster::LoadResource()
+{
+    //여기 다 수정 해야 함
+    auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
     if (nullptr != B1GameInstance) {
-        B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
+        printf("LoadResource");
+        //B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
 
-        ResourcePathList.AddUnique(MonsterInfo.GetResSkMesh());
-        ResourcePathList.AddUnique(MonsterInfo.GetResAnimInst());
+        //ResourcePathList.AddUnique(MonsterInfo.GetResSkMesh());
+        //ResourcePathList.AddUnique(MonsterInfo.GetResAnimInst());
 
-        ResourceStreamingHandle = B1GameInstance->StreamableManager.RequestAsyncLoad(
-            ResourcePathList, FStreamableDelegate::CreateUObject(this, &AB1Monster::CompletedResourceLoad));
+        //auto B1GameInstance2 = Cast<UB1GameInstance>(GetGameInstance());
+
+        //B1GameInstance2
+
+        //UDataTable* DT_B1MonsterInfo = B1GameInstance->GetMonsterInfo();
+
+        //if (DT_B1MonsterInfo != nullptr) {
+        //    int32 num = DT_B1MonsterInfo->GetRowMap().Num();
+        //    printf("num %d", num);
+        //    for (int32 Index = 1; Index <= num; ++Index)
+        //    {
+        //        FB1CharacterData* a = DT_B1MonsterInfo->FindRow<FB1CharacterData>(*FString::FromInt(Index), TEXT(""));
+        //        printf("Dagame %f Health %f Speed %f", a->Damage, a->Health, a->Speed);
+        //    }
+        //}
+
+       // ResourceStreamingHandle = B1GameInstance2->StreamableManager.RequestAsyncLoad(
+       //     ResourcePathList, FStreamableDelegate::CreateUObject(this, &AB1Monster::CompletedResourceLoad));
     }
 }
 void AB1Monster::CompletedResourceLoad()
 {
+    printf("CompletedResourceLoad type %d", MonsterType);
     ResourceStreamingHandle->ReleaseHandle();
 
     TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(ResourcePathList[0]);
@@ -136,16 +208,16 @@ void AB1Monster::CompletedResourceLoad()
         SkelMesh->SetAnimInstanceClass(LoadedAssetPath2.Get());
     }
 
-    B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
+    //FB1CharacterData* MonsterData = DT_B1MonsterInfo->FindRow<FB1CharacterData>(*FString::FromInt(MonsterType), TEXT(""));
+    ////printf("MonsterData %p", MonsterData);
 
-    GetCapsuleComponent()->SetCapsuleSize(
-        MonsterInfo.GetCapsuleSize().X, 
-        MonsterInfo.GetCapsuleSize().Y
-    );
+    //if (MonsterData != nullptr) {
+    //    //printf("MonsterType %d, health: %f, Damage %f, Speed: %f", MonsterType, MonsterData->Health, MonsterData->Damage, MonsterData->Speed);
+    //    MaxHP = HP = MonsterData->Health;
+    //    Damage = MonsterData->Damage;
+    //    GetCharacterMovement()->MaxWalkSpeed = MonsterData->Speed;
+    //}
 
-    MaxHP = HP = MonsterInfo.GetMaxHP();
-    Damage = MonsterInfo.GetDamage();
-    GetCharacterMovement()->MaxWalkSpeed = MonsterInfo.GetMaxWalkSpeed();
 
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
     AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
@@ -161,6 +233,12 @@ void AB1Monster::PossessedBy(AController* NewController)
 void AB1Monster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+    auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
+    if (B1GameInstance->IsMonsterTableLoad && IsInit == false) {
+        //printf("B1GameInstance->IsMonsterTableLoad %d", B1GameInstance->IsMonsterTableLoad);
+        Init(MonsterType);
+        IsInit = true;
+    }
 
 }
 // Called to bind functionality to input

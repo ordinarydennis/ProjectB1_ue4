@@ -1,0 +1,3 @@
+Type,HP,Speed,Damage,ResSKMesh,ResAnimInst
+0,50,400,20,/Game/Resources/Market/MLWarbandHP/Characters/Minion/Mesh/MinionSK.MinionSK,/Game/Blueprints/MinionAnimBP.MinionAnimBP_C
+1,150,200,30,/Game/Resources/Market/MLWarbandHP/Characters/Berserker/Mesh/BerserkerSK.BerserkerSK,/Game/Blueprints/MonsterAnimBlueprint.MonsterAnimBlueprint_C
