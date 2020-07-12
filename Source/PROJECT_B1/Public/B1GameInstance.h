@@ -23,7 +23,7 @@ public:
 
 public:
 	bool Tick(float DeltaSeconds);
-	struct FB1MonaterTableRow* GetMonsterData(int32 monsterType);
+	const struct FB1MonaterTableRow* GetMonsterData(int32 monsterType);
 	void ReloadDTFromCSVFile(UDataTable* dataTable, FString csvFileName);
 
 public:

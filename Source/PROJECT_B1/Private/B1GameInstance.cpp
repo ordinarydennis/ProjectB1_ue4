@@ -48,23 +48,19 @@ void UB1GameInstance::CompletedResourceLoad()
 		
 		int32 num = B1MonsterTable->GetRowMap().Num();
 		for (int32 Index = 0; Index < num; ++Index){
-			FB1MonaterTableRow* Row = B1MonsterTable->FindRow<FB1MonaterTableRow>(*FString::FromInt(Index), TEXT(""));
+			const FB1MonaterTableRow* Row = B1MonsterTable->FindRow<FB1MonaterTableRow>(*FString::FromInt(Index), TEXT(""));
 			if (Row == nullptr) {
 				continue;
 			}
 
-			//얘네 한번 더 로드를 해야 하나;;
 			MonsterResMeshPath.AddUnique(Row->ResSKMesh);
 			MonsterResAnimPath.AddUnique(Row->ResAnimInst);
 			MonsterResPath.AddUnique(Row->ResSKMesh);
 			MonsterResPath.AddUnique(Row->ResAnimInst);
-			//printf("HP %f Speed %f Damage %f ResSKMesh %s", Row->HP, Row->Speed, Row->Damage, *Row->ResSKMesh);
 		}
-
 
 		//MonsterResPath.Append(MonsterResMeshPath, ARRAY_COUNT(MonsterResMeshPath));
 		//MonsterResPath.Append(MonsterResAnimPath, ARRAY_COUNT(MonsterResAnimPath));
-
 
 		ResourceStreamingHandle = StreamableManager.RequestAsyncLoad(
 			MonsterResPath, FStreamableDelegate::CreateUObject(this, &UB1GameInstance::CompletedResourceLoad2));
@@ -73,27 +69,23 @@ void UB1GameInstance::CompletedResourceLoad()
 }
 void UB1GameInstance::CompletedResourceLoad2()
 {
-	printf("UB1GameInstance::CompletedResourceLoad2");
 	ResourceStreamingHandle->ReleaseHandle();
 
 	for (auto mesh : MonsterResMeshPath) {
 		TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(mesh);
 		if (LoadedAssetPath.IsValid()) {
-			//printf("MonsterResMeshPath: %s", *LoadedAssetPath.ToString());
 		}
 	}
 
 	for (auto anim : MonsterResAnimPath) {
 		TSoftClassPtr<UAnimInstance> LoadedAssetPath(anim);
 		if (LoadedAssetPath.IsValid()) {
-			//printf("MonsterResAnimPath: %s", *LoadedAssetPath.ToString());
 		}
 	}
 
-
 	IsMonsterTableLoad = true;
 }
-FB1MonaterTableRow* UB1GameInstance::GetMonsterData(int32 monsterType)
+const FB1MonaterTableRow* UB1GameInstance::GetMonsterData(int32 monsterType)
 {
 	return B1MonsterTable->FindRow<FB1MonaterTableRow>(*FString::FromInt(monsterType), TEXT(""));
 }

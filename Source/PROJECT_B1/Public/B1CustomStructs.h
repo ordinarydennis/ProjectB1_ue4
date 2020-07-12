@@ -19,11 +19,15 @@ public:
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float HP;
+	float HP = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float Speed;
+	float Speed = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float Damage;
+	float Damage = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float CapsuleSizeX = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float CapsuleSizeY = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString ResSKMesh;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")

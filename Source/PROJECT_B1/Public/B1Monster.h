@@ -41,9 +41,6 @@ protected:
 
 private:
 	void Init(int32 monsterType);
-	B1CharacterInfo GetCharacterInfo(int monsterType);
-	void LoadResource();
-	void CompletedResourceLoad();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "B1PawnComponent")

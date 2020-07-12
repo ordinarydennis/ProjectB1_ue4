@@ -54,43 +54,11 @@ AB1Monster::AB1Monster()
 
     AIControllerClass = AB1MonsterAIController::StaticClass();
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
-    //MonsterInfo = MakeShareable(new B1CharacterInfo);
-}
-B1CharacterInfo AB1Monster::GetCharacterInfo(int monsterType)
-{
-    TSharedPtr<B1CharacterInfo> MonsterInfo = MakeShareable(new B1CharacterInfo);
-    switch (monsterType) {
-    case 0:
-        MonsterInfo->SetResSkMesh(RES_SK_MONSTER1);
-        MonsterInfo->SetResAnimInst(RES_ANIM_INST_MONSTER);
-        MonsterInfo->SetCapsuleSize(FVector2D(50.f, 100.f));
-        MonsterInfo->SetMaxHP(100.f);
-        MonsterInfo->SetDamage(50.f);
-        MonsterInfo->SetMaxWalkSpeed(300.f);
-        break;
-    case 1:
-        MonsterInfo->SetResSkMesh(RES_SK_MONSTER_1);
-        MonsterInfo->SetResAnimInst(RES_ANIM_INST_MONSTER_1);
-        MonsterInfo->SetCapsuleSize(FVector2D(50.f, 100.f));
-        MonsterInfo->SetMaxHP(100.f);
-        MonsterInfo->SetDamage(50.f);
-        MonsterInfo->SetMaxWalkSpeed(200.f);
-        break;
-    default:
-        break;
-    }
-
-    //MonsterInfo->ReimportDT();
-    return *MonsterInfo;
 }
 // Called when the game starts or when spawned
 void AB1Monster::BeginPlay()
 {
 	Super::BeginPlay();
-    //printf("BeginPlay");
-    //Init(MonsterType);
-    //LoadResource();
 
     if (HUDWidgetClass != nullptr) {
         //BeginPlay() 함수에서  SetWidgetClass 해야 한다. 
@@ -109,34 +77,26 @@ void AB1Monster::BeginPlay()
 void AB1Monster::Init(int32 monsterType)
 {
     auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
-    printf("monsterType %d", monsterType);
-    FB1MonaterTableRow* MonsterTableRow = B1GameInstance->GetMonsterData(monsterType);
+    const FB1MonaterTableRow* MonsterTableRow = B1GameInstance->GetMonsterData(monsterType);
 
     if(nullptr == MonsterTableRow){
         printf("MonsterTableRow null");
         return;
     }
 
-    //printf("monsterType %d, health: %f, Damage %f, Speed: %f", monsterType, MonsterTableRow->HP, MonsterTableRow->Speed, MonsterTableRow->Damage);
     FSoftObjectPath mesh = MonsterTableRow->ResSKMesh;
     TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(mesh);
     if (LoadedAssetPath.IsValid()) {
-        //printf("LoadedAssetPath %s", *LoadedAssetPath.ToString());
         SkelMesh->SetSkeletalMesh(LoadedAssetPath.Get());
     }
 
     FSoftObjectPath anim = MonsterTableRow->ResAnimInst;
     TSoftClassPtr<UAnimInstance> LoadedAssetPath2(anim);
     if (LoadedAssetPath2.IsValid()) {
-        //printf("LoadedAssetPath2 %s", *LoadedAssetPath2.ToString());
         SkelMesh->SetAnimInstanceClass(LoadedAssetPath2.Get());
     }
 
-    B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
-    GetCapsuleComponent()->SetCapsuleSize(
-        MonsterInfo.GetCapsuleSize().X,
-        MonsterInfo.GetCapsuleSize().Y
-    );
+    GetCapsuleComponent()->SetCapsuleSize(MonsterTableRow->CapsuleSizeX, MonsterTableRow->CapsuleSizeY);
 
     SkelMesh->SetRelativeLocationAndRotation(
         FVector(0.f, 0.f, -90.f),
@@ -153,76 +113,6 @@ void AB1Monster::Init(int32 monsterType)
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
     AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
     AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
-}
-void AB1Monster::LoadResource()
-{
-    //여기 다 수정 해야 함
-    auto B1GameInstance = Cast<UB1GameInstance>(GetGameInstance());
-    if (nullptr != B1GameInstance) {
-        printf("LoadResource");
-        //B1CharacterInfo MonsterInfo = GetCharacterInfo(MonsterType);
-
-        //ResourcePathList.AddUnique(MonsterInfo.GetResSkMesh());
-        //ResourcePathList.AddUnique(MonsterInfo.GetResAnimInst());
-
-        //auto B1GameInstance2 = Cast<UB1GameInstance>(GetGameInstance());
-
-        //B1GameInstance2
-
-        //UDataTable* DT_B1MonsterInfo = B1GameInstance->GetMonsterInfo();
-
-        //if (DT_B1MonsterInfo != nullptr) {
-        //    int32 num = DT_B1MonsterInfo->GetRowMap().Num();
-        //    printf("num %d", num);
-        //    for (int32 Index = 1; Index <= num; ++Index)
-        //    {
-        //        FB1CharacterData* a = DT_B1MonsterInfo->FindRow<FB1CharacterData>(*FString::FromInt(Index), TEXT(""));
-        //        printf("Dagame %f Health %f Speed %f", a->Damage, a->Health, a->Speed);
-        //    }
-        //}
-
-       // ResourceStreamingHandle = B1GameInstance2->StreamableManager.RequestAsyncLoad(
-       //     ResourcePathList, FStreamableDelegate::CreateUObject(this, &AB1Monster::CompletedResourceLoad));
-    }
-}
-void AB1Monster::CompletedResourceLoad()
-{
-    printf("CompletedResourceLoad type %d", MonsterType);
-    ResourceStreamingHandle->ReleaseHandle();
-
-    TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(ResourcePathList[0]);
-    if (LoadedAssetPath.IsValid()) {
-        SkelMesh->SetSkeletalMesh(LoadedAssetPath.Get());
-    }
-
-    SkelMesh->SetRelativeLocationAndRotation(
-        FVector(0.f, 0.f, -90.f),
-        FRotator(0.f, -90.f, 0.f)    // Roll
-    );
-
-    HPBarWidget->SetupAttachment(SkelMesh);
-    HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
-
-    TSoftClassPtr<UAnimInstance> LoadedAssetPath2(ResourcePathList[1]);
-    if (LoadedAssetPath2.IsValid()) {
-        SkelMesh->SetAnimInstanceClass(LoadedAssetPath2.Get());
-    }
-
-    //FB1CharacterData* MonsterData = DT_B1MonsterInfo->FindRow<FB1CharacterData>(*FString::FromInt(MonsterType), TEXT(""));
-    ////printf("MonsterData %p", MonsterData);
-
-    //if (MonsterData != nullptr) {
-    //    //printf("MonsterType %d, health: %f, Damage %f, Speed: %f", MonsterType, MonsterData->Health, MonsterData->Damage, MonsterData->Speed);
-    //    MaxHP = HP = MonsterData->Health;
-    //    Damage = MonsterData->Damage;
-    //    GetCharacterMovement()->MaxWalkSpeed = MonsterData->Speed;
-    //}
-
-
-    auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
-    AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
-
     //SetCharacterState(ECharacterState::READY);
 }
 void AB1Monster::PossessedBy(AController* NewController)
@@ -256,8 +146,6 @@ void AB1Monster::PostInitializeComponents()
 float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
     float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-    //printf("Actor %s took Damage %f", *GetName(), FinalDamage);
 
     HP -= DamageAmount;
     if (0.0f > HP)
