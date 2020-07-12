@@ -43,7 +43,10 @@ public:
 protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-
+	
+	UFUNCTION()
+	void onClickedAttack();
+	//TODO: onClickedSkill1 이하 모두 수정하기
 	UFUNCTION()
 	void onSkill1Clicked();
 	UFUNCTION()

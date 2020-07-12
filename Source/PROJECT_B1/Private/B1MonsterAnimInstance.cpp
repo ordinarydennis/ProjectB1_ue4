@@ -27,6 +27,7 @@ void UB1MonsterAnimInstance::SetMonsterState(ERES_STATE_MONSTER monsterState)
 
 void UB1MonsterAnimInstance::AnimNotify_AttackHitCheck()
 {
+	//AnimNotify_AttackHitCheck -> AnimNotify_CheckAttackHit 으로 바꾸자
 	OnAttackHitCheck.Broadcast();
 }
 void UB1MonsterAnimInstance::AnimNotify_EndOfAttack()

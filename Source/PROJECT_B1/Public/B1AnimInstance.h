@@ -6,7 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "B1AnimInstance.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnCheckAttackHitDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnCheckSkillHitDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnEndofAnimDelegate);
 
 /**
@@ -24,16 +25,22 @@ public:
 public:
 	void SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum);
 	void SetIsDeath(bool isDeath);
+	void SetIsAttack(bool isAttack);
 
 public:
-	FOnAttackHitCheckDelegate OnAttackHitCheck;
+	FOnCheckAttackHitDelegate OnCheckAttackHit;
+	FOnCheckSkillHitDelegate OnCheckSkillHit;
 	FOnEndofAnimDelegate OnEndofAnim;
-
+	
 private:
+	UFUNCTION()
+	void AnimNotify_CheckAttackHit();
+	UFUNCTION()
+	void AnimNotify_EndOfAttack();
 	UFUNCTION()
 	void AnimNotify_EndofAnim();
 	UFUNCTION()
-	void AnimNotify_AttackHitCheck();
+	void AnimNotify_CheckSkillHit();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
@@ -45,6 +52,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	bool IsDeath = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
+	bool IsAttack = false;
 
 	class AB1Character* B1Character = nullptr;
 };

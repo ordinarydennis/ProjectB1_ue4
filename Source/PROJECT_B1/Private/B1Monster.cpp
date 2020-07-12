@@ -139,9 +139,7 @@ void AB1Monster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void AB1Monster::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
-    //auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    //AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
-    //AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
+
 }
 float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {

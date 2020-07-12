@@ -55,6 +55,11 @@ void UB1InGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	UButton* btnAttack = Cast<UButton>(GetWidgetFromName(TEXT("btnAttack")));
+	if (nullptr != btnAttack) {
+		btnAttack->OnClicked.AddDynamic(this, &UB1InGameWidget::onClickedAttack);
+	}
+
 	Btns.Reserve(NUM_OF_INGAME_SKILL_BTN);
 
 	auto BtnIndex2 = BTN_SKILL_INDEX::INDEX_NONE;
@@ -151,6 +156,14 @@ void UB1InGameWidget::LoadImage()
 	}	
 
 	SetNextSkillImg();
+}
+void UB1InGameWidget::onClickedAttack()
+{
+	if (nullptr == B1Character) {
+		return;
+	}
+
+	B1Character->RunAttack();
 }
 void UB1InGameWidget::onSkill1Clicked()
 {

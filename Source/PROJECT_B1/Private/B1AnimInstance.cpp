@@ -25,6 +25,13 @@ void UB1AnimInstance::SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum)
 {
 	SkillAnimResNum = static_cast<int32>(skillAnimResNum);
 }
+void UB1AnimInstance::AnimNotify_EndOfAttack()
+{
+	if (false == ::IsValid(B1Character)) {
+		return;
+	}
+	SetIsAttack(false);
+}
 void UB1AnimInstance::AnimNotify_EndofAnim()
 {
 	if (false == ::IsValid(B1Character)) {
@@ -34,11 +41,19 @@ void UB1AnimInstance::AnimNotify_EndofAnim()
 	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
 	OnEndofAnim.Broadcast();
 }
-void UB1AnimInstance::AnimNotify_AttackHitCheck()
+void UB1AnimInstance::AnimNotify_CheckAttackHit()
 {
-	OnAttackHitCheck.Broadcast();
+	OnCheckAttackHit.Broadcast();
+}
+void UB1AnimInstance::AnimNotify_CheckSkillHit()
+{
+	OnCheckSkillHit.Broadcast();
 }
 void UB1AnimInstance::SetIsDeath(bool isDeath)
 {
 	IsDeath = isDeath;
+}
+void UB1AnimInstance::SetIsAttack(bool isAttack)
+{
+	IsAttack = isAttack;
 }

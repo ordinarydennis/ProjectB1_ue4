@@ -17,9 +17,11 @@ class PROJECT_B1_API AB1Character : public AB1BaseCharacter
 public:
 	// Sets default values for this character's properties
 	AB1Character();
+	void RunAttack();
 	void RunSkill(IB1Skill* skill);
 	void StopSkill();
-	void CheckAttack();
+	void CheckAttackHit();
+	void CheckSkillHit();
 
 protected:
 	// Called when the game starts or when spawned

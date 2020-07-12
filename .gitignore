@@ -13,6 +13,8 @@ Content/Resources/Market/CraftResourcesIcons/*
 !Content/Resources/Market/CraftResourcesIcons/*.keep
 Content/Resources/Market/MLWarbandHP/*
 !Content/Resources/Market/MLWarbandHP/*.keep
+Content/Resources/Market/Skill_Icons_Pack/*
+!Content/Resources/Market/Skill_Icons_Pack/*.keep
 
 # Visual Studio 2015 database file
 *.VC.db
