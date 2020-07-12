@@ -73,13 +73,15 @@ void UB1GameInstance::CompletedResourceLoad2()
 
 	for (auto mesh : MonsterResMeshPath) {
 		TSoftObjectPtr<USkeletalMesh> LoadedAssetPath(mesh);
-		if (LoadedAssetPath.IsValid()) {
+		if (!LoadedAssetPath.IsValid()) {
+			printf("Mesh Load Fail %s", *LoadedAssetPath.ToString());
 		}
 	}
 
 	for (auto anim : MonsterResAnimPath) {
 		TSoftClassPtr<UAnimInstance> LoadedAssetPath(anim);
-		if (LoadedAssetPath.IsValid()) {
+		if (!LoadedAssetPath.IsValid()) {
+			printf("Anim Load Fail %s", *LoadedAssetPath.ToString());
 		}
 	}
 

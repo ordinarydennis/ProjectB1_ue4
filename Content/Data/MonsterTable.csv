@@ -1,3 +1,4 @@
 Type,HP,Speed,Damage,CapsuleSizeX,CapsuleSizeY,ResSKMesh,ResAnimInst
 0,50,400,20,50,100,/Game/Resources/Market/MLWarbandHP/Characters/Minion/Mesh/MinionSK.MinionSK,/Game/Blueprints/Anim/Monster0_AnimBP.Monster0_AnimBP_C
-1,150,200,30,50,100,/Game/Resources/Market/MLWarbandHP/Characters/Berserker/Mesh/BerserkerSK.BerserkerSK,/Game/Blueprints/Anim/Monster1_AnimBP.Monster1_AnimBP_C
+1,100,300,30,50,100,/Game/Resources/Market/MLWarbandHP/Characters/Grunt/Mesh/GruntSK.GruntSK,/Game/Blueprints/Anim/Monster1_AnimBP.Monster1_AnimBP_C
+2,150,200,30,50,100,/Game/Resources/Market/MLWarbandHP/Characters/Berserker/Mesh/BerserkerSK.BerserkerSK,/Game/Blueprints/Anim/Monster2_AnimBP.Monster2_AnimBP_C
