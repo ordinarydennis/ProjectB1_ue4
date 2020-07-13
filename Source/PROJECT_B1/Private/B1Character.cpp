@@ -74,7 +74,6 @@ void AB1Character::StopSkill()
 }
 void AB1Character::CheckAttackHit()
 {
-	printf("AB1Character::CheckAttackHit()");
 	float FinalAttackRange = 150.f;
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, this);

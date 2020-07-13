@@ -17,7 +17,7 @@ class PROJECT_B1_API AB1Monster : public AB1BaseCharacter
 public:
 	// Sets default values for this pawn's properties
 	AB1Monster();
-	void CheckAttack();
+	void CheckAttackHit();
 	void EndOfAttack();
 	void SetMonsterState(ERES_STATE_MONSTER state);
 
@@ -60,4 +60,5 @@ private:
 	
 	//TSharedPtr<B1CharacterInfo> MonsterInfo;
 	bool IsInit = false;
+	bool IsDeath = false;
 };

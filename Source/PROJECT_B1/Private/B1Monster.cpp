@@ -111,7 +111,7 @@ void AB1Monster::Init(int32 monsterType)
     Damage = MonsterTableRow->Damage;
 
     auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
-    AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Monster::CheckAttack);
+    AnimInst->OnCheckAttackHit.AddUObject(this, &AB1Monster::CheckAttackHit);
     AnimInst->OnEndOfAttack.AddUObject(this, &AB1Monster::EndOfAttack);
     //SetCharacterState(ECharacterState::READY);
 }
@@ -146,15 +146,31 @@ float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& Dama
     float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
     HP -= DamageAmount;
-    if (0.0f > HP)
+    if (0.0f >= HP)
     {
         HP = 0.0f;
+        IsDeath = true;
+        auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
+        AnimInst->SetIsDeath(IsDeath);
+        SetActorEnableCollision(false);
+        GetMesh()->SetHiddenInGame(false);
+        HPBarWidget->SetHiddenInGame(true);
+
+        AController* CurrentController = GetController();
+        if (CurrentController) {
+            // Stop movement so the death animation plays immediately
+            CurrentController->StopMovement();
+            // Unpossess to stop AI
+            CurrentController->UnPossess();
+            // Destroy the controller, since it's not part of the enemy anymore
+            CurrentController->Destroy();
+        }
     }
     OnHPChanged.Broadcast();
 
     return FinalDamage;
 }
-void AB1Monster::CheckAttack()
+void AB1Monster::CheckAttackHit()
 {
     float FinalAttackRange = 150.f;
     FHitResult HitResult;

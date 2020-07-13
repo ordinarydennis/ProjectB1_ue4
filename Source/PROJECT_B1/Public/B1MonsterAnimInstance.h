@@ -20,9 +20,10 @@ public:
 	UB1MonsterAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void SetMonsterState(ERES_STATE_MONSTER monsterState);
+	void SetIsDeath(bool isDeath);
 
 public:
-	FOnCheckSkillHitDelegate OnCheckSkillHit;
+	FOnCheckSkillHitDelegate OnCheckAttackHit;
 	FOnEndOfAttackDelegate OnEndOfAttack;
 
 private:
@@ -35,7 +36,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	float CurrentPlayerSpeed = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
-	bool IsDead = false;
+	bool IsDeath = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	bool IsAttack = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
