@@ -6,7 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "B1MonsterAnimInstance.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnCheckSkillHitDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnEndOfAttackDelegate);
 /**
  * 
@@ -22,7 +22,7 @@ public:
 	void SetMonsterState(ERES_STATE_MONSTER monsterState);
 
 public:
-	FOnAttackHitCheckDelegate OnAttackHitCheck;
+	FOnCheckSkillHitDelegate OnCheckSkillHit;
 	FOnEndOfAttackDelegate OnEndOfAttack;
 
 private:

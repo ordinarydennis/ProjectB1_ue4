@@ -58,15 +58,63 @@ AB1Character::AB1Character()
 
 	MaxHP = HP = 100.0f;
 }
+void AB1Character::RunAttack()
+{
+	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInst->SetIsAttack(true);
+}
 void AB1Character::RunSkill(IB1Skill* skill)
 {
 	Skill = skill;
 }
+
 void AB1Character::StopSkill()
 {
 	Skill = nullptr;
 }
-void AB1Character::CheckAttack()
+void AB1Character::CheckAttackHit()
+{
+	printf("AB1Character::CheckAttackHit()");
+	float FinalAttackRange = 150.f;
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = this->GetWorld()->SweepSingleByChannel(
+		HitResult,
+		this->GetActorLocation(),
+		this->GetActorLocation() + this->GetActorForwardVector() * FinalAttackRange,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(50.0f),
+		Params);
+
+#if ENABLE_DRAW_DEBUG
+	FVector TraceVec = this->GetActorForwardVector() * FinalAttackRange;
+	FVector Center = this->GetActorLocation() + TraceVec * 0.5f;
+	float AttackRadius = 50.f;
+	float HalfHeight = FinalAttackRange * 0.5f + AttackRadius;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 2.0f;
+
+	DrawDebugCapsule(this->GetWorld(),
+		Center,
+		HalfHeight,
+		AttackRadius,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
+#endif
+
+	if (bResult) {
+		if (HitResult.Actor.IsValid())
+		{
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(100, DamageEvent, this->GetController(), this);
+		}
+	}
+}
+void AB1Character::CheckSkillHit()
 {
 	if (nullptr != Skill) {
 		Skill->CheckAttack();
@@ -138,7 +186,9 @@ void AB1Character::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
-	AnimInst->OnAttackHitCheck.AddUObject(this, &AB1Character::CheckAttack);
+	AnimInst->OnCheckAttackHit.AddUObject(this, &AB1Character::CheckAttackHit);
+	AnimInst->OnCheckSkillHit.AddUObject(this, &AB1Character::CheckSkillHit);
+	
 }
 float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
