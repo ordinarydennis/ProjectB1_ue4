@@ -6,7 +6,12 @@
 
 UB1AnimInstance::UB1AnimInstance()
 {
-
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(
+		TEXT("/Game/Animation/UE4_Mannequin_Skeleton_Montage.UE4_Mannequin_Skeleton_Montage")
+	);
+	if (ATTACK_MONTAGE.Succeeded()) {
+		AttackMontage = ATTACK_MONTAGE.Object;
+	}
 }
 void UB1AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -45,10 +50,15 @@ void UB1AnimInstance::AnimNotify_CheckAttackHit()
 {
 	OnCheckAttackHit.Broadcast();
 }
-void UB1AnimInstance::AnimNotify_CheckSkillHit()
+void UB1AnimInstance::AnimNotify_CheckNextAttack()
 {
-	OnCheckSkillHit.Broadcast();
+	//printf("AnimNotify_CheckNextAttack");
+	OnCheckNextAttack.Broadcast();
 }
+//void UB1AnimInstance::AnimNotify_CheckSkillHit()
+//{
+//	OnCheckSkillHit.Broadcast();
+//}
 void UB1AnimInstance::SetIsDeath(bool isDeath)
 {
 	IsDeath = isDeath;
@@ -56,4 +66,21 @@ void UB1AnimInstance::SetIsDeath(bool isDeath)
 void UB1AnimInstance::SetIsAttack(bool isAttack)
 {
 	IsAttack = isAttack;
+}
+void UB1AnimInstance::PlayAttack()
+{
+	Montage_Play(AttackMontage, 1.0f);
+}
+FName UB1AnimInstance::GetAttackMontageSectionName(int32 Section)
+{
+	//ABCHECK(FMath::IsWithinInclusive<int32>(Section, 1, 4), NAME_None);
+	//ABLOG(Warning, TEXT("Section Name: %s"), *FString::Printf(TEXT("Attack%d"), Section));
+	printf("Section Name: %s", *FString::Printf(TEXT("Attack%d"), Section));
+	return FName(*FString::Printf(TEXT("Attack%d"), Section));
+}
+void UB1AnimInstance::JumpToAttackMontageSection(int32 NewSection)
+{
+	//ABCHECK(!IsDead);
+	//ABCHECK(Montage_IsPlaying(AttackMontage));
+	Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
 }

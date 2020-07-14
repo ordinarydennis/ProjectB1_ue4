@@ -23,6 +23,9 @@ public:
 	void CheckAttackHit();
 	void CheckSkillHit();
 
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -44,6 +47,8 @@ private:
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
 	void SetControlMode(EControlMode ControlMode);
+	void AttackStartComboState();
+	void AttackEndComboState();
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -56,6 +61,8 @@ private:
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
 	UPROPERTY()
 	class AB1PlayerController* B1PlayerController;
+	UPROPERTY()
+	class UB1AnimInstance* AnimInst;
 
 	float MovingSpeed = 0.8f;
 	IB1Skill* Skill = nullptr;
@@ -63,4 +70,14 @@ private:
 	EControlMode CurrentControlMode = EControlMode::QUARTER_VIEW;
 	FVector DirectionToMove = FVector::ZeroVector;
 	bool IsDeath = false;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsAttacking = false;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool CanNextCombo = false;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsComboInputOn = false;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	int32 CurrentCombo = 0;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	int32 MaxCombo = 5;
 };

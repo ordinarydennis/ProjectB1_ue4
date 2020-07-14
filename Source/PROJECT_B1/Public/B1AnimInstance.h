@@ -7,8 +7,10 @@
 #include "B1AnimInstance.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnCheckAttackHitDelegate);
-DECLARE_MULTICAST_DELEGATE(FOnCheckSkillHitDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnCheckNextAttackDelegate);
+//DECLARE_MULTICAST_DELEGATE(FOnCheckSkillHitDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnEndofAnimDelegate);
+
 
 /**
  * 
@@ -26,21 +28,27 @@ public:
 	void SetSkillAnimResNum(ERES_ANIM_NUM skillAnimResNum);
 	void SetIsDeath(bool isDeath);
 	void SetIsAttack(bool isAttack);
+	void PlayAttack();
+	FName GetAttackMontageSectionName(int32 Section);
+	void JumpToAttackMontageSection(int32 NewSection);
 
 public:
 	FOnCheckAttackHitDelegate OnCheckAttackHit;
-	FOnCheckSkillHitDelegate OnCheckSkillHit;
+	FOnCheckNextAttackDelegate OnCheckNextAttack;
+	//FOnCheckSkillHitDelegate OnCheckSkillHit;
 	FOnEndofAnimDelegate OnEndofAnim;
 	
 private:
 	UFUNCTION()
 	void AnimNotify_CheckAttackHit();
 	UFUNCTION()
+	void AnimNotify_CheckNextAttack();
+	UFUNCTION()
 	void AnimNotify_EndOfAttack();
 	UFUNCTION()
 	void AnimNotify_EndofAnim();
-	UFUNCTION()
-	void AnimNotify_CheckSkillHit();
+	//UFUNCTION()
+	//void AnimNotify_CheckSkillHit();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
@@ -55,6 +63,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Player, Meta = (AllowPrivateAccess = true))
 	bool IsAttack = false;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackMontage = nullptr;
 
 	class AB1Character* B1Character = nullptr;
 };

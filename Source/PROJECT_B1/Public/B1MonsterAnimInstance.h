@@ -6,7 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "B1MonsterAnimInstance.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnCheckSkillHitDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnCheckAttackHitDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnEndOfAttackDelegate);
 /**
  * 
@@ -23,7 +23,7 @@ public:
 	void SetIsDeath(bool isDeath);
 
 public:
-	FOnCheckSkillHitDelegate OnCheckAttackHit;
+	FOnCheckAttackHitDelegate OnCheckAttackHit;
 	FOnEndOfAttackDelegate OnEndOfAttack;
 
 private:

@@ -57,11 +57,50 @@ AB1Character::AB1Character()
 	}
 
 	MaxHP = HP = 100.0f;
+	AttackEndComboState();
+}
+void AB1Character::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+	//ABCHECK(nullptr != ABAnim);
+	AnimInst->OnCheckAttackHit.AddUObject(this, &AB1Character::CheckAttackHit);
+	//AnimInst->OnCheckSkillHit.AddUObject(this, &AB1Character::CheckSkillHit);
+
+	AnimInst->OnMontageEnded.AddDynamic(this, &AB1Character::OnAttackMontageEnded);
+
+	AnimInst->OnCheckNextAttack.AddLambda([this]() -> void {
+		CanNextCombo = false;
+		if (IsComboInputOn)
+		{
+			AttackStartComboState();
+			AnimInst->JumpToAttackMontageSection(CurrentCombo);
+		}
+		}
+	);
 }
 void AB1Character::RunAttack()
 {
-	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
-	AnimInst->SetIsAttack(true);
+	//auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+	//AnimInst->PlayAttack();
+	//AnimInst->SetIsAttack(true);
+
+	if (IsAttacking)
+	{
+		//ABCHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 1, MaxCombo));
+		if (CanNextCombo)
+		{
+			IsComboInputOn = true;
+		}
+	}
+	else
+	{
+		AttackStartComboState();
+		AnimInst->PlayAttack();
+		AnimInst->JumpToAttackMontageSection(CurrentCombo);
+		IsAttacking = true;
+	}
+
 }
 void AB1Character::RunSkill(IB1Skill* skill)
 {
@@ -115,9 +154,16 @@ void AB1Character::CheckAttackHit()
 }
 void AB1Character::CheckSkillHit()
 {
-	if (nullptr != Skill) {
-		Skill->CheckAttack();
-	}
+	//if (nullptr != Skill) {
+	//	Skill->CheckAttack();
+	//}
+}
+void AB1Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	printf("OnAttackMontageEnded");
+	IsAttacking = false;
+	AttackEndComboState();
+	//OnAttackEnd.Broadcast();
 }
 // Called when the game starts or when spawned
 void AB1Character::BeginPlay()
@@ -162,6 +208,18 @@ void AB1Character::SetControlMode(EControlMode NewControlMode)
 		break;
 	}
 }
+void AB1Character::AttackStartComboState()
+{
+	CanNextCombo = true;
+	IsComboInputOn = false;
+	CurrentCombo = FMath::Clamp<int32>(CurrentCombo + 1, 1, MaxCombo);
+}
+void AB1Character::AttackEndComboState()
+{
+	CanNextCombo = false;
+	IsComboInputOn = false;
+	CurrentCombo = 0;
+}
 // Called every frame
 void AB1Character::Tick(float DeltaTime)
 {
@@ -180,15 +238,6 @@ void AB1Character::Tick(float DeltaTime)
 		Skill->Run();
 	}
 }
-void AB1Character::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-
-	auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
-	AnimInst->OnCheckAttackHit.AddUObject(this, &AB1Character::CheckAttackHit);
-	AnimInst->OnCheckSkillHit.AddUObject(this, &AB1Character::CheckSkillHit);
-	
-}
 float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -200,7 +249,7 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 
 	HP -= DamageAmount;
 	if (KINDA_SMALL_NUMBER > HP) {
-		auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
+		//auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
 		AnimInst->SetIsDeath(true);
 		SetActorEnableCollision(false);
 		GetMesh()->SetHiddenInGame(false);
