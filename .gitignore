@@ -15,6 +15,8 @@ Content/Resources/Market/MLWarbandHP/*
 !Content/Resources/Market/MLWarbandHP/*.keep
 Content/Resources/Market/Skill_Icons_Pack/*
 !Content/Resources/Market/Skill_Icons_Pack/*.keep
+Content/Resources/Market/RPGMonsterWave2PA/*
+!Content/Resources/Market/RPGMonsterWave2PA/*.keep
 
 # Visual Studio 2015 database file
 *.VC.db
