@@ -7,6 +7,7 @@
 #include "Misc/DateTime.h"
 #include "Components/WidgetComponent.h"
 #include "B1HPWidget.h"
+#include "B1Weapon.h"
 
 // Sets default values
 AB1Character::AB1Character()
@@ -70,12 +71,12 @@ void AB1Character::PostInitializeComponents()
 	AnimInst->OnMontageEnded.AddDynamic(this, &AB1Character::OnAttackMontageEnded);
 
 	AnimInst->OnCheckNextAttack.AddLambda([this]() -> void {
-		CanNextCombo = false;
-		if (IsComboInputOn)
-		{
-			AttackStartComboState();
-			AnimInst->JumpToAttackMontageSection(CurrentCombo);
-		}
+			CanNextCombo = false;
+			if (IsComboInputOn)
+			{
+				AttackStartComboState();
+				AnimInst->JumpToAttackMontageSection(CurrentCombo);
+			}
 		}
 	);
 }
@@ -148,7 +149,7 @@ void AB1Character::CheckAttackHit()
 		if (HitResult.Actor.IsValid())
 		{
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(100, DamageEvent, this->GetController(), this);
+			HitResult.Actor->TakeDamage(5, DamageEvent, this->GetController(), this);
 		}
 	}
 }
@@ -160,7 +161,7 @@ void AB1Character::CheckSkillHit()
 }
 void AB1Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	printf("OnAttackMontageEnded");
+	//printf("OnAttackMontageEnded");
 	IsAttacking = false;
 	AttackEndComboState();
 	//OnAttackEnd.Broadcast();
@@ -182,6 +183,16 @@ void AB1Character::BeginPlay()
 		}
 	}
 
+	FName WeaponSocket(TEXT("hand_lSocket"));
+	if (GetMesh()->DoesSocketExist(WeaponSocket)) {
+		auto Weapon = GetWorld()->SpawnActor<AB1Weapon>(FVector::ZeroVector, FRotator::ZeroRotator);
+		if (nullptr != Weapon) {
+			Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		}
+	}
+	else {
+		printf("WeaponSocket fail");
+	}
 }
 void AB1Character::SetControlMode(EControlMode NewControlMode)
 {

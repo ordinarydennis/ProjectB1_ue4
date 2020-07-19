@@ -3,7 +3,8 @@
 #include "UnrealString.h"
 #include "Platform.h"
 
-const FString RES_SK_COMMONER = TEXT("/Game/Resources/Market/ModularRPGHeroesPolyart/Meshes/OneMeshCharacters/CommonerSK.CommonerSK");
+//const FString RES_SK_COMMONER = TEXT("/Game/Resources/Market/ModularRPGHeroesPolyart/Meshes/OneMeshCharacters/CommonerSK.CommonerSK");
+const FString RES_SK_COMMONER = TEXT("/Game/Resources/Market/ModularRPGHeroesPolyart/Meshes/OneMeshCharacters/ImmortalSK_2.ImmortalSK_2");
 
 const FString RES_ANIM_INST_PLAYER = TEXT("/Game/Blueprints/PlayerAnimBlueprint.PlayerAnimBlueprint_C");
 
