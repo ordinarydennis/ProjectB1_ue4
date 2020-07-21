@@ -30,10 +30,13 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 
 	bResult = (Target->GetDistanceTo(ControllingPawn) <= 100.f);
 
-	//if (false == bResult) {
-	//	auto Monster = Cast<AB1Monster>(ControllingPawn);
-	//	Monster->SetMonsterState(ERES_STATE_MONSTER::IDLE);
-	//}
+	if (true == bResult) {
+		if (Target->GetIsDeath()) {
+			bResult = false;
+		}
+		//auto Monster = Cast<AB1Monster>(ControllingPawn);
+		//Monster->SetMonsterState(ERES_STATE_MONSTER::IDLE);
+	}
 
 	return bResult;
 }

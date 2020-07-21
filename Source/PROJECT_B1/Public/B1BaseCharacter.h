@@ -18,6 +18,7 @@ public:
 	AB1BaseCharacter();
 	float GetHP();
 	float GetMaxHP();
+	bool GetIsDeath();
 
 public:
 	FOnHPChangedDelegate OnHPChanged;
@@ -29,6 +30,7 @@ protected:
 protected:
 	float HP = 0.0f;
 	float MaxHP = 0.0f;
+	bool IsDeath = false;
 
 public:	
 	// Called every frame

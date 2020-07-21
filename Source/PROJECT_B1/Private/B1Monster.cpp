@@ -103,6 +103,7 @@ void AB1Monster::Init(int32 monsterType)
         FRotator(0.f, -90.f, 0.f)    // Roll
     );
 
+    //출력 로그창에서 버그 나오는거 리소스 로딩 때문인 것 같다.
     HPBarWidget->SetupAttachment(SkelMesh);
     HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
 

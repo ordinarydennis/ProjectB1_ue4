@@ -18,6 +18,10 @@ float AB1BaseCharacter::GetMaxHP()
 {
 	return MaxHP;
 }
+bool AB1BaseCharacter::GetIsDeath()
+{
+	return IsDeath;
+}
 // Called when the game starts or when spawned
 void AB1BaseCharacter::BeginPlay()
 {

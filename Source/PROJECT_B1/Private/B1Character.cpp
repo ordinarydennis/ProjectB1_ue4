@@ -266,6 +266,7 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 		GetMesh()->SetHiddenInGame(false);
 		HPBarWidget->SetHiddenInGame(true);
 		DisableInput(B1PlayerController);
+		IsDeath = true;
 	}
 
 	OnHPChanged.Broadcast();
