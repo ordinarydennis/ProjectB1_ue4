@@ -4,6 +4,7 @@
 #include "B1GameInstance.h"
 #include "B1CustomStructs.h"
 #include "B1MonsterAnimInstance.h"
+#include "B1DebugPrint.h"
 //#include "Engine/DataTable.h"
 //#include "UObject/ConstructorHelpers.h"
 //#include "Misc/FileHelper.h"

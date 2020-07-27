@@ -8,6 +8,7 @@
 #include "Engine/StreamableManager.h"
 #include "B1GameInstance.generated.h"
 
+class UDataTable;
 /**
  * 
  */

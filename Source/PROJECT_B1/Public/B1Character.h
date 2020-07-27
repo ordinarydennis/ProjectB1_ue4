@@ -49,6 +49,7 @@ private:
 	void SetControlMode(EControlMode ControlMode);
 	void AttackStartComboState();
 	void AttackEndComboState();
+	void SetWeapon();
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)

@@ -3,6 +3,7 @@
 
 #include "B1AnimInstance.h"
 #include "B1Character.h"
+#include "B1DebugPrint.h"
 
 UB1AnimInstance::UB1AnimInstance()
 {

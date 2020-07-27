@@ -12,6 +12,17 @@
 				"Engine",
 				"UMG",
 				"AIModule",
+				"CoreUObject"
+			]
+		},
+		{
+			"Name": "PROJECT_B1",
+			"Type": "Editor",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"UMG",
+				"AIModule",
 				"CoreUObject",
 				"UnrealEd"
 			]

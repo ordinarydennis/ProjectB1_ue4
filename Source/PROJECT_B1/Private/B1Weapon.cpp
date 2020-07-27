@@ -3,7 +3,8 @@
 
 #include "B1Weapon.h"
 #include "UObject/ConstructorHelpers.h"
-//#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AB1Weapon::AB1Weapon()
@@ -13,7 +14,6 @@ AB1Weapon::AB1Weapon()
 
 	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_WEAPON(TEXT("/Game/Resources/Market/ModularRPGHeroesPolyart/Meshes/Weapons/Axe01SM.Axe01SM"));
-
 	if (SM_WEAPON.Succeeded()) {
 		Weapon->SetStaticMesh(SM_WEAPON.Object);
 	}
@@ -21,7 +21,6 @@ AB1Weapon::AB1Weapon()
 		printf("SM_WEAPON fail");
 	}
 	Weapon->SetCollisionProfileName(TEXT("NoCollision"));
-	
 }
 
 // Called when the game starts or when spawned

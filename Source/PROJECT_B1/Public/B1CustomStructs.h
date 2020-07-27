@@ -4,15 +4,34 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Engine/DataTable.h"
 #include "B1CustomStructs.generated.h"
 
+UCLASS()
+class PROJECT_B1_API AB1CustomStructs : public AActor
+{
+	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	AB1CustomStructs();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+};
 
 USTRUCT(BlueprintType)
 struct FB1MonaterTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
-public:
+	public:
 	FB1MonaterTableRow()
 	{
 
@@ -32,24 +51,4 @@ public:
 	FString ResSKMesh;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString ResAnimInst;
-};
-
-
-UCLASS()
-class PROJECT_B1_API AB1CustomStructs : public AActor
-{
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AB1CustomStructs();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 };

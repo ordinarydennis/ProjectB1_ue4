@@ -149,7 +149,7 @@ void AB1Character::CheckAttackHit()
 		if (HitResult.Actor.IsValid())
 		{
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(5, DamageEvent, this->GetController(), this);
+			HitResult.Actor->TakeDamage(0, DamageEvent, this->GetController(), this);
 		}
 	}
 }
@@ -183,6 +183,10 @@ void AB1Character::BeginPlay()
 		}
 	}
 
+	SetWeapon();
+}
+void AB1Character::SetWeapon()
+{
 	FName WeaponSocket(TEXT("hand_lSocket"));
 	if (GetMesh()->DoesSocketExist(WeaponSocket)) {
 		auto Weapon = GetWorld()->SpawnActor<AB1Weapon>(FVector::ZeroVector, FRotator::ZeroRotator);
