@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "PROJECT_B1.h"
 #include "Skill/B1Skill.h"
 
 /**

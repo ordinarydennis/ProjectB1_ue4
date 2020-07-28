@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "PROJECT_B1.h"
 #include "Animation/AnimInstance.h"
 #include "B1AnimInstance.generated.h"
 
@@ -11,6 +10,7 @@ DECLARE_MULTICAST_DELEGATE(FOnCheckNextAttackDelegate);
 //DECLARE_MULTICAST_DELEGATE(FOnCheckSkillHitDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnEndofAnimDelegate);
 
+enum class ERES_ANIM_NUM;
 
 /**
  * 

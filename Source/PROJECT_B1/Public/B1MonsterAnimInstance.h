@@ -2,12 +2,13 @@
 
 #pragma once
 
-#include "PROJECT_B1.h"
 #include "Animation/AnimInstance.h"
 #include "B1MonsterAnimInstance.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnCheckAttackHitDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnEndOfAttackDelegate);
+
+enum class ERES_STATE_MONSTER;
 /**
  * 
  */

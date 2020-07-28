@@ -8,6 +8,8 @@
 #include "Components/WidgetComponent.h"
 #include "B1HPWidget.h"
 #include "B1Weapon.h"
+#include "B1Resources.h"
+#include "B1DebugPrint.h"
 
 // Sets default values
 AB1Character::AB1Character()
@@ -298,10 +300,12 @@ void AB1Character::PossessedBy(AController* NewController)
 }
 void AB1Character::UpDown(float NewAxisValue)
 {
+	NewAxisValue = (0.f < NewAxisValue) ? 1.0f : NewAxisValue;
 	DirectionToMove.Y = NewAxisValue * MovingSpeed;
 }
 void AB1Character::LeftRight(float NewAxisValue)
 {
+	NewAxisValue = (0.f < NewAxisValue) ? 1.0f : NewAxisValue;
 	DirectionToMove.X = NewAxisValue * MovingSpeed;
 }
 

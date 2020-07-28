@@ -5,6 +5,7 @@
 #include "B1Character.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "B1Resources.h"
 #include "SkillFactory.h"
 
 UB1InGameWidget::UB1InGameWidget(const FObjectInitializer& ObjectInitializer)

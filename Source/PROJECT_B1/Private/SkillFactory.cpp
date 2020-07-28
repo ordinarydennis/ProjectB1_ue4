@@ -3,6 +3,7 @@
 
 #include "SkillFactory.h"
 #include "B1Character.h"
+#include "B1Resources.h"
 #include "Skill/1000/B1Skill1000.h"
 #include "Skill/1000/B1Skill1001.h"
 #include "Skill/1000/B1Skill1002.h"

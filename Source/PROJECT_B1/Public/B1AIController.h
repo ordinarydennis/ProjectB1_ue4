@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "PROJECT_B1.h"
 #include "AIController.h"
 #include "B1AIController.generated.h"
 

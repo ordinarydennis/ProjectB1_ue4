@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "PROJECT_B1.h"
 #include "B1AnimInstance.h"
 #include "UObject/Interface.h"
 #include "B1Skill.generated.h"
