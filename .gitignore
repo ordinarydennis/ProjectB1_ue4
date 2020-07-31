@@ -17,6 +17,9 @@ Content/Resources/Market/Skill_Icons_Pack/*
 !Content/Resources/Market/Skill_Icons_Pack/*.keep
 Content/Resources/Market/RPGMonsterWave2PA/*
 !Content/Resources/Market/RPGMonsterWave2PA/*.keep
+Content/Resources/Market/Magic_Circle_Creator/*
+!Content/Resources/Market/Magic_Circle_Creator/*.keep
+
 
 # Visual Studio 2015 database file
 *.VC.db
