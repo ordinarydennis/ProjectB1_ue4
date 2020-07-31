@@ -59,6 +59,12 @@ AB1Character::AB1Character()
 
 	MaxHP = HP = 100.0f;
 	AttackEndComboState();
+
+	static ConstructorHelpers::FObjectFinder<UClass> AmmoItem(TEXT("/Game/Resources/Market/Magic_Circle_Creator/Blueprints/TestBP.TestBP_C"));
+	if (AmmoItem.Object)
+	{
+		AmmoBlueprint = AmmoItem.Object;
+	}
 }
 void AB1Character::PostInitializeComponents()
 {
@@ -86,8 +92,7 @@ void AB1Character::RunAttack()
 	//AnimInst->PlayAttack();
 	//AnimInst->SetIsAttack(true);
 
-	if (IsAttacking)
-	{
+	if (IsAttacking){
 		//ABCHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 1, MaxCombo));
 		if (CanNextCombo)
 		{
@@ -100,6 +105,15 @@ void AB1Character::RunAttack()
 		AnimInst->PlayAttack();
 		AnimInst->JumpToAttackMontageSection(CurrentCombo);
 		IsAttacking = true;
+
+		if (AmmoBlueprint && nullptr == effect){
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			FVector  SpawnLocation = GetActorLocation();
+			SpawnLocation.Z = 0.0f;
+			effect = GetWorld()->SpawnActor<AActor>(AmmoBlueprint, SpawnLocation, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+			effect->SetActorScale3D(FVector(5.0f, 5.0f, 1.0f));
+		}
 	}
 
 }
@@ -251,6 +265,12 @@ void AB1Character::Tick(float DeltaTime)
 
 	if (nullptr != Skill) {
 		Skill->Run();
+	}
+
+	if (nullptr != effect) {
+		FVector  SpawnLocation = GetActorLocation();
+		SpawnLocation.Z = 0.0f;
+		effect->SetActorLocation(SpawnLocation, false);
 	}
 }
 float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
