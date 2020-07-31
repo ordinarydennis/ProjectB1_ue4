@@ -3,7 +3,6 @@
 #pragma once
 
 #include "PROJECT_B1.h"
-//#include "B1Resources.h"
 #include "B1InGameWidget.h"
 #include "Skill/B1Skill.h"
 //#include "GameFramework/Character.h"

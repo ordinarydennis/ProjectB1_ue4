@@ -2,7 +2,6 @@
 
 
 #include "B1PlayerController.h"
-#include "B1Resources.h"
 #include "B1InGameWidget.h"
 
 AB1PlayerController::AB1PlayerController()

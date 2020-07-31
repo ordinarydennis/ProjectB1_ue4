@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "B1Resources.h"
+#include "PROJECT_B1.h"
 #include "B1BaseCharacter.h"
 #include "B1CharacterInfo.h"
 #include "B1Monster.generated.h"

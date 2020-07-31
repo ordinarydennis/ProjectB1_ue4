@@ -2,7 +2,6 @@
 
 
 #include "B1MonsterAnimInstance.h"
-#include "B1Resources.h"
 
 UB1MonsterAnimInstance::UB1MonsterAnimInstance()
 {

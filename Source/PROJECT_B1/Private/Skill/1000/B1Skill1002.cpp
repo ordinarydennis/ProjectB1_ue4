@@ -3,7 +3,6 @@
 
 #include "B1Skill1002.h"
 #include "B1Character.h"
-#include "B1Resources.h"
 #include "B1DebugPrint.h"
 
 B1Skill1002::B1Skill1002(AB1Character* character)

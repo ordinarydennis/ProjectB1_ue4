@@ -3,27 +3,6 @@
 #include "UnrealString.h"
 #include "Platform.h"
 
-UENUM()
-enum class ERES_ANIM_NUM
-{
-	NONE,
-	_1000 = 1000,
-	_1001,
-	_1002,
-	_1003,
-	_1004,
-	_1005,
-};
-
-UENUM()
-enum class ERES_STATE_MONSTER
-{
-	IDLE,
-	RUN,
-	ATTACK,
-};
-
-
 //const FString RES_SK_COMMONER = TEXT("/Game/Resources/Market/ModularRPGHeroesPolyart/Meshes/OneMeshCharacters/CommonerSK.CommonerSK");
 const FString RES_SK_COMMONER = TEXT("/Game/Resources/Market/ModularRPGHeroesPolyart/Meshes/OneMeshCharacters/ImmortalSK_2.ImmortalSK_2");
 

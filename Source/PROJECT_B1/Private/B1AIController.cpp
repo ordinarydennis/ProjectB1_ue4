@@ -2,8 +2,6 @@
 
 
 #include "B1AIController.h"
-#include "B1Resources.h"
-#include "UObject/ConstructorHelpers.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"

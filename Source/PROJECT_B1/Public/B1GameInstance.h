@@ -3,7 +3,7 @@
 #pragma once
 
 //#include "CoreMinimal.h"
-//#include "PROJECT_B1.h"
+#include "PROJECT_B1.h"
 #include "Engine/GameInstance.h"
 #include "Engine/StreamableManager.h"
 #include "B1GameInstance.generated.h"

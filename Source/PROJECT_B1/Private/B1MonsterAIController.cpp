@@ -2,7 +2,6 @@
 
 
 #include "B1MonsterAIController.h"
-#include "B1Resources.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"

@@ -9,7 +9,6 @@
 #include "B1CharacterInfo.h"
 #include "B1GameInstance.h"
 #include "B1CustomStructs.h"
-#include "B1DebugPrint.h"
 
 // Sets default values
 AB1Monster::AB1Monster()
