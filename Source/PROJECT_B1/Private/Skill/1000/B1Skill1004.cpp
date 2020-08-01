@@ -30,6 +30,10 @@ void B1Skill1004::Run()
 		SkillStartTimestamp = FDateTime::Now().ToUnixTimestamp();
 	}
 }
+void B1Skill1004::End()
+{
+	printf("EndOfSkill");
+}
 void B1Skill1004::CheckAttack()
 {
 

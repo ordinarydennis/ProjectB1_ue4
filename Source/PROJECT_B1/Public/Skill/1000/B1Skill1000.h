@@ -16,6 +16,7 @@ public:
 
 public:
 	virtual void Run() override;
+	virtual void End() override;
 	virtual void CheckAttack() override;
 
 private:
@@ -23,4 +24,9 @@ private:
 
 private:
 	void PlayAnimation();
+
+private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> AmmoBlueprint;
+	AActor* effect = nullptr;
 };

@@ -25,6 +25,7 @@ class PROJECT_B1_API IB1Skill
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void Run() = 0;
+	virtual void End() = 0;
 	virtual void CheckAttack() = 0;
 
 protected:

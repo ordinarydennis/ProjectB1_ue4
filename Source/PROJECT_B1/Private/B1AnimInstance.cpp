@@ -38,14 +38,13 @@ void UB1AnimInstance::AnimNotify_EndOfAttack()
 	}
 	SetIsAttack(false);
 }
-void UB1AnimInstance::AnimNotify_EndofAnim()
+void UB1AnimInstance::AnimNotify_EndOfSkill()
 {
 	if (false == ::IsValid(B1Character)) {
 		return;
 	}
-
 	SkillAnimResNum = static_cast<int32>(ERES_ANIM_NUM::NONE);
-	OnEndofAnim.Broadcast();
+	OnEndOfSkill.Broadcast();
 }
 void UB1AnimInstance::AnimNotify_CheckAttackHit()
 {

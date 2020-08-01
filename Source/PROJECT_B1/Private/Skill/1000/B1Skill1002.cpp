@@ -39,6 +39,10 @@ void B1Skill1002::Run()
 	const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
 	Character->AddMovementInput(Direction, 0.8);
 }
+void B1Skill1002::End()
+{
+	printf("EndOfSkill");
+}
 void B1Skill1002::CheckAttack()
 {
 

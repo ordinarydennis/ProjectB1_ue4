@@ -32,6 +32,10 @@ void B1Skill1005::Run()
 
 	Move();
 }
+void B1Skill1005::End()
+{
+	printf("EndOfSkill");
+}
 void B1Skill1005::CheckAttack()
 {
 

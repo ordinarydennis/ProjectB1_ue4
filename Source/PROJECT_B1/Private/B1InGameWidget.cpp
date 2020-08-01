@@ -90,7 +90,7 @@ void UB1InGameWidget::NativeConstruct()
 	LoadImage();
 
 	auto AnimInst = Cast<UB1AnimInstance>(B1Character->GetMesh()->GetAnimInstance());
-	AnimInst->OnEndofAnim.AddUObject(this, &UB1InGameWidget::StopSkill);
+	AnimInst->OnEndOfSkill.AddUObject(this, &UB1InGameWidget::StopSkill);
 }
 void UB1InGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
@@ -244,15 +244,15 @@ void UB1InGameWidget::StopSkill()
 	auto Skill = SkillsOfBtn.Find(BtnIndex);
 	auto Btn = Btns.Find(BtnIndex);
 
-	SkillQueue.Enqueue(*Skill);
-	IB1Skill* NextSkill = nullptr;
-	SkillQueue.Dequeue(NextSkill);
-	NextSkill->SetBtnImage(*Btn);
-	SkillsOfBtn.Add(BtnIndex, NextSkill);
+	//SkillQueue.Enqueue(*Skill);
+	//IB1Skill* NextSkill = nullptr;
+	//SkillQueue.Dequeue(NextSkill);
+	//NextSkill->SetBtnImage(*Btn);
+	//SkillsOfBtn.Add(BtnIndex, NextSkill);
 	
 	BtnIndex = BTN_SKILL_INDEX::INDEX_NONE;
 	B1Character->StopSkill();
-	SetNextSkillImg();
+	//SetNextSkillImg();
 }
 void UB1InGameWidget::SetNextSkillImg()
 {

@@ -16,6 +16,7 @@ public:
 
 public:
 	virtual void Run() override;
+	virtual void End() override;
 	virtual void CheckAttack() override;
 
 private:

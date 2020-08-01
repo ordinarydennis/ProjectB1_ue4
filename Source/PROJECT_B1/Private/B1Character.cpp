@@ -8,6 +8,7 @@
 #include "Components/WidgetComponent.h"
 #include "B1HPWidget.h"
 #include "B1Weapon.h"
+#include "B1DebugPrint.h"
 
 // Sets default values
 AB1Character::AB1Character()
@@ -59,12 +60,6 @@ AB1Character::AB1Character()
 
 	MaxHP = HP = 100.0f;
 	AttackEndComboState();
-
-	static ConstructorHelpers::FObjectFinder<UClass> AmmoItem(TEXT("/Game/Resources/Market/Magic_Circle_Creator/Blueprints/TestBP.TestBP_C"));
-	if (AmmoItem.Object)
-	{
-		AmmoBlueprint = AmmoItem.Object;
-	}
 }
 void AB1Character::PostInitializeComponents()
 {
@@ -105,15 +100,6 @@ void AB1Character::RunAttack()
 		AnimInst->PlayAttack();
 		AnimInst->JumpToAttackMontageSection(CurrentCombo);
 		IsAttacking = true;
-
-		if (AmmoBlueprint && nullptr == effect){
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			FVector  SpawnLocation = GetActorLocation();
-			SpawnLocation.Z = 0.0f;
-			effect = GetWorld()->SpawnActor<AActor>(AmmoBlueprint, SpawnLocation, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-			effect->SetActorScale3D(FVector(5.0f, 5.0f, 1.0f));
-		}
 	}
 
 }
@@ -124,6 +110,7 @@ void AB1Character::RunSkill(IB1Skill* skill)
 
 void AB1Character::StopSkill()
 {
+	Skill->End();
 	Skill = nullptr;
 }
 void AB1Character::CheckAttackHit()
@@ -131,7 +118,7 @@ void AB1Character::CheckAttackHit()
 	float FinalAttackRange = 150.f;
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, this);
-	bool bResult = this->GetWorld()->SweepSingleByChannel(
+	bool bResult = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		this->GetActorLocation(),
 		this->GetActorLocation() + this->GetActorForwardVector() * FinalAttackRange,
@@ -266,12 +253,6 @@ void AB1Character::Tick(float DeltaTime)
 	if (nullptr != Skill) {
 		Skill->Run();
 	}
-
-	if (nullptr != effect) {
-		FVector  SpawnLocation = GetActorLocation();
-		SpawnLocation.Z = 0.0f;
-		effect->SetActorLocation(SpawnLocation, false);
-	}
 }
 float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
@@ -294,7 +275,7 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 	}
 
 	OnHPChanged.Broadcast();
-	
+
 	return FinalDamage;
 }
 // Called to bind functionality to input

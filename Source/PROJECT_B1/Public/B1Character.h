@@ -80,8 +80,4 @@ private:
 	int32 CurrentCombo = 0;
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	int32 MaxCombo = 5;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AActor> AmmoBlueprint;
-	AActor* effect = nullptr;
 };

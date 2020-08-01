@@ -10,7 +10,7 @@ const FString RES_ANIM_INST_PLAYER = TEXT("/Game/Blueprints/PlayerAnimBlueprint.
 
 const FString RES_WID_INGAME_C = TEXT("/Game/UI/InGameWidget.InGameWidget_C");
 
-const FString RES_TEX2D_SKILL1000 = TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_06_b");
+const FString RES_TEX2D_SKILL1000 = TEXT("/Game/Resources/Market/Skill_Icons_Pack/Textures/Tex_blue_10.Tex_blue_10");
 const FString RES_TEX2D_SKILL1001 = TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_07_b");
 const FString RES_TEX2D_SKILL1002 = TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_08_b");
 const FString RES_TEX2D_SKILL1003 = TEXT("/Game/Resources/Market/CraftResourcesIcons/Textures/Tex_gemstone_09_b");

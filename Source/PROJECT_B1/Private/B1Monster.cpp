@@ -177,7 +177,7 @@ void AB1Monster::CheckAttackHit()
     FHitResult HitResult;
     FCollisionQueryParams Params(NAME_None, false, this);
     
-    bool bResult = this->GetWorld()->SweepSingleByChannel(
+    bool bResult = GetWorld()->SweepSingleByChannel(
         HitResult,
         this->GetActorLocation(),
         this->GetActorLocation() + this->GetActorForwardVector() * FinalAttackRange,

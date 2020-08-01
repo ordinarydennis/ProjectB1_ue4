@@ -9,7 +9,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnCheckAttackHitDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCheckNextAttackDelegate);
 //DECLARE_MULTICAST_DELEGATE(FOnCheckSkillHitDelegate);
-DECLARE_MULTICAST_DELEGATE(FOnEndofAnimDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnEndOfSkillDelegate);
 
 
 /**
@@ -36,7 +36,7 @@ public:
 	FOnCheckAttackHitDelegate OnCheckAttackHit;
 	FOnCheckNextAttackDelegate OnCheckNextAttack;
 	//FOnCheckSkillHitDelegate OnCheckSkillHit;
-	FOnEndofAnimDelegate OnEndofAnim;
+	FOnEndOfSkillDelegate OnEndOfSkill;
 	
 private:
 	UFUNCTION()
@@ -46,7 +46,7 @@ private:
 	UFUNCTION()
 	void AnimNotify_EndOfAttack();
 	UFUNCTION()
-	void AnimNotify_EndofAnim();
+	void AnimNotify_EndOfSkill();
 	//UFUNCTION()
 	//void AnimNotify_CheckSkillHit();
 
