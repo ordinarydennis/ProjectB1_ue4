@@ -10,9 +10,9 @@ void UB1HPWidget::NativeConstruct()
 	Super::NativeConstruct();
 	HPProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HPBar")));
 }
-void UB1HPWidget::BindCharacterStat(AB1BaseCharacter* pawn)
+void UB1HPWidget::BindCharacterStat(AB1BaseCharacter* baseCharacter)
 {
-	BaseCharacter = pawn;
+	BaseCharacter = baseCharacter;
 	BaseCharacter->OnHPChanged.AddUObject(this, &UB1HPWidget::UpdateHPWidget);
 }
 void UB1HPWidget::UpdateHPWidget()

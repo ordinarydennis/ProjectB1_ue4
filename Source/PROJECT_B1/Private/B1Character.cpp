@@ -59,6 +59,7 @@ AB1Character::AB1Character()
 	}
 
 	MaxHP = HP = 100.0f;
+	Damage = 10.f;
 	AttackEndComboState();
 }
 void AB1Character::PostInitializeComponents()
@@ -102,6 +103,8 @@ void AB1Character::RunAttack()
 		IsAttacking = true;
 	}
 
+	printf("Damage %f", Damage);
+
 }
 void AB1Character::RunSkill(IB1Skill* skill)
 {
@@ -116,10 +119,10 @@ void AB1Character::StopSkill()
 void AB1Character::CheckAttackHit()
 {
 	float FinalAttackRange = 150.f;
-	FHitResult HitResult;
+	TArray<struct FHitResult> OutHits;
 	FCollisionQueryParams Params(NAME_None, false, this);
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		HitResult,
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		OutHits,
 		this->GetActorLocation(),
 		this->GetActorLocation() + this->GetActorForwardVector() * FinalAttackRange,
 		FQuat::Identity,
@@ -147,10 +150,12 @@ void AB1Character::CheckAttackHit()
 #endif
 
 	if (bResult) {
-		if (HitResult.Actor.IsValid())
-		{
-			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(0, DamageEvent, this->GetController(), this);
+		for (auto OutHit : OutHits) {
+			if (OutHit.Actor.IsValid())
+			{
+				FDamageEvent DamageEvent;
+				OutHit.Actor->TakeDamage(Damage, DamageEvent, this->GetController(), this);
+			}
 		}
 	}
 }
@@ -159,6 +164,10 @@ void AB1Character::CheckSkillHit()
 	//if (nullptr != Skill) {
 	//	Skill->CheckAttack();
 	//}
+}
+void AB1Character::AddSkillEffect(B1SkillEffect skillEffect)
+{	
+	SkillEffects.Add(skillEffect);
 }
 void AB1Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
@@ -253,6 +262,20 @@ void AB1Character::Tick(float DeltaTime)
 	if (nullptr != Skill) {
 		Skill->Run();
 	}
+
+	int32 index = 0;
+	for (auto& SkillEffect : SkillEffects){
+		//종료시간 확인 후 삭제
+		//if (SkillEffect.IsEnd()) {
+		//	printf("SkillEffects.Num() %d", SkillEffects.Num());
+		//	printf("type : %d ended", SkillEffect.GetType());
+		//	SkillEffects.RemoveAt(index);
+		//	printf("after SkillEffects.Num() %d", SkillEffects.Num());
+		//}
+		//index++;
+	}
+
+	
 }
 float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
@@ -263,15 +286,16 @@ float AB1Character::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 	//IsDeath = true;
 	//SetActorEnableCollision(false);
 
-	HP -= DamageAmount;
+	//HP -= DamageAmount;
 	if (KINDA_SMALL_NUMBER > HP) {
+		HP = 0.f;
+		IsDeath = true;
 		//auto AnimInst = Cast<UB1AnimInstance>(GetMesh()->GetAnimInstance());
 		AnimInst->SetIsDeath(true);
 		SetActorEnableCollision(false);
 		GetMesh()->SetHiddenInGame(false);
 		HPBarWidget->SetHiddenInGame(true);
 		DisableInput(B1PlayerController);
-		IsDeath = true;
 	}
 
 	OnHPChanged.Broadcast();

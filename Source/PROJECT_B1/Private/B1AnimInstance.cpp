@@ -73,9 +73,7 @@ void UB1AnimInstance::PlayAttack()
 }
 FName UB1AnimInstance::GetAttackMontageSectionName(int32 Section)
 {
-	//ABCHECK(FMath::IsWithinInclusive<int32>(Section, 1, 4), NAME_None);
-	//ABLOG(Warning, TEXT("Section Name: %s"), *FString::Printf(TEXT("Attack%d"), Section));
-	printf("Section Name: %s", *FString::Printf(TEXT("Attack%d"), Section));
+	//printf("Section Name: %s", *FString::Printf(TEXT("Attack%d"), Section));
 	return FName(*FString::Printf(TEXT("Attack%d"), Section));
 }
 void UB1AnimInstance::JumpToAttackMontageSection(int32 NewSection)

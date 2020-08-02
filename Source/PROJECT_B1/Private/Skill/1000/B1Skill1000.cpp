@@ -3,6 +3,7 @@
 
 #include "B1Skill1000.h"
 #include "B1Character.h"
+#include "B1SkillEffect.h"
 #include "B1DebugPrint.h"
 
 B1Skill1000::B1Skill1000(AB1Character* character)
@@ -25,7 +26,6 @@ B1Skill1000::B1Skill1000(AB1Character* character)
 	static ConstructorHelpers::FObjectFinder<UClass> AmmoItem(TEXT("/Game/Resources/Market/Magic_Circle_Creator/Blueprints/TestBP.TestBP_C"));
 	if (AmmoItem.Object)
 	{
-		printf("AmmoItem.Object");
 		AmmoBlueprint = AmmoItem.Object;
 	}
 }
@@ -49,6 +49,11 @@ void B1Skill1000::Run()
 				effect->SetActorScale3D(FVector(5.0f, 5.0f, 5.0f));
 			}
 		}
+
+		B1SkillEffect se;
+		se.ApplyEffect(Character);
+		printf("Damage %f", Damage);
+		Character->AddSkillEffect(se);
 	}
 
 	if (nullptr != effect) {

@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "B1HPWidget.generated.h"
 
+class AB1BaseCharacter;
 /**
  * 
  */
@@ -14,7 +15,7 @@ class PROJECT_B1_API UB1HPWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-    void BindCharacterStat(class AB1BaseCharacter* pawn);
+    void BindCharacterStat(AB1BaseCharacter* baseCharacter);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -25,5 +26,5 @@ private:
 	class UProgressBar* HPProgressBar;
 
 private:
-	class AB1BaseCharacter* BaseCharacter = nullptr;
+	AB1BaseCharacter* BaseCharacter = nullptr;
 };

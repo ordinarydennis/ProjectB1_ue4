@@ -18,9 +18,17 @@ float AB1BaseCharacter::GetMaxHP()
 {
 	return MaxHP;
 }
+float AB1BaseCharacter::GetDamage()
+{
+	return Damage;
+}
 bool AB1BaseCharacter::GetIsDeath()
 {
 	return IsDeath;
+}
+void AB1BaseCharacter::SetDamage(float damage)
+{
+	Damage = damage;
 }
 // Called when the game starts or when spawned
 void AB1BaseCharacter::BeginPlay()
@@ -28,14 +36,12 @@ void AB1BaseCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 }
-
 // Called every frame
 void AB1BaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
-
 // Called to bind functionality to input
 void AB1BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

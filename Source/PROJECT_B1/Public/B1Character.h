@@ -7,6 +7,7 @@
 #include "Skill/B1Skill.h"
 //#include "GameFramework/Character.h"
 #include "B1BaseCharacter.h"
+#include "B1SkillEffect.h"
 #include "B1Character.generated.h"
 
 UCLASS()
@@ -22,6 +23,7 @@ public:
 	void StopSkill();
 	void CheckAttackHit();
 	void CheckSkillHit();
+	void AddSkillEffect(B1SkillEffect skillEffect);
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
@@ -80,4 +82,5 @@ private:
 	int32 CurrentCombo = 0;
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	int32 MaxCombo = 5;
+	TArray<B1SkillEffect> SkillEffects;
 };

@@ -18,7 +18,10 @@ public:
 	AB1BaseCharacter();
 	float GetHP();
 	float GetMaxHP();
+	float GetDamage();
 	bool GetIsDeath();
+
+	void SetDamage(float damage);
 
 public:
 	FOnHPChangedDelegate OnHPChanged;
@@ -28,10 +31,15 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	float HP = 0.0f;
-	float MaxHP = 0.0f;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Inform, Meta = (AllowPrivateAccess = true))
+	float Damage = 0.f;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Inform, Meta = (AllowPrivateAccess = true))
+	float HP = 0.f;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Inform, Meta = (AllowPrivateAccess = true))
+	float MaxHP = 0.f;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Inform, Meta = (AllowPrivateAccess = true))
 	bool IsDeath = false;
-
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

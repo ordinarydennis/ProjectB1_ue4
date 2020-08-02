@@ -147,9 +147,8 @@ float AB1Monster::TakeDamage(float DamageAmount, struct FDamageEvent const& Dama
     float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
     HP -= DamageAmount;
-    if (0.0f >= HP)
-    {
-        HP = 0.0f;
+    if (KINDA_SMALL_NUMBER > HP){
+        HP = 0.f;
         IsDeath = true;
         auto AnimInst = Cast<UB1MonsterAnimInstance>(SkelMesh->GetAnimInstance());
         AnimInst->SetIsDeath(IsDeath);
